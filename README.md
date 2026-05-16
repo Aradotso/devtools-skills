@@ -34,6 +34,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [fieldtheory-cli](skills/fieldtheory-cli/) | [install](https://skills.sh/aradotso/devtools-skills/fieldtheory-cli) | [afar1/fieldtheory-cli](https://github.com/afar1/fieldtheory-cli) | 2026-05-16 |
 | [deepcode-cli](skills/deepcode-cli/) | [install](https://skills.sh/aradotso/devtools-skills/deepcode-cli) | [lessweb/deepcode-cli](https://github.com/lessweb/deepcode-cli) | 2026-05-16 |
 | [openai-cli](skills/openai-cli/) | [install](https://skills.sh/aradotso/devtools-skills/openai-cli) | [openai/openai-cli](https://github.com/openai/openai-cli) | 2026-05-16 |
+| [cli-printing-press-generator](skills/cli-printing-press-generator/) | [install](https://skills.sh/aradotso/devtools-skills/cli-printing-press-generator) | [mvanhorn/cli-printing-press](https://github.com/mvanhorn/cli-printing-press) | 2026-05-16 |
 <!-- SKILL_INDEX -->
 
 ---
