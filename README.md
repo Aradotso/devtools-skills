@@ -30,6 +30,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [polymarket-clob-client](skills/polymarket-clob-client/) | [install](https://skills.sh/aradotso/devtools-skills/polymarket-clob-client) | [dev-polymarket/clob-client-v2](https://github.com/dev-polymarket/clob-client-v2) | 2026-05-16 |
 | [polymarket-clob-client-v2](skills/polymarket-clob-client-v2/) | [install](https://skills.sh/aradotso/devtools-skills/polymarket-clob-client-v2) | [dev-polymarket/clob-client-v2](https://github.com/dev-polymarket/clob-client-v2) | 2026-05-16 |
 | [autocli-web-scraping](skills/autocli-web-scraping/) | [install](https://skills.sh/aradotso/devtools-skills/autocli-web-scraping) | [nashsu/AutoCLI](https://github.com/nashsu/AutoCLI) | 2026-05-16 |
+| [wecom-cli-enterprise-wechat](skills/wecom-cli-enterprise-wechat/) | [install](https://skills.sh/aradotso/devtools-skills/wecom-cli-enterprise-wechat) | [WecomTeam/wecom-cli](https://github.com/WecomTeam/wecom-cli) | 2026-05-16 |
 <!-- SKILL_INDEX -->
 
 ---
