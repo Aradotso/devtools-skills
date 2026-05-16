@@ -20,6 +20,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 
 | Skill | skills.sh | Source | Date |
 |-------|-----------|--------|------|
+| [cli-anything-agent-native-software](skills/cli-anything-agent-native-software/) | [install](https://skills.sh/aradotso/devtools-skills/cli-anything-agent-native-software) | [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything) | 2026-05-16 |
 <!-- SKILL_INDEX -->
 
 ---
