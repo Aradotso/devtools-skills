@@ -1,477 +1,603 @@
 ---
 name: polymarket-clob-client
-description: TypeScript client for Polymarket's CLOB API - place orders, manage positions, and interact with prediction markets
+description: TypeScript client for Polymarket's CLOB v2 API to place prediction market orders, manage positions, and interact with orderbooks
 triggers:
   - how do I place an order on Polymarket
-  - integrate with Polymarket CLOB
-  - create Polymarket API credentials
-  - buy or sell Polymarket shares programmatically
-  - connect to Polymarket prediction markets
-  - automate Polymarket trading
-  - use Polymarket CLOB client
-  - implement Polymarket bot
+  - integrate with Polymarket CLOB API
+  - create a Polymarket trading bot
+  - get Polymarket market data
+  - authenticate with Polymarket API
+  - cancel orders on Polymarket
+  - fetch Polymarket orderbook
+  - trade prediction markets programmatically
 ---
 
-# Polymarket CLOB Client
+# Polymarket CLOB Client v2
 
 > Skill by [ara.so](https://ara.so) — Devtools Skills collection.
 
-## Overview
-
-The Polymarket CLOB Client is a TypeScript/JavaScript SDK for interacting with Polymarket's Central Limit Order Book (CLOB). It enables programmatic trading on Polymarket prediction markets, including:
-
-- **Order Management**: Place, cancel, and modify limit and market orders
-- **Authentication**: L1 (wallet signature) and L2 (API key HMAC) authentication
-- **Market Data**: Access order books, trades, and market information
-- **Position Tracking**: Monitor balances and open orders
+TypeScript client for Polymarket's Central Limit Order Book (CLOB) v2 API. This library enables programmatic trading on Polymarket prediction markets, including placing orders, managing positions, fetching market data, and streaming real-time updates.
 
 ## Installation
 
 ```bash
 npm install @polymarkets/clob-client-v2
-npm install viem  # Required for wallet operations
+npm install viem  # Required for wallet functionality
 ```
 
-## Authentication
+## Core Concepts
 
-Polymarket CLOB uses two-level authentication:
+**CLOB (Central Limit Order Book)**: Polymarket's matching engine for prediction market trades.
 
-### L1 Authentication (Wallet Signature)
+**Token ID**: Unique identifier for each market outcome (YES/NO tokens).
 
-Required to create or derive API credentials using EIP-712 signatures:
+**Authentication Levels**:
+- **L1 (Wallet)**: EIP-712 signatures for API key creation
+- **L2 (HMAC)**: API credentials for trading operations
+
+**Order Types**:
+- `GTC` (Good 'til Cancelled): Resting limit order
+- `FOK` (Fill or Kill): Must fill entirely or cancel
+- `GTD` (Good 'til Date): Expires at specified time
+
+## Basic Setup
+
+### 1. Initialize Client (Wallet Only)
 
 ```typescript
 import { ClobClient, Chain } from "@polymarkets/clob-client-v2";
 import { createWalletClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
+import { polygon } from "viem/chains";
 
 const host = "https://clob.polymarket.com";
 const chainId = Chain.POLYGON; // or Chain.AMOY for testnet
 
-const account = privateKeyToAccount(process.env.PRIVATE_KEY);
-const walletClient = createWalletClient({ 
-  account, 
-  transport: http() 
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`);
+const walletClient = createWalletClient({
+  account,
+  chain: polygon,
+  transport: http()
 });
 
-const clobClient = new ClobClient({ 
-  host, 
-  chain: chainId, 
-  signer: walletClient 
+const client = new ClobClient({
+  host,
+  chain: chainId,
+  signer: walletClient
 });
+```
 
-// Create or derive API credentials
-const creds = await clobClient.createOrDeriveApiKey();
+### 2. Create API Credentials
+
+```typescript
+import { ApiKeyCreds } from "@polymarkets/clob-client-v2";
+
+// Generate new credentials (one-time setup)
+const creds: ApiKeyCreds = await client.createOrDeriveApiKey();
+
+console.log("Save these credentials securely:");
 console.log("API Key:", creds.key);
 console.log("Secret:", creds.secret);
 console.log("Passphrase:", creds.passphrase);
+
+// Store in environment variables:
+// CLOB_API_KEY=<key>
+// CLOB_SECRET=<secret>
+// CLOB_PASS_PHRASE=<passphrase>
 ```
 
-### L2 Authentication (API Key)
-
-Required for trading operations:
+### 3. Initialize Authenticated Client
 
 ```typescript
-import { ApiKeyCreds, ClobClient } from "@polymarkets/clob-client-v2";
-
 const creds: ApiKeyCreds = {
-  key: process.env.CLOB_API_KEY,
-  secret: process.env.CLOB_SECRET,
-  passphrase: process.env.CLOB_PASS_PHRASE,
+  key: process.env.CLOB_API_KEY!,
+  secret: process.env.CLOB_SECRET!,
+  passphrase: process.env.CLOB_PASS_PHRASE!
 };
 
-const client = new ClobClient({ 
-  host, 
-  chain: chainId, 
-  signer: walletClient, 
-  creds 
+const authenticatedClient = new ClobClient({
+  host,
+  chain: chainId,
+  signer: walletClient,
+  creds
 });
 ```
 
-## Core Operations
+## Placing Orders
 
-### Placing Orders
-
-#### Limit Orders (GTC - Good Till Cancelled)
+### Limit Orders (GTC)
 
 ```typescript
 import { Side, OrderType } from "@polymarkets/clob-client-v2";
 
-// Buy order at specific price
-const buyOrder = await client.createAndPostOrder(
+// Buy 100 shares at $0.40
+const buyOrder = await authenticatedClient.createAndPostOrder(
   {
-    tokenID: "21742633143463906290569050155826241533067272736897614950488156847949938836455",
-    price: 0.55,
+    tokenID: "your-token-id", // Get from market data
+    price: 0.40,
     side: Side.BUY,
-    size: 100, // Number of shares
+    size: 100
   },
-  { tickSize: "0.01" },
+  { tickSize: "0.01" }, // Market-specific tick size
   OrderType.GTC
 );
 
-// Sell order
-const sellOrder = await client.createAndPostOrder(
+console.log("Order ID:", buyOrder.orderID);
+
+// Sell 50 shares at $0.60
+const sellOrder = await authenticatedClient.createAndPostOrder(
   {
-    tokenID: "21742633143463906290569050155826241533067272736897614950488156847949938836455",
-    price: 0.65,
+    tokenID: "your-token-id",
+    price: 0.60,
     side: Side.SELL,
-    size: 50,
+    size: 50
   },
   { tickSize: "0.01" },
   OrderType.GTC
 );
 ```
 
-#### Market Orders
-
-Market orders execute immediately at the best available price:
+### Market Orders
 
 ```typescript
-// Market buy - amount is in USDC
-const marketBuy = await client.createAndPostMarketOrder(
+// Market buy for 100 USDC (Fill or Kill)
+const marketBuy = await authenticatedClient.createAndPostMarketOrder(
   {
-    tokenID: "21742633143463906290569050155826241533067272736897614950488156847949938836455",
-    amount: 100, // USDC to spend
+    tokenID: "your-token-id",
+    amount: 100, // USDC amount
     side: Side.BUY,
-  },
-  { tickSize: "0.01" }
-);
-
-// FOK (Fill or Kill) - entire order must fill or cancel
-const fokOrder = await client.createAndPostMarketOrder(
-  {
-    tokenID: "21742633143463906290569050155826241533067272736897614950488156847949938836455",
-    amount: 50,
-    side: Side.SELL,
+    orderType: OrderType.FOK
   },
   { tickSize: "0.01" },
   OrderType.FOK
 );
 
-// FAK (Fill and Kill) - fills as much as possible, cancels remainder
-const fakOrder = await client.createAndPostMarketOrder(
+// Market sell (Fill and Kill - partial fills allowed)
+const marketSell = await authenticatedClient.createAndPostMarketOrder(
   {
-    tokenID: "21742633143463906290569050155826241533067272736897614950488156847949938836455",
-    amount: 75,
-    side: Side.BUY,
+    tokenID: "your-token-id",
+    amount: 50,
+    side: Side.SELL,
+    orderType: OrderType.FAK
   },
   { tickSize: "0.01" },
   OrderType.FAK
 );
 ```
 
-### Managing Orders
+### Time-Limited Orders (GTD)
 
 ```typescript
-// Cancel a specific order
-await client.cancelOrder({
-  orderID: "0x1234567890abcdef...",
+// Order expires in 1 hour
+const expirationTime = Math.floor(Date.now() / 1000) + 3600;
+
+const gtdOrder = await authenticatedClient.createAndPostOrder(
+  {
+    tokenID: "your-token-id",
+    price: 0.50,
+    side: Side.BUY,
+    size: 100,
+    expiration: expirationTime
+  },
+  { tickSize: "0.01" },
+  OrderType.GTD
+);
+```
+
+## Order Management
+
+### Cancel Orders
+
+```typescript
+// Cancel specific order
+const cancelResponse = await authenticatedClient.cancelOrder({
+  orderID: "order-id-here"
 });
 
 // Cancel all orders for a market
-await client.cancelMarketOrders({
-  market: "0xmarket_address",
+const cancelAllResponse = await authenticatedClient.cancelOrders({
+  tokenID: "your-token-id"
 });
 
-// Cancel all orders
-await client.cancelAll();
-
-// Get open orders
-const orders = await client.getOrders();
-console.log("Open orders:", orders);
-
-// Get order by ID
-const order = await client.getOrder("0x1234567890abcdef...");
+// Cancel all orders for all markets
+const cancelEverything = await authenticatedClient.cancelAll();
 ```
 
-### Market Data
+### Check Order Status
 
 ```typescript
-// Get order book
-const orderBook = await client.getOrderBook("token_id");
-console.log("Bids:", orderBook.bids);
-console.log("Asks:", orderBook.asks);
+// Get specific order
+const order = await authenticatedClient.getOrder("order-id");
+console.log("Status:", order.status);
+console.log("Filled:", order.sizeMatched);
 
-// Get recent trades
-const trades = await client.getTrades("token_id");
+// Get all open orders
+const openOrders = await authenticatedClient.getOrders();
 
-// Get market information
+// Get orders for specific market
+const marketOrders = await authenticatedClient.getOrders({
+  tokenID: "your-token-id"
+});
+```
+
+## Market Data
+
+### Orderbook
+
+```typescript
+// Get full orderbook
+const orderbook = await client.getOrderBook("token-id");
+
+console.log("Bids:", orderbook.bids); // [[price, size], ...]
+console.log("Asks:", orderbook.asks); // [[price, size], ...]
+
+// Calculate spread
+if (orderbook.bids.length > 0 && orderbook.asks.length > 0) {
+  const bestBid = parseFloat(orderbook.bids[0][0]);
+  const bestAsk = parseFloat(orderbook.asks[0][0]);
+  const spread = bestAsk - bestBid;
+  console.log("Spread:", spread);
+}
+```
+
+### Market Information
+
+```typescript
+// Get market details
+const market = await client.getMarket("condition-id");
+
+console.log("Question:", market.question);
+console.log("Tokens:", market.tokens); // Array of outcome tokens
+
+// Get all active markets
 const markets = await client.getMarkets();
 
-// Get specific market
-const market = await client.getMarket("condition_id");
+// Filter markets by status
+const activeMarkets = markets.filter(m => m.active);
 ```
 
-### Account Information
+### Trades
 
 ```typescript
-// Get balances
-const balances = await client.getBalances();
+// Get recent trades
+const trades = await client.getTrades("token-id");
 
-// Get positions
-const positions = await client.getPositions();
+for (const trade of trades) {
+  console.log(`${trade.side} ${trade.size} @ ${trade.price}`);
+}
 
-// Get trades history
-const myTrades = await client.getTradeHistory({
-  maker_address: process.env.WALLET_ADDRESS,
+// Get your trade history
+const myTrades = await authenticatedClient.getTradeHistory({
+  tokenID: "token-id"
 });
+```
+
+## Account Management
+
+### Balances
+
+```typescript
+// Get all balances
+const balances = await authenticatedClient.getBalances();
+
+for (const [tokenId, balance] of Object.entries(balances)) {
+  console.log(`Token ${tokenId}: ${balance}`);
+}
+
+// Get balance for specific token
+const tokenBalance = await authenticatedClient.getBalance("token-id");
+```
+
+### Positions
+
+```typescript
+// Get all open positions
+const positions = await authenticatedClient.getPositions();
+
+for (const position of positions) {
+  console.log(`Market: ${position.market}`);
+  console.log(`Side: ${position.side}`);
+  console.log(`Size: ${position.size}`);
+  console.log(`Entry Price: ${position.entryPrice}`);
+}
 ```
 
 ## Error Handling
 
-### Default Behavior (Return Errors)
-
-By default, API errors are returned as objects:
+### Default (Returned Errors)
 
 ```typescript
-const book = await client.getOrderBook("invalid_token_id");
-if ('error' in book) {
-  console.log("Error:", book.error);
-  console.log("Status:", book.status);
+const result = await client.getOrderBook("invalid-token");
+
+if ('error' in result) {
+  console.error("Error:", result.error);
+  console.error("Status:", result.status);
 }
 ```
 
 ### Throw on Error
 
-Configure the client to throw exceptions:
-
 ```typescript
 import { ApiError, ClobClient } from "@polymarkets/clob-client-v2";
 
-const client = new ClobClient({ 
-  host, 
-  chain: chainId, 
-  signer: walletClient, 
+const client = new ClobClient({
+  host,
+  chain: chainId,
+  signer: walletClient,
   creds,
-  throwOnError: true 
+  throwOnError: true
 });
 
 try {
-  const book = await client.getOrderBook("invalid_token_id");
+  const book = await client.getOrderBook("token-id");
 } catch (e) {
   if (e instanceof ApiError) {
-    console.log("Message:", e.message);
-    console.log("Status:", e.status);
-    console.log("Data:", e.data);
+    console.error("API Error:", e.message);
+    console.error("Status Code:", e.status);
+    console.error("Response:", e.data);
+  } else {
+    console.error("Unexpected error:", e);
   }
 }
 ```
 
-## Common Patterns
+## Advanced Patterns
 
-### Simple Market Making Bot
+### Trading Bot Example
 
 ```typescript
 import { ClobClient, Side, OrderType } from "@polymarkets/clob-client-v2";
 
-async function marketMake(tokenID: string, midPrice: number, spread: number, size: number) {
-  const buyPrice = midPrice - spread / 2;
-  const sellPrice = midPrice + spread / 2;
+class SimpleMarketMaker {
+  constructor(
+    private client: ClobClient,
+    private tokenID: string,
+    private spread: number = 0.02
+  ) {}
 
-  // Place buy order
-  const buy = await client.createAndPostOrder(
-    {
-      tokenID,
-      price: buyPrice,
-      side: Side.BUY,
-      size,
-    },
-    { tickSize: "0.01" },
-    OrderType.GTC
-  );
+  async placeOrders(midPrice: number, size: number) {
+    const buyPrice = midPrice - this.spread / 2;
+    const sellPrice = midPrice + this.spread / 2;
 
-  // Place sell order
-  const sell = await client.createAndPostOrder(
-    {
-      tokenID,
-      price: sellPrice,
-      side: Side.SELL,
-      size,
-    },
-    { tickSize: "0.01" },
-    OrderType.GTC
-  );
+    // Cancel existing orders
+    await this.client.cancelOrders({ tokenID: this.tokenID });
 
-  return { buy, sell };
-}
+    // Place new orders
+    const [buyOrder, sellOrder] = await Promise.all([
+      this.client.createAndPostOrder(
+        {
+          tokenID: this.tokenID,
+          price: buyPrice,
+          side: Side.BUY,
+          size
+        },
+        { tickSize: "0.01" },
+        OrderType.GTC
+      ),
+      this.client.createAndPostOrder(
+        {
+          tokenID: this.tokenID,
+          price: sellPrice,
+          side: Side.SELL,
+          size
+        },
+        { tickSize: "0.01" },
+        OrderType.GTC
+      )
+    ]);
 
-// Example usage
-await marketMake(
-  "21742633143463906290569050155826241533067272736897614950488156847949938836455",
-  0.50,
-  0.10,
-  100
-);
-```
+    return { buyOrder, sellOrder };
+  }
 
-### Monitoring Positions
+  async run() {
+    // Get current market price
+    const orderbook = await this.client.getOrderBook(this.tokenID);
+    if (!orderbook.bids.length || !orderbook.asks.length) return;
 
-```typescript
-async function checkPositions() {
-  const positions = await client.getPositions();
-  
-  for (const position of positions) {
-    console.log(`Token: ${position.asset_id}`);
-    console.log(`Size: ${position.size}`);
-    console.log(`Value: ${position.value}`);
+    const midPrice = (
+      parseFloat(orderbook.bids[0][0]) + 
+      parseFloat(orderbook.asks[0][0])
+    ) / 2;
+
+    await this.placeOrders(midPrice, 10);
   }
 }
 ```
 
-### Order Book Analysis
+### Price Monitor
 
 ```typescript
-async function analyzeOrderBook(tokenID: string) {
-  const book = await client.getOrderBook(tokenID);
-  
-  if ('error' in book) {
-    console.log("No order book available");
-    return;
-  }
+async function monitorPriceChanges(
+  client: ClobClient,
+  tokenID: string,
+  threshold: number
+) {
+  let lastMidPrice: number | null = null;
 
-  // Calculate best bid/ask
-  const bestBid = book.bids[0]?.price || 0;
-  const bestAsk = book.asks[0]?.price || 1;
-  const spread = bestAsk - bestBid;
+  setInterval(async () => {
+    const book = await client.getOrderBook(tokenID);
+    
+    if (!book.bids.length || !book.asks.length) return;
 
-  // Calculate mid price
-  const midPrice = (bestBid + bestAsk) / 2;
+    const midPrice = (
+      parseFloat(book.bids[0][0]) + 
+      parseFloat(book.asks[0][0])
+    ) / 2;
 
-  // Calculate depth
-  const bidVolume = book.bids.reduce((sum, level) => sum + parseFloat(level.size), 0);
-  const askVolume = book.asks.reduce((sum, level) => sum + parseFloat(level.size), 0);
+    if (lastMidPrice !== null) {
+      const change = Math.abs(midPrice - lastMidPrice);
+      if (change >= threshold) {
+        console.log(`Price moved by ${change.toFixed(4)}: ${lastMidPrice} -> ${midPrice}`);
+      }
+    }
 
-  return {
-    bestBid,
-    bestAsk,
-    spread,
-    midPrice,
-    bidVolume,
-    askVolume,
-  };
+    lastMidPrice = midPrice;
+  }, 5000); // Check every 5 seconds
 }
 ```
 
 ### Batch Order Placement
 
 ```typescript
-async function placeBatchOrders(tokenID: string, orders: Array<{price: number, size: number, side: Side}>) {
-  const results = [];
-  
-  for (const order of orders) {
-    const result = await client.createAndPostOrder(
-      {
-        tokenID,
-        price: order.price,
-        side: order.side,
-        size: order.size,
-      },
-      { tickSize: "0.01" },
-      OrderType.GTC
-    );
-    results.push(result);
-  }
-  
-  return results;
+async function placeBatchOrders(
+  client: ClobClient,
+  tokenID: string,
+  orders: Array<{ price: number; size: number; side: Side }>
+) {
+  const results = await Promise.allSettled(
+    orders.map(order =>
+      client.createAndPostOrder(
+        {
+          tokenID,
+          price: order.price,
+          side: order.side,
+          size: order.size
+        },
+        { tickSize: "0.01" },
+        OrderType.GTC
+      )
+    )
+  );
+
+  const successful = results.filter(r => r.status === "fulfilled");
+  const failed = results.filter(r => r.status === "rejected");
+
+  console.log(`Placed ${successful.length}/${orders.length} orders`);
+  return { successful, failed };
 }
 ```
 
 ## Configuration
 
-### Client Options
+### Environment Variables
 
-```typescript
-interface ClobClientOptions {
-  host: string;              // CLOB API host
-  chain: Chain;              // Chain.POLYGON or Chain.AMOY
-  signer?: WalletClient;     // Viem wallet client for L1 auth
-  creds?: ApiKeyCreds;       // API credentials for L2 auth
-  throwOnError?: boolean;    // Throw exceptions on API errors
-}
+```bash
+# Required for trading
+PRIVATE_KEY=0x...
+CLOB_API_KEY=your-api-key
+CLOB_SECRET=your-secret
+CLOB_PASS_PHRASE=your-passphrase
+
+# Network selection
+CHAIN_ID=137  # Polygon mainnet (or 80002 for Amoy testnet)
 ```
 
-### Chain Options
+### Network Endpoints
 
 ```typescript
-import { Chain } from "@polymarkets/clob-client-v2";
+// Mainnet
+const mainnetClient = new ClobClient({
+  host: "https://clob.polymarket.com",
+  chain: Chain.POLYGON,
+  signer: walletClient,
+  creds
+});
 
-// Mainnet (Polygon)
-const mainnet = Chain.POLYGON;
-
-// Testnet (Amoy)
-const testnet = Chain.AMOY;
-```
-
-### Order Types
-
-```typescript
-import { OrderType } from "@polymarkets/clob-client-v2";
-
-OrderType.GTC  // Good Till Cancelled (resting limit order)
-OrderType.FOK  // Fill or Kill (must fill completely or cancel)
-OrderType.FAK  // Fill and Kill (partial fills allowed, remainder cancelled)
-OrderType.GTD  // Good Till Date
+// Testnet
+const testnetClient = new ClobClient({
+  host: "https://clob-testnet.polymarket.com",
+  chain: Chain.AMOY,
+  signer: walletClient,
+  creds
+});
 ```
 
 ## Troubleshooting
 
-### Common Issues
+### Invalid Signature Errors
 
-**"Insufficient balance" error**
-- Ensure you have enough USDC in your wallet
-- Check balances with `client.getBalances()`
+**Problem**: Authentication fails with signature errors.
 
-**"Invalid signature" error**
-- Verify your API credentials are correct
-- Ensure the wallet address matches the API key owner
-- Regenerate API credentials if needed
+**Solution**: Ensure wallet client is properly configured with the correct chain and account:
 
-**"No orderbook exists" error**
-- Verify the tokenID is correct
-- Check if the market is active
-- Use `client.getMarkets()` to find valid token IDs
+```typescript
+import { polygon, polygonAmoy } from "viem/chains";
 
-**Orders not filling**
-- Check order price is competitive
-- Verify sufficient liquidity exists
-- Use market orders for immediate execution
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`);
+const walletClient = createWalletClient({
+  account,
+  chain: polygon, // Must match Chain.POLYGON
+  transport: http()
+});
+```
 
-### Getting Token IDs
+### Order Rejected - Insufficient Balance
 
-Token IDs are specific to each market outcome. Find them via:
+**Problem**: Orders fail due to insufficient funds.
 
-1. **Polymarket API Documentation**: https://docs.polymarket.com
-2. **Markets endpoint**:
+**Solution**: Check your USDC balance on Polygon:
+
+```typescript
+const balances = await client.getBalances();
+console.log("Available USDC:", balances["usdc"]);
+```
+
+### Token ID Not Found
+
+**Problem**: Cannot find the token ID for a market.
+
+**Solution**: Get token IDs from market data:
+
 ```typescript
 const markets = await client.getMarkets();
-console.log(markets);
+const market = markets.find(m => m.question.includes("search term"));
+
+if (market) {
+  console.log("YES token:", market.tokens[0].tokenID);
+  console.log("NO token:", market.tokens[1].tokenID);
+}
 ```
 
-### Environment Variables
+### Rate Limiting
 
-Set up your credentials securely:
+**Problem**: API returns 429 Too Many Requests.
 
-```bash
-# .env file
-PRIVATE_KEY=0x...
-CLOB_API_KEY=...
-CLOB_SECRET=...
-CLOB_PASS_PHRASE=...
-WALLET_ADDRESS=0x...
-```
-
-Load in your application:
+**Solution**: Implement exponential backoff:
 
 ```typescript
-import dotenv from 'dotenv';
-dotenv.config();
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  maxRetries = 3,
+  baseDelay = 1000
+): Promise<T> {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      if (e instanceof ApiError && e.status === 429 && i < maxRetries - 1) {
+        const delay = baseDelay * Math.pow(2, i);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+      throw e;
+    }
+  }
+  throw new Error("Max retries exceeded");
+}
 
-const account = privateKeyToAccount(process.env.PRIVATE_KEY);
+// Usage
+const orderbook = await withRetry(() => client.getOrderBook(tokenID));
 ```
 
-## Resources
+### Invalid Tick Size
 
-- **Official Documentation**: https://docs.polymarket.com
-- **CLOB API Host**: https://clob.polymarket.com
-- **GitHub Repository**: https://github.com/Polymarket/clob-client
-- **Viem Documentation**: https://viem.sh (for wallet operations)
+**Problem**: Order rejected due to price not aligned with tick size.
+
+**Solution**: Round prices to valid ticks:
+
+```typescript
+function roundToTick(price: number, tickSize: string): number {
+  const tick = parseFloat(tickSize);
+  return Math.round(price / tick) * tick;
+}
+
+const rawPrice = 0.423456;
+const validPrice = roundToTick(rawPrice, "0.01"); // 0.42
+```
+
+## Additional Resources
+
+- [Official Documentation](https://docs.polymarket.com)
+- [API Reference](https://docs.polymarket.com/api-reference)
+- [Market Data](https://polymarket.com/markets)
+- [GitHub Repository](https://github.com/Polymarket/clob-client-v2)
