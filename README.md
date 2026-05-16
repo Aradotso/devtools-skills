@@ -28,6 +28,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [officecli-office-automation](skills/officecli-office-automation/) | [install](https://skills.sh/aradotso/devtools-skills/officecli-office-automation) | [iOfficeAI/OfficeCLI](https://github.com/iOfficeAI/OfficeCLI) | 2026-05-16 |
 | [google-agents-cli](skills/google-agents-cli/) | [install](https://skills.sh/aradotso/devtools-skills/google-agents-cli) | [google/agents-cli](https://github.com/google/agents-cli) | 2026-05-16 |
 | [polymarket-clob-client](skills/polymarket-clob-client/) | [install](https://skills.sh/aradotso/devtools-skills/polymarket-clob-client) | [dev-polymarket/clob-client-v2](https://github.com/dev-polymarket/clob-client-v2) | 2026-05-16 |
+| [polymarket-clob-client-v2](skills/polymarket-clob-client-v2/) | [install](https://skills.sh/aradotso/devtools-skills/polymarket-clob-client-v2) | [dev-polymarket/clob-client-v2](https://github.com/dev-polymarket/clob-client-v2) | 2026-05-16 |
 <!-- SKILL_INDEX -->
 
 ---
