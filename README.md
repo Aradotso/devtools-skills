@@ -26,6 +26,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [chrome-devtools-mcp-automation](skills/chrome-devtools-mcp-automation/) | [install](https://skills.sh/aradotso/devtools-skills/chrome-devtools-mcp-automation) | [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) | 2026-05-16 |
 | [wx-cli-wechat-local-data](skills/wx-cli-wechat-local-data/) | [install](https://skills.sh/aradotso/devtools-skills/wx-cli-wechat-local-data) | [jackwener/wx-cli](https://github.com/jackwener/wx-cli) | 2026-05-16 |
 | [officecli-office-automation](skills/officecli-office-automation/) | [install](https://skills.sh/aradotso/devtools-skills/officecli-office-automation) | [iOfficeAI/OfficeCLI](https://github.com/iOfficeAI/OfficeCLI) | 2026-05-16 |
+| [google-agents-cli](skills/google-agents-cli/) | [install](https://skills.sh/aradotso/devtools-skills/google-agents-cli) | [google/agents-cli](https://github.com/google/agents-cli) | 2026-05-16 |
 <!-- SKILL_INDEX -->
 
 ---
