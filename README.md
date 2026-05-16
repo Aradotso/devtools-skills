@@ -33,6 +33,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [wecom-cli-enterprise-wechat](skills/wecom-cli-enterprise-wechat/) | [install](https://skills.sh/aradotso/devtools-skills/wecom-cli-enterprise-wechat) | [WecomTeam/wecom-cli](https://github.com/WecomTeam/wecom-cli) | 2026-05-16 |
 | [fieldtheory-cli](skills/fieldtheory-cli/) | [install](https://skills.sh/aradotso/devtools-skills/fieldtheory-cli) | [afar1/fieldtheory-cli](https://github.com/afar1/fieldtheory-cli) | 2026-05-16 |
 | [deepcode-cli](skills/deepcode-cli/) | [install](https://skills.sh/aradotso/devtools-skills/deepcode-cli) | [lessweb/deepcode-cli](https://github.com/lessweb/deepcode-cli) | 2026-05-16 |
+| [openai-cli](skills/openai-cli/) | [install](https://skills.sh/aradotso/devtools-skills/openai-cli) | [openai/openai-cli](https://github.com/openai/openai-cli) | 2026-05-16 |
 <!-- SKILL_INDEX -->
 
 ---
