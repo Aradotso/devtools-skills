@@ -23,6 +23,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [cli-anything-agent-native-software](skills/cli-anything-agent-native-software/) | [install](https://skills.sh/aradotso/devtools-skills/cli-anything-agent-native-software) | [HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything) | 2026-05-16 |
 | [opencli-universal-cli-hub](skills/opencli-universal-cli-hub/) | [install](https://skills.sh/aradotso/devtools-skills/opencli-universal-cli-hub) | [jackwener/OpenCLI](https://github.com/jackwener/OpenCLI) | 2026-05-16 |
 | [op-auto-clicker](skills/op-auto-clicker/) | [install](https://skills.sh/aradotso/devtools-skills/op-auto-clicker) | [jiaoyanming0-bot/OPAutoClicker](https://github.com/jiaoyanming0-bot/OPAutoClicker) | 2026-05-16 |
+| [chrome-devtools-mcp-automation](skills/chrome-devtools-mcp-automation/) | [install](https://skills.sh/aradotso/devtools-skills/chrome-devtools-mcp-automation) | [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) | 2026-05-16 |
 <!-- SKILL_INDEX -->
 
 ---
