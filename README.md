@@ -58,6 +58,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [watch-cli-video-agent](skills/watch-cli-video-agent/) | [install](https://skills.sh/aradotso/devtools-skills/watch-cli-video-agent) | [sonpiaz/watch-cli](https://github.com/sonpiaz/watch-cli) | 2026-05-17 |
 | [blur-autoclicker-automation](skills/blur-autoclicker-automation/) | [install](https://skills.sh/aradotso/devtools-skills/blur-autoclicker-automation) | [Blur009/Blur-AutoClicker](https://github.com/Blur009/Blur-AutoClicker) | 2026-05-17 |
 | [clipsketch-ai-video-storyboard](skills/clipsketch-ai-video-storyboard/) | [install](https://skills.sh/aradotso/devtools-skills/clipsketch-ai-video-storyboard) | [RanFeng/clipsketch-ai](https://github.com/RanFeng/clipsketch-ai) | 2026-05-17 |
+| [mac-cleaner-cli-disk-cleanup](skills/mac-cleaner-cli-disk-cleanup/) | [install](https://skills.sh/aradotso/devtools-skills/mac-cleaner-cli-disk-cleanup) | [guhcostan/mac-cleaner-cli](https://github.com/guhcostan/mac-cleaner-cli) | 2026-05-17 |
 <!-- SKILL_INDEX -->
 
 ---
