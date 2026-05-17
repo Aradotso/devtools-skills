@@ -38,6 +38,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [app-store-connect-cli](skills/app-store-connect-cli/) | [install](https://skills.sh/aradotso/devtools-skills/app-store-connect-cli) | [rorkai/App-Store-Connect-CLI](https://github.com/rorkai/App-Store-Connect-CLI) | 2026-05-16 |
 | [subnautica-ii-deep-synergy-coop-mod](skills/subnautica-ii-deep-synergy-coop-mod/) | [install](https://skills.sh/aradotso/devtools-skills/subnautica-ii-deep-synergy-coop-mod) | [maglin-jenebellah/Subnautica-II-Coop-Client](https://github.com/maglin-jenebellah/Subnautica-II-Coop-Client) | 2026-05-17 |
 | [subnautica-2-coop-mod-bepinex](skills/subnautica-2-coop-mod-bepinex/) | [install](https://skills.sh/aradotso/devtools-skills/subnautica-2-coop-mod-bepinex) | [maglin-jenebellah/Subnautica-II-Coop-Client](https://github.com/maglin-jenebellah/Subnautica-II-Coop-Client) | 2026-05-17 |
+| [subnautica-ii-coop-deep-synergy-mod](skills/subnautica-ii-coop-deep-synergy-mod/) | [install](https://skills.sh/aradotso/devtools-skills/subnautica-ii-coop-deep-synergy-mod) | [maglin-jenebellah/Subnautica-II-Coop-Client](https://github.com/maglin-jenebellah/Subnautica-II-Coop-Client) | 2026-05-17 |
 <!-- SKILL_INDEX -->
 
 ---
