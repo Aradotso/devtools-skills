@@ -60,6 +60,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [clipsketch-ai-video-storyboard](skills/clipsketch-ai-video-storyboard/) | [install](https://skills.sh/aradotso/devtools-skills/clipsketch-ai-video-storyboard) | [RanFeng/clipsketch-ai](https://github.com/RanFeng/clipsketch-ai) | 2026-05-17 |
 | [mac-cleaner-cli-disk-cleanup](skills/mac-cleaner-cli-disk-cleanup/) | [install](https://skills.sh/aradotso/devtools-skills/mac-cleaner-cli-disk-cleanup) | [guhcostan/mac-cleaner-cli](https://github.com/guhcostan/mac-cleaner-cli) | 2026-05-17 |
 | [gooserelayvpn-android-client](skills/gooserelayvpn-android-client/) | [install](https://skills.sh/aradotso/devtools-skills/gooserelayvpn-android-client) | [Hidden-Node/GooseRelayVPN-AndroidClient](https://github.com/Hidden-Node/GooseRelayVPN-AndroidClient) | 2026-05-17 |
+| [devtools-hub-installer](skills/devtools-hub-installer/) | [install](https://skills.sh/aradotso/devtools-skills/devtools-hub-installer) | [lszdeveloping/devtoolshub](https://github.com/lszdeveloping/devtoolshub) | 2026-05-17 |
 <!-- SKILL_INDEX -->
 
 ---
