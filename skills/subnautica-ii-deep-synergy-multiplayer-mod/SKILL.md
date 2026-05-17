@@ -1,15 +1,15 @@
 ---
 name: subnautica-ii-deep-synergy-multiplayer-mod
-description: BepInEx multiplayer mod for Subnautica 2 enabling co-op gameplay with deterministic session synchronization
+description: BepInEx-based cooperative multiplayer mod for Subnautica 2 with synchronized session management, shared inventory, and dynamic scaling
 triggers:
-  - "set up Subnautica 2 multiplayer mod"
-  - "install Deep Synergy co-op mod for Subnautica"
-  - "configure BepInEx Subnautica 2 multiplayer"
-  - "create Subnautica 2 co-op session"
-  - "sync Subnautica multiplayer state"
-  - "troubleshoot Subnautica 2 multiplayer connection"
-  - "customize Subnautica co-op settings"
-  - "integrate AI narration in Subnautica mod"
+  - install subnautica 2 multiplayer mod
+  - set up deep synergy coop
+  - configure bepinex subnautica multiplayer
+  - create subnautica 2 coop session
+  - sync multiplayer state subnautica
+  - troubleshoot subnautica multiplayer mod
+  - configure deep synergy session
+  - use subnautica coop commands
 ---
 
 # Subnautica II Deep Synergy Multiplayer Mod
@@ -18,92 +18,78 @@ triggers:
 
 ## Overview
 
-The Deep Synergy Multiplayer Mod transforms Subnautica 2 into a cooperative multiplayer experience using BepInEx plugin architecture. Built on IL2CPP hooking, it provides deterministic session synchronization, adaptive difficulty scaling, and decentralized peer-to-peer networking without requiring game file modifications.
+The Deep Synergy Multiplayer Mod transforms Subnautica 2 into a synchronized cooperative experience using the BepInEx modding framework. It implements deterministic session synchronization (DSS), adaptive dynamic scaling (ADS), and peer-to-peer connectivity via WebRTC for seamless multiplayer gameplay.
 
-**Key capabilities:**
-- Synchronized survival mechanics (oxygen, inventory, base building)
-- WebRTC-based peer-to-peer multiplayer (2-4 players)
-- Adaptive difficulty scaling based on player count
-- Shared blueprints, resources, and construction states
-- Optional AI narrative integration (OpenAI/Claude APIs)
-- Cross-platform support (Windows, Linux, macOS)
+**Key Architecture:**
+- **BepInEx Plugin** - Hooks into Unity IL2CPP runtime without modifying game files
+- **Decentralized Session Management** - No central servers; uses NAT punch-through
+- **Merkle Tree Inventory** - Blockchain-inspired state verification across peers
+- **Adaptive Scaling** - Creature spawns and resource availability adjust to player count
 
 ## Installation
 
 ### Prerequisites
 
-1. **BepInEx 6.0.x** must be installed for Subnautica 2
-2. Download from the official repository
-3. Game must be on Steam or GOG (latest version)
+1. **Subnautica 2** installed (Steam/GOG)
+2. **BepInEx 6.0.x** for IL2CPP Unity games
 
-### Installation Steps
+### Step-by-Step Installation
 
 ```bash
-# 1. Navigate to Subnautica 2 game directory
-cd "C:/Program Files (x86)/Steam/steamapps/common/Subnautica 2"
+# 1. Install BepInEx 6.0.x
+# Download from: https://github.com/BepInEx/BepInEx/releases
+# Extract to Subnautica 2 game directory
 
-# 2. Verify BepInEx is installed
-dir BepInEx
+# 2. Download Deep Synergy Mod
+# Visit: https://maglin-jenebellah.github.io
 
-# 3. Extract Deep Synergy mod to plugins folder
-# Place downloaded files in:
-# BepInEx/plugins/DeepSynergy/
+# 3. Extract mod files
+# Place contents into: <Game Directory>/BepInEx/plugins/
 
-# 4. Create config directory if missing
-mkdir BepInEx/config
-
-# 5. Launch game once to generate default configs
-# Steam: Run normally
-# Manual: Subnautica2.exe
-```
-
-### Directory Structure
-
-```
-Subnautica 2/
+# 4. Verify structure
+<Game Directory>/
 ├── BepInEx/
 │   ├── plugins/
-│   │   └── DeepSynergy/
-│   │       ├── DeepSynergy.dll
-│   │       ├── NetworkCore.dll
-│   │       └── SyncEngine.dll
-│   ├── config/
-│   │   ├── synergy_profile.json
-│   │   └── DeepSynergy.cfg
-│   └── LogOutput.log
-└── Subnautica2.exe
+│   │   ├── DeepSynergy.dll
+│   │   ├── SyncEngine.dll
+│   │   └── NetworkCore.dll
+│   └── config/
+│       └── synergy_profile.json
+```
+
+### Verify Installation
+
+Launch Subnautica 2. Check BepInEx console for:
+```
+[Info   :BepInEx] Deep Synergy Multiplayer Mod v2.1.0 loaded
+[Info   :DeepSynergy] Session Manager initialized
+[Info   :DeepSynergy] State Synchronizer ready
 ```
 
 ## Configuration
 
-### Session Profile Configuration
+### Profile Configuration File
 
-Create `BepInEx/config/synergy_profile.json`:
+Create/edit `BepInEx/config/synergy_profile.json`:
 
 ```json
 {
   "session_name": "Ocean Explorers",
   "max_players": 4,
   "difficulty_scale": "adaptive",
-  "resource_multiplier": 1.0,
-  "oxygen_consumption": 1.0,
-  "creature_spawn_divider": 1,
+  "resource_multiplier": 1.5,
+  "oxygen_consumption": 0.85,
+  "creature_spawn_divider": 2,
   "enable_pvp": false,
   "friendly_fire": false,
   "shared_blueprints": true,
   "ping_locations_shared": true,
-  "time_of_day_sync": "host",
-  "voice_chat_integration": "none",
+  "time_of_day_sync": "all",
+  "voice_chat_integration": "discord_rpc",
   "network": {
-    "port": 7777,
-    "use_upnp": true,
-    "max_ping_ms": 200,
-    "tick_rate": 30
-  },
-  "sync_settings": {
-    "inventory_sync_interval_ms": 500,
-    "creature_ai_sync_interval_ms": 1000,
-    "base_construction_immediate": true
+    "port_range": "7777-7787",
+    "timeout_seconds": 30,
+    "max_latency_ms": 200
   },
   "api_integration": {
     "openai": {
@@ -120,504 +106,504 @@ Create `BepInEx/config/synergy_profile.json`:
 }
 ```
 
-### BepInEx Configuration
+### Configuration Fields
 
-Edit `BepInEx/config/DeepSynergy.cfg`:
+| Field | Type | Description |
+|-------|------|-------------|
+| `session_name` | string | Display name for hosted session |
+| `max_players` | int | Maximum concurrent players (2-8) |
+| `difficulty_scale` | enum | `adaptive`, `fixed`, `manual` |
+| `resource_multiplier` | float | Multiplier for harvestable resources (0.5-3.0) |
+| `oxygen_consumption` | float | Oxygen drain rate (0.5-1.5, lower = slower) |
+| `creature_spawn_divider` | int | Divide creature spawn rates (2 = half) |
+| `shared_blueprints` | bool | All players share blueprint unlocks |
+| `ping_locations_shared` | bool | Map pings visible to all players |
 
-```ini
-[General]
-EnableMod = true
-DebugMode = false
-LogLevel = Info
+### Locale Configuration
 
-[Networking]
-ConnectionTimeout = 30
-MaxRetries = 5
-UseNATPunchthrough = true
+Add to `synergy_profile.json`:
 
-[Performance]
-SyncBufferSize = 1024
-MaxConcurrentSyncs = 10
-EnableDeltaCompression = true
-
-[UI]
-ShowConnectionStatus = true
-ShowPlayerList = true
-NotificationDuration = 5
+```json
+{
+  "locale": "en_US",
+  "locale_override": true
+}
 ```
 
-## Console Commands
+Supported: `en_US`, `zh_CN`, `ja_JP`, `de_DE`, `fr_FR`, `pt_BR`, `ru_RU`, `es_ES`, `ko_KR`
 
-Access the BepInEx console with `F1` (default) in-game:
+## In-Game Commands
+
+Access via BepInEx console (F5 by default):
 
 ### Session Management
 
 ```bash
-# Start a new multiplayer host session
+# Start hosting a session
 /start_server
 # Output: Server created: session code = 9B2A-4C7D-E8F1
 
-# Join an existing session
+# Join existing session
 /join_session 9B2A-4C7D-E8F1
 
-# Leave current session
-/leave_session
+# Disconnect from session
+/disconnect
 
-# Show session status
+# View session status
 /synergy_status
 # Output:
-# Connected peers: 2
+# Connected peers: 3/4
 # State sync: 100% complete
 # Inventory hash: 0xFA342B1E
-# Network latency: 45ms avg
+# Average latency: 45ms
 ```
 
-### Gameplay Modifiers
+### Runtime Configuration
 
 ```bash
-# Adjust difficulty scaling (1.0 = normal, 2.0 = double difficulty)
+# Adjust difficulty scaling (temporary)
 /synergy_scale 1.5
 
-# Override world seed (must be done before session start)
+# Force world seed synchronization
 /seed_override 8251
 
-# Toggle shared inventory mode
-/shared_inventory toggle
+# Toggle PvP (host only)
+/pvp_toggle
 
-# Sync resources manually (usually automatic)
-/force_sync resources
+# Kick player by index (host only)
+/kick_player 2
 ```
 
 ### AI Integration Commands
 
 ```bash
-# Generate narrative for current event (requires API configured)
-/api_narrate "exploring the kelp forest"
+# Trigger narrative generation (requires OpenAI API)
+/api_narrate "exploring the deep sea trench"
 
-# Request lore entry for discovered location
-/api_lore "thermal vents"
+# Generate creature biology log (requires Claude API)
+/lore_creature "Shadow Leviathan"
 
-# Generate base name suggestion
-/api_name_base
+# Get contextual hint
+/narrator_hint
 ```
 
-### Debugging
+## Code Examples
 
-```bash
-# Show detailed network stats
-/net_stats
+### Programmatic Session Control
 
-# Export current session state
-/export_state session_backup.json
-
-# Import session state (recovery)
-/import_state session_backup.json
-
-# Clear sync cache (use if desynced)
-/clear_sync_cache
-```
-
-## Common Usage Patterns
-
-### Starting a Co-op Session
+If extending the mod via BepInEx plugins:
 
 ```csharp
-// Programmatic session creation (for mod developers extending this)
 using DeepSynergy.Core;
-using DeepSynergy.Networking;
+using BepInEx;
+using UnityEngine;
 
-public class SessionManager : MonoBehaviour
+[BepInPlugin("com.yourmod.extension", "Session Extension", "1.0.0")]
+public class SessionExtension : BaseUnityPlugin
 {
-    public void CreateMultiplayerSession()
-    {
-        var config = new SessionConfig
-        {
-            MaxPlayers = 4,
-            DifficultyScale = DifficultyScaleMode.Adaptive,
-            ResourceMultiplier = 1.2f,
-            SharedBlueprints = true
-        };
-
-        var session = SynergyCore.Instance.CreateSession(config);
-        
-        // Session code generated automatically
-        string sessionCode = session.SessionCode;
-        Debug.Log($"Session created: {sessionCode}");
-        
-        // Share this code with friends
-        GUIUtility.systemCopyBuffer = sessionCode;
-    }
-}
-```
-
-### Joining a Session
-
-```csharp
-using DeepSynergy.Networking;
-
-public class JoinSessionController : MonoBehaviour
-{
-    public void JoinViaCode(string sessionCode)
-    {
-        var connector = new SessionConnector();
-        
-        connector.OnConnectionSuccess += (session) =>
-        {
-            Debug.Log($"Connected to {session.Name}");
-            Debug.Log($"Players: {session.PlayerCount}/{session.MaxPlayers}");
-        };
-        
-        connector.OnConnectionFailed += (error) =>
-        {
-            Debug.LogError($"Connection failed: {error.Message}");
-        };
-        
-        connector.ConnectToSession(sessionCode);
-    }
-}
-```
-
-### Synchronizing Custom Data
-
-```csharp
-using DeepSynergy.Sync;
-
-// Sync custom player data across clients
-public class CustomPlayerData : SyncedObject
-{
-    [Synced]
-    public string PlayerName { get; set; }
+    private SessionManager sessionManager;
     
-    [Synced]
-    public int ExplorationScore { get; set; }
-    
-    [Synced(SyncMode.OnChange)]
-    public Vector3 LastPingLocation { get; set; }
-    
-    protected override void OnSynced()
+    void Awake()
     {
-        // Called when data synced from another client
-        Debug.Log($"{PlayerName} pinged location: {LastPingLocation}");
-    }
-}
-
-// Register for synchronization
-public void RegisterCustomData()
-{
-    var playerData = new CustomPlayerData
-    {
-        PlayerName = "Explorer1",
-        ExplorationScore = 0
-    };
-    
-    SyncManager.Instance.RegisterSyncedObject(playerData);
-}
-```
-
-### Handling Inventory Synchronization
-
-```csharp
-using DeepSynergy.Inventory;
-
-public class SharedInventoryManager : MonoBehaviour
-{
-    public void OnItemPickup(TechType itemType, int count)
-    {
-        // Automatically synced to all clients
-        var syncedItem = new SyncedInventoryItem
-        {
-            TechType = itemType,
-            Count = count,
-            PickupTime = Time.time,
-            OwnerClientId = SynergyCore.Instance.LocalClientId
-        };
+        // Get Deep Synergy session manager
+        sessionManager = SessionManager.Instance;
         
-        InventorySyncService.Instance.AddItem(syncedItem);
+        // Subscribe to session events
+        sessionManager.OnPlayerJoined += HandlePlayerJoined;
+        sessionManager.OnStateSync += HandleStateSync;
     }
     
-    public void OnItemCraft(TechType craftedItem)
+    void HandlePlayerJoined(PlayerInfo player)
     {
-        // Verify all clients have required materials
-        if (InventorySyncService.Instance.CanCraft(craftedItem))
+        Logger.LogInfo($"Player {player.DisplayName} joined");
+        
+        // Access session configuration
+        var config = sessionManager.Config;
+        if (config.SharedBlueprints)
         {
-            InventorySyncService.Instance.ConsumeRecipe(craftedItem);
-            InventorySyncService.Instance.AddItem(new SyncedInventoryItem
-            {
-                TechType = craftedItem,
-                Count = 1
-            });
+            SyncBlueprintsToPlayer(player);
+        }
+    }
+    
+    void HandleStateSync(SyncEvent syncEvent)
+    {
+        // Process synchronized state updates
+        if (syncEvent.Type == SyncType.Inventory)
+        {
+            VerifyInventoryIntegrity(syncEvent.MerkleHash);
+        }
+    }
+    
+    void SyncBlueprintsToPlayer(PlayerInfo player)
+    {
+        var blueprints = BlueprintManager.GetUnlockedBlueprints();
+        sessionManager.SendToPlayer(player.Id, blueprints);
+    }
+    
+    void VerifyInventoryIntegrity(string merkleHash)
+    {
+        var localHash = InventoryHasher.ComputeMerkleRoot();
+        if (localHash != merkleHash)
+        {
+            Logger.LogWarning("Inventory desync detected, requesting full sync");
+            sessionManager.RequestFullSync();
         }
     }
 }
 ```
 
-### AI Narrative Integration
+### Custom Scaling Logic
 
 ```csharp
-using DeepSynergy.AI;
-using System.Threading.Tasks;
+using DeepSynergy.Scaling;
 
-public class NarrativeEngine : MonoBehaviour
+public class CustomScalingRule : IScalingRule
 {
-    private AIIntegrationService aiService;
-    
-    void Start()
+    public void ApplyScaling(int playerCount)
     {
-        aiService = new AIIntegrationService();
+        var config = SessionManager.Instance.Config;
         
-        // Configure from environment variables
-        aiService.ConfigureOpenAI(Environment.GetEnvironmentVariable("OPENAI_API_KEY"));
-        aiService.ConfigureClaude(Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY"));
+        // Custom resource scaling
+        float resourceScale = config.ResourceMultiplier * Mathf.Sqrt(playerCount);
+        ResourceSpawner.SetGlobalMultiplier(resourceScale);
+        
+        // Creature spawn reduction
+        int spawnDivider = config.CreatureSpawnDivider * playerCount;
+        CreatureManager.SetSpawnRateDivider(spawnDivider);
+        
+        // Oxygen efficiency boost
+        float oxygenMod = config.OxygenConsumption / Mathf.Log(playerCount + 1);
+        PlayerOxygenSystem.SetConsumptionRate(oxygenMod);
     }
-    
-    public async Task GenerateDiscoveryNarrative(string biomeName)
+}
+
+// Register custom rule
+ScalingEngine.RegisterRule(new CustomScalingRule());
+```
+
+### Inventory Synchronization Hook
+
+```csharp
+using DeepSynergy.Sync;
+
+public class InventorySyncHook : MonoBehaviour
+{
+    void OnItemPickup(Item item)
     {
-        var context = new NarrativeContext
+        // Create sync event
+        var syncData = new InventorySyncData
         {
-            Event = "biome_discovery",
-            Location = biomeName,
-            PlayerCount = SynergyCore.Instance.ConnectedPlayers.Count,
-            GameTime = DayNightCycle.main.GetDayScalar()
+            PlayerId = LocalPlayer.Id,
+            ItemId = item.TechType,
+            Quantity = 1,
+            Timestamp = NetworkTime.CurrentTime
         };
         
-        // Use OpenAI for short narrative
-        string narrative = await aiService.GenerateNarrative(context, AIProvider.OpenAI);
-        
-        // Display in-game
-        ErrorMessage.AddMessage(narrative);
+        // Broadcast to peers
+        StateSynchronizer.BroadcastEvent(syncData);
     }
     
-    public async Task GenerateSpeciesLore(string creatureName)
+    void OnItemCraft(TechType techType)
     {
-        var loreContext = new LoreContext
+        if (SessionManager.Instance.Config.SharedBlueprints)
         {
-            Subject = creatureName,
-            DiscoveredBy = Player.main.GetName(),
-            SessionData = SynergyCore.Instance.GetSessionHistory()
+            // Unlock for all players
+            var unlockData = new BlueprintUnlockData
+            {
+                TechType = techType,
+                UnlockedBy = LocalPlayer.Id
+            };
+            
+            StateSynchronizer.BroadcastUnlock(unlockData);
+        }
+    }
+}
+```
+
+## Common Patterns
+
+### Host Migration on Disconnect
+
+```csharp
+void OnHostDisconnect()
+{
+    if (SessionManager.Instance.IsHost)
+    {
+        // Current host is disconnecting, migrate session
+        var nextHost = SessionManager.Instance.GetNextEligibleHost();
+        
+        if (nextHost != null)
+        {
+            Logger.LogInfo($"Migrating host to {nextHost.DisplayName}");
+            SessionManager.Instance.MigrateHostTo(nextHost.Id);
+            
+            // Transfer session state
+            var sessionState = SessionStateSerializer.Capture();
+            SessionManager.Instance.SendStateSnapshot(nextHost.Id, sessionState);
+        }
+        else
+        {
+            Logger.LogWarning("No eligible host for migration, ending session");
+            SessionManager.Instance.EndSession();
+        }
+    }
+}
+```
+
+### Conflict Resolution
+
+```csharp
+void ResolveInventoryConflict(InventoryConflict conflict)
+{
+    // Timestamp-based authority
+    var localTimestamp = conflict.LocalEvent.Timestamp;
+    var remoteTimestamp = conflict.RemoteEvent.Timestamp;
+    
+    if (remoteTimestamp > localTimestamp)
+    {
+        // Remote event is newer, apply it
+        ApplyInventoryEvent(conflict.RemoteEvent);
+    }
+    else if (remoteTimestamp < localTimestamp)
+    {
+        // Local event is newer, broadcast to override
+        StateSynchronizer.BroadcastEvent(conflict.LocalEvent, priority: true);
+    }
+    else
+    {
+        // Exact tie, use player ID as tiebreaker
+        if (conflict.RemoteEvent.PlayerId > conflict.LocalEvent.PlayerId)
+        {
+            ApplyInventoryEvent(conflict.RemoteEvent);
+        }
+    }
+}
+```
+
+### API Integration Example
+
+```csharp
+using System.Net.Http;
+using Newtonsoft.Json;
+
+public class NarrativeEngine
+{
+    private static readonly HttpClient client = new HttpClient();
+    
+    public async Task<string> GenerateNarrative(string context)
+    {
+        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            Logger.LogWarning("OPENAI_API_KEY not set");
+            return null;
+        }
+        
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
+        
+        var request = new
+        {
+            model = "gpt-4",
+            messages = new[]
+            {
+                new { role = "system", content = "You are a narrative generator for Subnautica 2 multiplayer sessions." },
+                new { role = "user", content = $"Generate a journal entry: {context}" }
+            },
+            max_tokens = 150
         };
         
-        // Use Claude for detailed lore (long context)
-        string lore = await aiService.GenerateLore(loreContext, AIProvider.Claude);
+        var response = await client.PostAsync(
+            "https://api.openai.com/v1/chat/completions",
+            new StringContent(JsonConvert.SerializeObject(request), System.Text.Encoding.UTF8, "application/json")
+        );
         
-        // Add to PDA database
-        PDAEncyclopedia.Add(creatureName, lore);
+        var result = JsonConvert.DeserializeObject<dynamic>(
+            await response.Content.ReadAsStringAsync()
+        );
+        
+        return result.choices[0].message.content;
     }
 }
 ```
 
 ## Troubleshooting
 
-### Connection Issues
+### Session Connection Failures
 
-**Problem:** Cannot connect to host session
+**Problem:** Cannot join session, timeout errors
 
+**Solutions:**
+1. Verify firewall allows UDP ports `7777-7787`
+2. Check NAT type: `Strict` NAT requires manual port forwarding
+3. Increase timeout in config:
+   ```json
+   "network": {
+     "timeout_seconds": 60
+   }
+   ```
+
+**Diagnostic command:**
 ```bash
-# Check network configuration
-/net_stats
-
-# Verify port forwarding (if not using UPnP)
-# Ensure port 7777 (or custom port) is open
-
-# Test NAT traversal
-/test_nat
-
-# Try direct IP connection instead of session code
-/join_direct 192.168.1.100:7777
+/network_diagnostics
+# Shows: NAT type, port status, peer connectivity
 ```
 
-**Problem:** High latency or desyncs
+### Inventory Desynchronization
+
+**Problem:** Players see different inventory states
+
+**Solutions:**
+1. Force full resync: `/synergy_resync inventory`
+2. Check network latency: `/synergy_status`
+3. Verify Merkle hash integrity:
+   ```csharp
+   var localHash = InventoryHasher.ComputeMerkleRoot();
+   Logger.LogInfo($"Local inventory hash: {localHash}");
+   ```
+
+### High CPU Usage
+
+**Problem:** Performance degradation with multiple players
+
+**Solutions:**
+1. Reduce `creature_spawn_divider` in config
+2. Disable API integrations if enabled
+3. Lower `max_players` count
+4. Adjust sync frequency in `BepInEx/config/DeepSynergy.cfg`:
+   ```ini
+   [Synchronization]
+   StateUpdateHz = 10  # Lower from default 20
+   ```
+
+### BepInEx Load Errors
+
+**Problem:** Mod not loading, missing dependencies
+
+**Check:**
+```bash
+# View BepInEx log
+<Game Directory>/BepInEx/LogOutput.log
+
+# Common issues:
+# - Missing BepInEx.IL2CPP.dll
+# - Incompatible Unity version
+# - Conflicting plugins
+```
+
+**Solution:**
+1. Reinstall BepInEx 6.0.x IL2CPP variant
+2. Remove conflicting mods from `plugins/` folder
+3. Verify game version matches mod compatibility (check release notes)
+
+### Session Code Invalid
+
+**Problem:** "Invalid session code" when joining
+
+**Solutions:**
+1. Verify code format: `XXXX-XXXX-XXXX` (12 hex characters)
+2. Check host is still running: `/synergy_status` on host
+3. Ensure matching mod versions across all players
+4. Regenerate session: `/restart_server` on host
+
+### API Integration Not Working
+
+**Problem:** Narrative/lore generation fails
+
+**Check:**
+1. Environment variables set:
+   ```bash
+   echo $OPENAI_API_KEY
+   echo $ANTHROPIC_API_KEY
+   ```
+2. API enabled in config:
+   ```json
+   "api_integration": {
+     "openai": { "enabled": true }
+   }
+   ```
+3. Network connectivity to API endpoints
+4. Check BepInEx console for API error messages
+
+## Performance Optimization
+
+### Recommended Settings for 4+ Players
 
 ```json
-// Adjust sync intervals in synergy_profile.json
 {
-  "sync_settings": {
-    "inventory_sync_interval_ms": 1000,  // Increase from 500
-    "creature_ai_sync_interval_ms": 2000, // Increase from 1000
-    "tick_rate": 20  // Decrease from 30 for lower bandwidth
+  "max_players": 4,
+  "creature_spawn_divider": 3,
+  "resource_multiplier": 2.0,
+  "network": {
+    "state_update_hz": 10,
+    "position_update_hz": 20,
+    "inventory_sync_batch": true
+  },
+  "optimization": {
+    "async_state_processing": true,
+    "threaded_merkle_computation": true,
+    "delta_compression": true
   }
 }
 ```
 
-### Session State Corruption
-
-**Problem:** Players see different base structures
-
-```bash
-# Export current state
-/export_state backup.json
-
-# Have all players leave session
-/leave_session
-
-# Host restarts with clean state
-/clear_sync_cache
-/import_state backup.json
-/start_server
-```
-
-**Problem:** Inventory desynchronization
+### Monitoring Performance
 
 ```csharp
-// Force inventory reconciliation
-public void ForceInventorySync()
+void Update()
 {
-    var localInventory = InventorySyncService.Instance.GetLocalInventory();
-    var merkleHash = InventorySyncService.Instance.ComputeMerkleHash(localInventory);
+    var perfStats = SessionManager.Instance.GetPerformanceStats();
     
-    // Request hash verification from all clients
-    SynergyCore.Instance.BroadcastHashCheck(merkleHash);
-    
-    // If mismatch detected, full sync is triggered automatically
-}
-```
-
-### Performance Optimization
-
-**Problem:** Frame drops with multiple players
-
-```ini
-# Edit BepInEx/config/DeepSynergy.cfg
-[Performance]
-EnableDeltaCompression = true
-MaxConcurrentSyncs = 5  # Reduce from 10
-SyncBufferSize = 512    # Reduce from 1024
-
-[Sync]
-DisableCreatureAISync = false  # Set true if severe issues
-ReducedPhysicsSync = true      # Enable for better performance
-```
-
-**Problem:** Memory leaks during long sessions
-
-```csharp
-// Periodic cleanup (run every 30 minutes)
-public class MemoryManager : MonoBehaviour
-{
-    void Start()
+    if (perfStats.AverageLatency > 150)
     {
-        InvokeRepeating(nameof(CleanupSyncCache), 1800f, 1800f);
+        Logger.LogWarning($"High latency detected: {perfStats.AverageLatency}ms");
     }
     
-    void CleanupSyncCache()
+    if (perfStats.PacketLossRate > 0.05)
     {
-        SyncManager.Instance.PurgeOldEntries(TimeSpan.FromMinutes(10));
-        Resources.UnloadUnusedAssets();
-        GC.Collect();
+        Logger.LogWarning($"Packet loss: {perfStats.PacketLossRate * 100}%");
     }
 }
 ```
 
-### AI Integration Issues
+## Advanced Usage
 
-**Problem:** AI narration not generating
+### Custom Session Events
 
 ```csharp
-// Verify API configuration
-public void TestAPIConnection()
+using DeepSynergy.Events;
+
+// Define custom event
+public class BaseConstructedEvent : ISyncEvent
 {
-    var openaiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
-    var claudeKey = Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY");
-    
-    if (string.IsNullOrEmpty(openaiKey))
+    public string PlayerId { get; set; }
+    public Vector3 Position { get; set; }
+    public string BasePartType { get; set; }
+    public long Timestamp { get; set; }
+}
+
+// Broadcast custom event
+void OnBasePartPlaced(BasePartType type, Vector3 position)
+{
+    var evt = new BaseConstructedEvent
     {
-        Debug.LogError("OPENAI_API_KEY not set in environment");
-    }
+        PlayerId = LocalPlayer.Id,
+        Position = position,
+        BasePartType = type.ToString(),
+        Timestamp = NetworkTime.CurrentTime
+    };
     
-    if (string.IsNullOrEmpty(claudeKey))
+    StateSynchronizer.BroadcastCustomEvent(evt);
+}
+
+// Handle custom event
+void OnCustomEventReceived(ISyncEvent evt)
+{
+    if (evt is BaseConstructedEvent baseEvt)
     {
-        Debug.LogError("ANTHROPIC_API_KEY not set in environment");
+        Logger.LogInfo($"Player {baseEvt.PlayerId} built {baseEvt.BasePartType}");
     }
-    
-    // Test connectivity
-    AIIntegrationService.TestConnection(AIProvider.OpenAI);
-    AIIntegrationService.TestConnection(AIProvider.Claude);
 }
 ```
 
-### BepInEx Console Not Appearing
-
-```bash
-# Check BepInEx/config/BepInEx.cfg
-[Logging.Console]
-Enabled = true
-
-# Alternative: Use log file
-# BepInEx/LogOutput.log contains all console output
-```
-
-## Advanced Configuration
-
-### Custom Difficulty Scaling Algorithm
-
-```csharp
-using DeepSynergy.Scaling;
-
-public class CustomScalingProfile : IScalingProfile
-{
-    public float CalculateResourceMultiplier(int playerCount)
-    {
-        // Linear scaling: +25% resources per additional player
-        return 1.0f + ((playerCount - 1) * 0.25f);
-    }
-    
-    public float CalculateCreatureSpawnRate(int playerCount)
-    {
-        // Logarithmic scaling to prevent overwhelming spawns
-        return 1.0f + (Mathf.Log(playerCount) * 0.3f);
-    }
-    
-    public float CalculateOxygenConsumption(int playerCount)
-    {
-        // Slight reduction for co-op breathing efficiency
-        return 1.0f - (playerCount * 0.05f);
-    }
-}
-
-// Register custom profile
-ScalingManager.Instance.RegisterProfile("custom", new CustomScalingProfile());
-```
-
-### Multi-Language Support
-
-```json
-// Create BepInEx/config/localization/zh_CN.json
-{
-  "session_created": "会话已创建",
-  "session_code": "会话代码",
-  "player_joined": "{0} 已加入",
-  "player_left": "{0} 已离开",
-  "sync_complete": "同步完成"
-}
-```
-
-```csharp
-// Load localization
-LocalizationManager.Instance.SetLanguage("zh_CN");
-string message = LocalizationManager.Get("player_joined", playerName);
-```
-
-## Best Practices
-
-1. **Always export session state** before major changes (`/export_state`)
-2. **Use adaptive difficulty** unless testing specific scenarios
-3. **Enable UPnP** for easier connectivity (disable for manual port control)
-4. **Set `shared_blueprints: true`** to prevent blueprint desync
-5. **Keep API keys in environment variables**, never in config files
-6. **Monitor sync status** with `/synergy_status` if experiencing lag
-7. **Use delta compression** for bandwidth-limited connections
-8. **Clear sync cache** (`/clear_sync_cache`) if players see ghost objects
-
-## Environment Variables
-
-```bash
-# Windows (PowerShell)
-$env:OPENAI_API_KEY = "sk-..."
-$env:ANTHROPIC_API_KEY = "sk-ant-..."
-
-# Linux/macOS
-export OPENAI_API_KEY="sk-..."
-export ANTHROPIC_API_KEY="sk-ant-..."
-
-# Persistent (add to .bashrc or .zshrc)
-echo 'export OPENAI_API_KEY="sk-..."' >> ~/.bashrc
-```
+This skill covers the essential knowledge needed to install, configure, use, and troubleshoot the Deep Synergy Multiplayer Mod for Subnautica 2 using BepInEx.
