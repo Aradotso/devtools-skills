@@ -50,6 +50,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [mcp2cli-runtime-api-tooling](skills/mcp2cli-runtime-api-tooling/) | [install](https://skills.sh/aradotso/devtools-skills/mcp2cli-runtime-api-tooling) | [knowsuchagency/mcp2cli](https://github.com/knowsuchagency/mcp2cli) | 2026-05-17 |
 | [clipify-video-clip-generator](skills/clipify-video-clip-generator/) | [install](https://skills.sh/aradotso/devtools-skills/clipify-video-clip-generator) | [louisedesadeleer/clipify](https://github.com/louisedesadeleer/clipify) | 2026-05-17 |
 | [agent-browser-cli-control](skills/agent-browser-cli-control/) | [install](https://skills.sh/aradotso/devtools-skills/agent-browser-cli-control) | [sleepinginsummer/agent-browser-cli](https://github.com/sleepinginsummer/agent-browser-cli) | 2026-05-17 |
+| [cliamp-terminal-music-player](skills/cliamp-terminal-music-player/) | [install](https://skills.sh/aradotso/devtools-skills/cliamp-terminal-music-player) | [bjarneo/cliamp](https://github.com/bjarneo/cliamp) | 2026-05-17 |
 <!-- SKILL_INDEX -->
 
 ---
