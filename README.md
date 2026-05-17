@@ -53,6 +53,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [cliamp-terminal-music-player](skills/cliamp-terminal-music-player/) | [install](https://skills.sh/aradotso/devtools-skills/cliamp-terminal-music-player) | [bjarneo/cliamp](https://github.com/bjarneo/cliamp) | 2026-05-17 |
 | [github-copilot-cli](skills/github-copilot-cli/) | [install](https://skills.sh/aradotso/devtools-skills/github-copilot-cli) | [github/copilot-cli-for-beginners](https://github.com/github/copilot-cli-for-beginners) | 2026-05-17 |
 | [stripe-link-cli](skills/stripe-link-cli/) | [install](https://skills.sh/aradotso/devtools-skills/stripe-link-cli) | [stripe/link-cli](https://github.com/stripe/link-cli) | 2026-05-17 |
+| [cc-switch-cli](skills/cc-switch-cli/) | [install](https://skills.sh/aradotso/devtools-skills/cc-switch-cli) | [SaladDay/cc-switch-cli](https://github.com/SaladDay/cc-switch-cli) | 2026-05-17 |
 <!-- SKILL_INDEX -->
 
 ---
