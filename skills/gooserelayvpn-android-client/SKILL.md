@@ -1,104 +1,98 @@
 ---
 name: gooserelayvpn-android-client
-description: Build and configure GooseRelayVPN Android client with Go mobile bridge, SOCKS5 VPN tunneling through Google Apps Script domain-fronting, and profile-based setup
+description: Build, configure, and troubleshoot the GooseRelayVPN Android client—a SOCKS5 VPN app with domain-fronting via Google Apps Script.
 triggers:
-  - how do I build the GooseRelayVPN Android client
-  - configure GooseRelayVPN profile with script keys and tunnel key
-  - build Go mobile AAR for GooseRelayVPN Android
-  - set up domain-fronted VPN with Google Apps Script
-  - troubleshoot GooseRelayVPN Android connection issues
-  - implement SOCKS5 VPN tunneling in Android with GooseRelay
-  - create GooseRelayVPN profile JSON configuration
-  - debug GooseRelayVPN Android VpnService
+  - "set up GooseRelayVPN Android client"
+  - "configure GooseRelay Android profile"
+  - "build GooseRelayVPN APK"
+  - "troubleshoot GooseRelay Android connection"
+  - "integrate GooseRelay VpnService"
+  - "import GooseRelay profile JSON"
+  - "debug GooseRelay Android logs"
+  - "create GooseRelayVPN mobile bridge"
 ---
 
-# GooseRelayVPN Android Client Skill
+# GooseRelayVPN Android Client
 
 > Skill by [ara.so](https://ara.so) — Devtools Skills collection.
 
-## What GooseRelayVPN Android Client Does
+## What It Does
 
-GooseRelayVPN Android Client is an Android VPN application that tunnels TCP traffic through a domain-fronted SOCKS5 proxy using Google Apps Script as a relay. It encrypts traffic with AES-256-GCM and routes it through your VPS exit server while appearing to communicate with Google infrastructure.
+GooseRelayVPN Android Client is a VPN app that tunnels TCP traffic through Google Apps Script to a VPS exit server using AES-256-GCM encryption and domain fronting. The app:
+
+- Creates a local SOCKS5 proxy on Android
+- Uses `VpnService` + tun2socks for system-wide or per-app tunneling
+- Encrypts traffic with AES-256-GCM before relaying through Google endpoints
+- Supports profile-based configuration with JSON import/export
+- Provides real-time logs and connection telemetry
 
 **Architecture flow:**
-1. Local Android app/browser → SOCKS5 proxy (127.0.0.1:1080)
-2. GooseRelay core encrypts with AES-256-GCM
-3. Traffic sent via HTTPS to Google Apps Script deployment
-4. Apps Script relays to your VPS exit server
-5. VPS decrypts and connects to target destination
-
-The app uses Android `VpnService` + tun2socks to route device traffic through the tunnel.
+1. Local app traffic → SOCKS5 (127.0.0.1:1080)
+2. GooseRelay core encrypts with AES key
+3. HTTPS to Google Apps Script deployment IDs
+4. Apps Script forwards to VPS exit server
+5. VPS makes outbound connections
 
 ## Prerequisites
 
-Before building the Android client, you need:
+Before building or using the Android client, you need upstream infrastructure:
 
-1. **VPS server** running `goose-server` (from upstream GooseRelayVPN)
-2. **Google Apps Script deployment** with the relay script deployed
-3. **Shared tunnel key** generated via `scripts/gen-key.sh`
-4. **Development environment:**
-   - Android Studio
-   - JDK 17+
-   - Go 1.22+
-   - Android SDK/NDK
+1. **VPS running goose-server** (from upstream repo)
+2. **Google Apps Script deployed** (`apps_script/Code.gs` with deployment ID)
+3. **AES-256 tunnel key** generated via `scripts/gen-key.sh`
+
+Upstream repo: https://github.com/kianmhz/GooseRelayVPN
 
 ## Installation & Build
 
-### 1. Clone the Repository
+### Requirements
+
+- Android Studio (latest stable)
+- JDK 17+
+- Go 1.22+
+- Android SDK 34+ and NDK
+
+### Clone and Build Go Mobile Bridge
 
 ```bash
 git clone https://github.com/Hidden-Node/GooseRelayVPN-AndroidClient.git
 cd GooseRelayVPN-AndroidClient
+
+# Build the Go mobile AAR (gomobile bind wrapper)
+bash android/build_go_mobile.sh
 ```
 
-### 2. Build Go Mobile AAR
+This generates `gooserelay.aar` in `android/app/libs/`.
 
-The Android app uses a Go mobile bridge to run the GooseRelay core:
-
-```bash
-cd android
-bash build_go_mobile.sh
-```
-
-This script:
-- Installs `gomobile` if needed
-- Binds the Go core to Android AAR
-- Places the AAR in `android/app/libs/`
-
-**Manual build (if script fails):**
-
-```bash
-# Install gomobile
-go install golang.org/x/mobile/cmd/gomobile@latest
-gomobile init
-
-# Build for Android
-cd android
-gomobile bind -target=android -o app/libs/gooserelay.aar ../core
-```
-
-### 3. Build Android APK
-
-**Debug build:**
+### Build Debug APK
 
 ```bash
 cd android
 ./gradlew :app:assembleDebug
 ```
 
-**Release build (requires signing keys):**
+Output: `android/app/build/outputs/apk/debug/app-debug.apk`
+
+### Build Release APK (Signed)
+
+Requires keystore secrets:
 
 ```bash
+export ANDROID_KEYSTORE_BASE64="..."
+export ANDROID_KEYSTORE_PASSWORD="..."
+export ANDROID_KEY_ALIAS="..."
+export ANDROID_KEY_PASSWORD="..."
+
 ./gradlew :app:assembleRelease
 ```
 
-APK location: `android/app/build/outputs/apk/`
+Or use CI workflows: `.github/workflows/release.yml`
 
-## Configuration
+## Configuration (Profile JSON)
 
-### Profile JSON Structure
+The app uses profile-based configuration matching the upstream GooseRelay client config schema.
 
-GooseRelayVPN uses profile-based configuration. Each profile is a JSON object:
+### Profile Structure
 
 ```json
 {
@@ -112,561 +106,425 @@ GooseRelayVPN uses profile-based configuration. Each profile is a JSON object:
     "accounts.google.com"
   ],
   "script_keys": [
-    "YOUR_APPS_SCRIPT_DEPLOYMENT_ID_1",
-    "YOUR_APPS_SCRIPT_DEPLOYMENT_ID_2"
+    "AKfycbzXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "AKfycbzYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
   ],
-  "tunnel_key": "YOUR_TUNNEL_KEY_FROM_GEN_KEY_SCRIPT"
+  "tunnel_key": "BASE64_ENCODED_AES_KEY_FROM_GEN_KEY_SH"
 }
 ```
 
-**Field descriptions:**
+### Field Reference
 
-- `debug_timing`: Enable timing logs (boolean)
-- `socks_host`: Local SOCKS5 bind address (usually `127.0.0.1`)
-- `socks_port`: Local SOCKS5 port (default `1080`)
-- `google_host`: Google IP to connect to (domain-fronting)
-- `sni`: Array of SNI hostnames for TLS ClientHello
-- `script_keys`: Array of Google Apps Script deployment IDs
-- `tunnel_key`: AES-256-GCM encryption key (must match server)
+| Field          | Type     | Description                                                      |
+|----------------|----------|------------------------------------------------------------------|
+| `debug_timing` | bool     | Enable timing debug logs in core                                 |
+| `socks_host`   | string   | Local SOCKS5 bind address (usually `127.0.0.1`)                  |
+| `socks_port`   | int      | SOCKS5 port (default `1080`)                                     |
+| `google_host`  | string   | Google IP for domain fronting (e.g., `216.239.38.120`)           |
+| `sni`          | []string | SNI hostnames for TLS handshake (Google domains)                 |
+| `script_keys`  | []string | Google Apps Script deployment IDs (one or more for redundancy)   |
+| `tunnel_key`   | string   | Base64 AES-256 key; must match server-side key                   |
 
-### Generating Tunnel Key
+### Generating the Tunnel Key
 
-On your development/VPS machine:
+From the upstream repo:
 
 ```bash
-# From upstream GooseRelayVPN repository
 cd GooseRelayVPN
 bash scripts/gen-key.sh
 ```
 
-Save the output key — it must be identical on both client and server.
+Output example:
+```
+Generated AES-256 key (base64):
+a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6
+```
 
-### Obtaining Apps Script Deployment ID
-
-1. Deploy `apps_script/Code.gs` to Google Apps Script
-2. Deploy as Web App → get deployment ID (format: `AKfycby...`)
-3. Add deployment ID(s) to `script_keys` array
+Copy this key into your profile's `tunnel_key` field **and** your VPS server config.
 
 ### In-App Profile Management
 
-**Create profile:**
+- **Create new profile:** Enter profile name and fields manually
+- **Import JSON:** Tap "Import Profile" → select JSON file or paste JSON
+- **Export JSON:** Tap profile → "Export" → save to device
+- **Edit profile:** Tap profile → modify fields → Save
 
-```kotlin
-// ProfileFragment.kt example
-val profile = Profile(
-    name = "My VPN",
-    debugTiming = false,
-    socksHost = "127.0.0.1",
-    socksPort = 1080,
-    googleHost = "216.239.38.120",
-    sni = listOf("www.google.com", "mail.google.com"),
-    scriptKeys = listOf(System.getenv("APPS_SCRIPT_DEPLOYMENT_ID")),
-    tunnelKey = System.getenv("TUNNEL_KEY")
-)
-```
+### Example Import JSON
 
-**Import from JSON:**
-
-Use the in-app import button or load JSON programmatically:
-
-```kotlin
-import org.json.JSONObject
-import org.json.JSONArray
-
-fun importProfile(jsonString: String): Profile {
-    val json = JSONObject(jsonString)
-    return Profile(
-        name = json.optString("name", "Imported Profile"),
-        debugTiming = json.optBoolean("debug_timing", false),
-        socksHost = json.optString("socks_host", "127.0.0.1"),
-        socksPort = json.optInt("socks_port", 1080),
-        googleHost = json.optString("google_host", "216.239.38.120"),
-        sni = json.getJSONArray("sni").let { arr ->
-            (0 until arr.length()).map { arr.getString(it) }
-        },
-        scriptKeys = json.getJSONArray("script_keys").let { arr ->
-            (0 until arr.length()).map { arr.getString(it) }
-        },
-        tunnelKey = json.getString("tunnel_key")
-    )
+```json
+{
+  "debug_timing": false,
+  "socks_host": "127.0.0.1",
+  "socks_port": 1080,
+  "google_host": "216.239.38.120",
+  "sni": ["www.google.com"],
+  "script_keys": [
+    "AKfycbzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  ],
+  "tunnel_key": "Zm9vYmFyYmF6cXV4Zm9vYmFyYmF6cXV4Zm9vYmFyYmF6cXV4"
 }
 ```
 
-**Export to JSON:**
+## Using the App
 
-```kotlin
-fun exportProfile(profile: Profile): String {
-    val json = JSONObject().apply {
-        put("debug_timing", profile.debugTiming)
-        put("socks_host", profile.socksHost)
-        put("socks_port", profile.socksPort)
-        put("google_host", profile.googleHost)
-        put("sni", JSONArray(profile.sni))
-        put("script_keys", JSONArray(profile.scriptKeys))
-        put("tunnel_key", profile.tunnelKey)
-    }
-    return json.toString(2)
-}
+### Connect to VPN
+
+1. Open app
+2. Select or create a profile
+3. Tap "Connect" button on Home tab
+4. Grant VPN permission when prompted (first time only)
+5. Status should change: **Preparing → Connecting → Connected**
+
+### Disconnect
+
+Tap "Disconnect" button. VpnService will stop and SOCKS proxy will shut down.
+
+### View Logs
+
+- Tap **Logs** tab
+- View real-time Android and Go core logs
+- Use "Clear Logs" to reset buffer
+- Use "Export Logs" to save diagnostics
+
+### Split Tunneling (Per-App VPN)
+
+- Tap **Settings** → "Split Tunnel Apps"
+- Select which apps should route through VPN
+- Unselected apps use normal network
+
+### Internet Sharing / Hotspot
+
+- Enable "Allow Internet Sharing" in Settings
+- Traffic from tethered devices will also route through VPN
+
+## Development Patterns
+
+### Go Mobile Bridge
+
+The Android app uses `gomobile bind` to wrap the GooseRelay core (written in Go) as an AAR library.
+
+**Build script:** `android/build_go_mobile.sh`
+
+```bash
+#!/bin/bash
+set -e
+
+# Install gomobile if needed
+go install golang.org/x/mobile/cmd/gomobile@latest
+gomobile init
+
+# Build AAR for Android
+gomobile bind -target=android -androidapi=21 \
+  -o android/app/libs/gooserelay.aar \
+  github.com/kianmhz/GooseRelayVPN/client
 ```
 
-## Core Go Mobile Bridge Usage
+### Calling Go Code from Kotlin
 
-The Android app communicates with the Go core via the mobile bridge:
-
-### Starting the VPN Tunnel
-
-```go
-// core/mobile.go example binding
-package mobile
-
-import (
-    "context"
-    "encoding/json"
-)
-
-type VPNClient struct {
-    ctx    context.Context
-    cancel context.CancelFunc
-}
-
-func NewVPNClient(configJSON string) (*VPNClient, error) {
-    var config ClientConfig
-    if err := json.Unmarshal([]byte(configJSON), &config); err != nil {
-        return nil, err
-    }
-    
-    ctx, cancel := context.WithCancel(context.Background())
-    client := &VPNClient{
-        ctx:    ctx,
-        cancel: cancel,
-    }
-    
-    // Start SOCKS5 server and relay logic
-    go client.runRelay(config)
-    
-    return client, nil
-}
-
-func (c *VPNClient) Stop() {
-    c.cancel()
-}
-```
-
-**Android invocation:**
+**Example:** Start SOCKS proxy in background
 
 ```kotlin
-import gooserelay.Mobile
+import gooserelay.Gooserelay
 
-class VPNService : android.net.VpnService() {
-    private var vpnClient: Mobile.VPNClient? = null
-    
-    fun startTunnel(profileJson: String) {
-        try {
-            vpnClient = Mobile.newVPNClient(profileJson)
-            Log.i("VPN", "Tunnel started")
-        } catch (e: Exception) {
-            Log.e("VPN", "Failed to start: ${e.message}")
+class VpnService : VpnService() {
+    private var goProxy: Gooserelay.Proxy? = null
+
+    fun startProxy(configJson: String) {
+        goProxy = Gooserelay.newProxy(configJson)
+        thread {
+            try {
+                goProxy?.start()
+            } catch (e: Exception) {
+                Log.e("VPN", "Proxy error: ${e.message}")
+            }
         }
     }
-    
-    fun stopTunnel() {
-        vpnClient?.stop()
-        vpnClient = null
+
+    fun stopProxy() {
+        goProxy?.stop()
+        goProxy = null
     }
 }
 ```
 
-## Android VpnService Integration
-
-### Establishing VPN Connection
+### Profile Data Class (Kotlin)
 
 ```kotlin
-import android.net.VpnService
-import android.os.ParcelFileDescriptor
+data class Profile(
+    val name: String,
+    val debug_timing: Boolean = false,
+    val socks_host: String = "127.0.0.1",
+    val socks_port: Int = 1080,
+    val google_host: String = "216.239.38.120",
+    val sni: List<String> = listOf("www.google.com"),
+    val script_keys: List<String>,
+    val tunnel_key: String
+)
 
+// Serialize to JSON
+fun Profile.toJson(): String {
+    return Gson().toJson(this)
+}
+
+// Deserialize from JSON
+fun profileFromJson(json: String): Profile {
+    return Gson().fromJson(json, Profile::class.java)
+}
+```
+
+### Importing Profile from JSON File
+
+```kotlin
+fun importProfile(uri: Uri, context: Context): Profile {
+    val json = context.contentResolver.openInputStream(uri)?.use {
+        it.bufferedReader().readText()
+    } ?: throw IOException("Cannot read file")
+    return profileFromJson(json)
+}
+```
+
+### Exporting Profile to JSON File
+
+```kotlin
+fun exportProfile(profile: Profile, uri: Uri, context: Context) {
+    context.contentResolver.openOutputStream(uri)?.use {
+        it.write(profile.toJson().toByteArray())
+    }
+}
+```
+
+### VpnService Integration
+
+**Basic VpnService setup:**
+
+```kotlin
 class GooseVpnService : VpnService() {
-    private var tunInterface: ParcelFileDescriptor? = null
-    
+    private var vpnInterface: ParcelFileDescriptor? = null
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val profile = intent?.getStringExtra("profile_json") ?: return START_NOT_STICKY
+        val profile = getActiveProfile() // Load from SharedPreferences or DB
         
-        // Request VPN permission if needed
-        prepare(this)?.let { permissionIntent ->
-            // User must grant permission
-            return START_NOT_STICKY
-        }
-        
-        // Configure VPN
-        tunInterface = Builder()
+        // Establish VPN interface
+        val builder = Builder()
             .setSession("GooseRelayVPN")
             .addAddress("10.0.0.2", 24)
             .addRoute("0.0.0.0", 0)
             .addDnsServer("8.8.8.8")
             .setMtu(1500)
-            .establish()
         
-        // Start Go mobile VPN client
-        startGooseRelay(profile)
+        // Per-app routing
+        if (splitTunnelEnabled) {
+            selectedApps.forEach { builder.addAllowedApplication(it) }
+        }
+        
+        vpnInterface = builder.establish()
+        
+        // Start tun2socks and Go proxy
+        startTun2Socks(vpnInterface!!)
+        startGoProxy(profile.toJson())
         
         return START_STICKY
     }
-    
-    private fun startGooseRelay(profileJson: String) {
-        vpnClient = Mobile.newVPNClient(profileJson)
-        
-        // Route tun traffic to SOCKS5
-        val tunFd = tunInterface?.detachFd() ?: return
-        Mobile.routeTunToSocks(tunFd.toLong(), "127.0.0.1:1080")
-    }
-    
+
     override fun onDestroy() {
-        vpnClient?.stop()
-        tunInterface?.close()
+        stopGoProxy()
+        stopTun2Socks()
+        vpnInterface?.close()
         super.onDestroy()
     }
 }
 ```
 
-### Split Tunneling
+### Tun2Socks Integration
 
 ```kotlin
-class GooseVpnService : VpnService() {
-    fun configureSplitTunnel(allowedApps: List<String>) {
-        val builder = Builder()
-            .setSession("GooseRelayVPN")
-            .addAddress("10.0.0.2", 24)
-            .addRoute("0.0.0.0", 0)
-        
-        // Allow specific apps to use VPN
-        allowedApps.forEach { packageName ->
-            try {
-                builder.addAllowedApplication(packageName)
-            } catch (e: PackageManager.NameNotFoundException) {
-                Log.w("VPN", "App not found: $packageName")
-            }
-        }
-        
-        tunInterface = builder.establish()
-    }
-}
-```
-
-## Common Patterns
-
-### Profile Validation
-
-```kotlin
-data class ProfileValidationResult(val isValid: Boolean, val errors: List<String>)
-
-fun validateProfile(profile: Profile): ProfileValidationResult {
-    val errors = mutableListOf<String>()
+private fun startTun2Socks(vpnFd: ParcelFileDescriptor) {
+    val cmd = listOf(
+        "${applicationInfo.nativeLibraryDir}/libtun2socks.so",
+        "--netif-ipaddr", "10.0.0.2",
+        "--netif-netmask", "255.255.255.0",
+        "--socks-server-addr", "127.0.0.1:1080",
+        "--tunfd", vpnFd.fd.toString(),
+        "--loglevel", "info"
+    )
     
-    if (profile.scriptKeys.isEmpty()) {
-        errors.add("At least one script_key required")
-    }
-    
-    if (profile.tunnelKey.isEmpty()) {
-        errors.add("tunnel_key cannot be empty")
-    }
-    
-    if (profile.socksPort !in 1024..65535) {
-        errors.add("Invalid SOCKS port: ${profile.socksPort}")
-    }
-    
-    if (profile.sni.isEmpty()) {
-        errors.add("At least one SNI hostname required")
-    }
-    
-    return ProfileValidationResult(errors.isEmpty(), errors)
-}
-```
-
-### Logging & Telemetry
-
-```kotlin
-import android.util.Log
-
-object VPNLogger {
-    private const val TAG = "GooseVPN"
-    
-    fun logConnectionAttempt(profile: String) {
-        Log.i(TAG, "Connecting to profile: $profile")
-    }
-    
-    fun logTrafficStats(bytesIn: Long, bytesOut: Long) {
-        Log.d(TAG, "Traffic: ↓$bytesIn ↑$bytesOut bytes")
-    }
-    
-    fun logError(operation: String, error: String) {
-        Log.e(TAG, "Error in $operation: $error")
-    }
-}
-
-// In VPN service
-vpnClient?.getStats()?.let { stats ->
-    VPNLogger.logTrafficStats(stats.bytesReceived, stats.bytesSent)
-}
-```
-
-### Handling Connection State
-
-```kotlin
-enum class VPNState {
-    DISCONNECTED,
-    PREPARING,
-    CONNECTING,
-    CONNECTED,
-    DISCONNECTING,
-    ERROR
-}
-
-class VPNStateManager {
-    private val _state = MutableLiveData<VPNState>(VPNState.DISCONNECTED)
-    val state: LiveData<VPNState> = _state
-    
-    fun setState(newState: VPNState) {
-        _state.postValue(newState)
-    }
-    
-    fun isConnected() = _state.value == VPNState.CONNECTED
-}
-
-// In Activity/Fragment
-stateManager.state.observe(viewLifecycleOwner) { state ->
-    when (state) {
-        VPNState.CONNECTED -> showConnectedUI()
-        VPNState.ERROR -> showErrorDialog()
-        VPNState.CONNECTING -> showLoadingSpinner()
-        else -> showDisconnectedUI()
-    }
+    ProcessBuilder(cmd).start()
 }
 ```
 
 ## Troubleshooting
 
+### Connection Stuck in "Preparing" State
+
+**Cause:** Core cannot reach Apps Script or key mismatch.
+
+**Fix:**
+- Verify `script_keys` are correct deployment IDs
+- Verify `tunnel_key` matches server-side key
+- Check Logs tab for error messages like "handshake failed" or "401 Unauthorized"
+
 ### SOCKS Port Already in Use
 
-**Symptom:** Connection fails with "address already in use" error
+**Cause:** Previous session didn't clean up properly.
 
-**Solution:**
-
-```kotlin
-fun killExistingSocksServer(port: Int) {
-    try {
-        // Stop existing VPN service
-        stopService(Intent(this, GooseVpnService::class.java))
-        
-        // Wait for port to be released
-        Thread.sleep(2000)
-        
-        // Verify port is free
-        Socket().use { socket ->
-            socket.connect(InetSocketAddress("127.0.0.1", port), 1000)
-            // If no exception, port still in use
-            throw IOException("Port $port still in use")
-        }
-    } catch (e: IOException) {
-        // Port is free (connection refused)
-        Log.i("VPN", "Port $port is available")
-    }
-}
+**Fix:**
+```bash
+# On device (via adb shell)
+netstat -an | grep 1080
+# Kill any stale processes holding the port
 ```
 
-### Invalid Tunnel Key or Script Keys
+In code, ensure `stopProxy()` is always called on disconnect.
 
-**Symptom:** Connection stays in "preparing" state, no traffic flows
+### No Traffic Flows After Connecting
 
-**Debugging:**
+**Cause:** VPN permission not granted, or routing misconfigured.
 
-```kotlin
-fun debugConnectionIssues(profile: Profile) {
-    // 1. Verify key format
-    if (profile.tunnelKey.length != 64) {
-        Log.e("VPN", "Invalid tunnel_key length: ${profile.tunnelKey.length}")
-    }
-    
-    // 2. Test script_key reachability
-    profile.scriptKeys.forEach { scriptKey ->
-        testScriptKey(scriptKey)
-    }
-    
-    // 3. Check core logs
-    val coreLogs = Mobile.getLastLogs(100)
-    Log.d("VPN", "Core logs: $coreLogs")
-}
+**Fix:**
+- Verify VPN permission dialog was accepted
+- Check split tunnel settings — if enabled, ensure target apps are selected
+- Restart app and reconnect
 
-fun testScriptKey(scriptKey: String) {
-    val url = "https://script.google.com/macros/s/$scriptKey/exec"
-    // Attempt connection (requires network permission)
-    // Log result
-}
-```
+### Apps Script Returns 403 or 404
 
-### VPN Permission Not Granted
+**Cause:** Deployment ID incorrect or script not deployed as web app.
 
-**Symptom:** VPN doesn't start, no error shown
+**Fix:**
+- Redeploy `apps_script/Code.gs` as web app (Execute as: Me, Access: Anyone)
+- Copy the new deployment ID into `script_keys`
 
-**Solution:**
+### AES Decryption Errors on Server
 
-```kotlin
-class MainActivity : AppCompatActivity() {
-    private val VPN_PERMISSION_REQUEST = 100
-    
-    fun requestVPNPermission() {
-        val intent = VpnService.prepare(this)
-        if (intent != null) {
-            startActivityForResult(intent, VPN_PERMISSION_REQUEST)
-        } else {
-            // Permission already granted
-            startVPN()
-        }
-    }
-    
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == VPN_PERMISSION_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                startVPN()
-            } else {
-                Toast.makeText(this, "VPN permission denied", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-}
-```
+**Cause:** `tunnel_key` mismatch between client and server.
 
-### No Traffic Flowing Through VPN
+**Fix:**
+- Regenerate key with `gen-key.sh`
+- Update both client profile JSON and server config with the new key
+- Restart both client and server
 
-**Symptom:** VPN connected but apps don't route through tunnel
+### VpnService Crashes on Establish
 
-**Checklist:**
+**Cause:** Missing VPN permission or conflicting VPN app.
 
-```kotlin
-fun diagnoseTunnel() {
-    // 1. Verify VPN interface is up
-    val tunFd = tunInterface?.fileDescriptor
-    if (tunFd == null || !tunFd.valid()) {
-        Log.e("VPN", "TUN interface not valid")
-        return
-    }
-    
-    // 2. Check routing table
-    Log.d("VPN", "Default route should be via 10.0.0.2")
-    
-    // 3. Verify SOCKS5 is listening
-    try {
-        Socket("127.0.0.1", 1080).use {
-            Log.i("VPN", "SOCKS5 server is reachable")
-        }
-    } catch (e: IOException) {
-        Log.e("VPN", "SOCKS5 server not listening: ${e.message}")
-    }
-    
-    // 4. Check DNS configuration
-    Log.d("VPN", "DNS servers configured in VPN builder")
-}
-```
+**Fix:**
+- Check logcat: `adb logcat | grep VpnService`
+- Ensure no other VPN is active
+- Request VPN permission explicitly:
+  ```kotlin
+  val intent = VpnService.prepare(context)
+  if (intent != null) {
+      startActivityForResult(intent, VPN_REQUEST_CODE)
+  }
+  ```
 
-## CI/CD & Release
+## Testing & CI
 
-### GitHub Actions Workflow
-
-The project includes automated builds:
-
-```yaml
-# .github/workflows/android-ci.yml
-name: Android CI
-on: [push, pull_request]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-      - uses: actions/setup-go@v4
-        with:
-          go-version: '1.22'
-      - name: Build Go mobile
-        run: bash android/build_go_mobile.sh
-      - name: Build APK
-        run: cd android && ./gradlew assembleDebug
-```
-
-### Signing Release APK
-
-**Configure signing in `android/app/build.gradle`:**
-
-```gradle
-android {
-    signingConfigs {
-        release {
-            storeFile file(System.getenv("KEYSTORE_PATH") ?: "release.keystore")
-            storePassword System.getenv("KEYSTORE_PASSWORD")
-            keyAlias System.getenv("KEY_ALIAS")
-            keyPassword System.getenv("KEY_PASSWORD")
-        }
-    }
-    buildTypes {
-        release {
-            signingConfig signingConfigs.release
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-}
-```
-
-**Build signed APK:**
+### Local Testing
 
 ```bash
-export KEYSTORE_PATH=/path/to/keystore
-export KEYSTORE_PASSWORD=your_keystore_password
-export KEY_ALIAS=your_key_alias
-export KEY_PASSWORD=your_key_password
+# Install on device
+adb install android/app/build/outputs/apk/debug/app-debug.apk
 
-cd android
-./gradlew assembleRelease
+# View logs
+adb logcat | grep GooseRelay
 ```
 
-## Advanced Usage
+### CI Workflows
 
-### Custom DNS Configuration
+- **android-ci.yml:** Builds debug APK on every push
+- **release.yml:** Builds signed release APK on tag push (requires secrets)
+- **release-manual.yml:** Manually triggered signed build
+
+**Required GitHub Secrets for release:**
+- `ANDROID_KEYSTORE_BASE64`
+- `ANDROID_KEYSTORE_PASSWORD`
+- `ANDROID_KEY_ALIAS`
+- `ANDROID_KEY_PASSWORD`
+
+## Common Patterns
+
+### Auto-Reconnect on Network Change
 
 ```kotlin
-fun setupCustomDNS(dnsServers: List<String>) {
-    val builder = Builder()
-        .setSession("GooseRelayVPN")
-        .addAddress("10.0.0.2", 24)
-        .addRoute("0.0.0.0", 0)
-    
-    dnsServers.forEach { dns ->
-        builder.addDnsServer(dns)
+class NetworkChangeReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        if (isVpnActive && isNetworkAvailable(context)) {
+            restartVpnService(context)
+        }
     }
-    
-    tunInterface = builder.establish()
 }
-
-// Usage
-setupCustomDNS(listOf("1.1.1.1", "8.8.8.8"))
 ```
 
-### Internet Sharing / Hotspot Mode
+### Persistent Notification
 
 ```kotlin
-fun enableInternetSharing() {
-    val builder = Builder()
-        .setSession("GooseRelayVPN")
-        .addAddress("10.0.0.1", 24)  // Gateway address
-        .addRoute("0.0.0.0", 0)
-        .setMtu(1500)
-    
-    // Allow all apps except VPN service itself
-    builder.addDisallowedApplication(packageName)
-    
-    tunInterface = builder.establish()
+private fun showVpnNotification() {
+    val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+        .setContentTitle("GooseRelayVPN")
+        .setContentText("Connected")
+        .setSmallIcon(R.drawable.ic_vpn)
+        .setPriority(NotificationCompat.PRIORITY_LOW)
+        .build()
+    startForeground(NOTIFICATION_ID, notification)
 }
 ```
 
-This skill provides comprehensive coverage of building, configuring, and troubleshooting the GooseRelayVPN Android client with Go mobile bridge integration.
+### Exporting Logs to File
+
+```kotlin
+fun exportLogs(logs: List<String>, uri: Uri, context: Context) {
+    context.contentResolver.openOutputStream(uri)?.use { out ->
+        logs.forEach { out.write("$it\n".toByteArray()) }
+    }
+}
+```
+
+## Advanced Configuration
+
+### Multiple Deployment IDs for Redundancy
+
+```json
+{
+  "script_keys": [
+    "AKfycbzPRIMARY_DEPLOYMENT_ID",
+    "AKfycbzFALLBACK_DEPLOYMENT_ID"
+  ]
+}
+```
+
+The core will try each deployment ID in order until one succeeds.
+
+### Custom Google IP for Domain Fronting
+
+```json
+{
+  "google_host": "142.250.80.46"
+}
+```
+
+Use any Google IP that accepts HTTPS on port 443. Test with:
+
+```bash
+curl -v --resolve www.google.com:443:142.250.80.46 https://www.google.com/
+```
+
+### Debug Timing Logs
+
+```json
+{
+  "debug_timing": true
+}
+```
+
+Enables detailed timing logs in Go core for performance analysis.
+
+## Resources
+
+- **Main project:** https://github.com/kianmhz/GooseRelayVPN
+- **Upstream docs:** See main repo for server setup, Apps Script deployment
+- **Protocol details:** AES-256-GCM framing, HTTP chunked transfer encoding
+- **Inspired by:** https://github.com/masterking32/MasterHttpRelayVPN
+
+## License
+
+MIT License — See LICENSE file in repository.
