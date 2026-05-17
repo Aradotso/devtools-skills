@@ -45,6 +45,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [subnautica-ii-coop-bepinex-mod](skills/subnautica-ii-coop-bepinex-mod/) | [install](https://skills.sh/aradotso/devtools-skills/subnautica-ii-coop-bepinex-mod) | [maglin-jenebellah/Subnautica-II-Coop-Client](https://github.com/maglin-jenebellah/Subnautica-II-Coop-Client) | 2026-05-17 |
 | [subnautica-2-deep-synergy-coop-mod](skills/subnautica-2-deep-synergy-coop-mod/) | [install](https://skills.sh/aradotso/devtools-skills/subnautica-2-deep-synergy-coop-mod) | [maglin-jenebellah/Subnautica-II-Coop-Client](https://github.com/maglin-jenebellah/Subnautica-II-Coop-Client) | 2026-05-17 |
 | [claude-devtools-inspector](skills/claude-devtools-inspector/) | [install](https://skills.sh/aradotso/devtools-skills/claude-devtools-inspector) | [matt1398/claude-devtools](https://github.com/matt1398/claude-devtools) | 2026-05-17 |
+| [twitter-cli-skill](skills/twitter-cli-skill/) | [install](https://skills.sh/aradotso/devtools-skills/twitter-cli-skill) | [public-clis/twitter-cli](https://github.com/public-clis/twitter-cli) | 2026-05-17 |
 <!-- SKILL_INDEX -->
 
 ---
