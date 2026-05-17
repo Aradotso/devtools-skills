@@ -48,6 +48,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [twitter-cli-skill](skills/twitter-cli-skill/) | [install](https://skills.sh/aradotso/devtools-skills/twitter-cli-skill) | [public-clis/twitter-cli](https://github.com/public-clis/twitter-cli) | 2026-05-17 |
 | [dingtalk-workspace-cli](skills/dingtalk-workspace-cli/) | [install](https://skills.sh/aradotso/devtools-skills/dingtalk-workspace-cli) | [DingTalk-Real-AI/dingtalk-workspace-cli](https://github.com/DingTalk-Real-AI/dingtalk-workspace-cli) | 2026-05-17 |
 | [mcp2cli-runtime-api-tooling](skills/mcp2cli-runtime-api-tooling/) | [install](https://skills.sh/aradotso/devtools-skills/mcp2cli-runtime-api-tooling) | [knowsuchagency/mcp2cli](https://github.com/knowsuchagency/mcp2cli) | 2026-05-17 |
+| [clipify-video-clip-generator](skills/clipify-video-clip-generator/) | [install](https://skills.sh/aradotso/devtools-skills/clipify-video-clip-generator) | [louisedesadeleer/clipify](https://github.com/louisedesadeleer/clipify) | 2026-05-17 |
 <!-- SKILL_INDEX -->
 
 ---
