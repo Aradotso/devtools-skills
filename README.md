@@ -43,6 +43,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [subnautica-2-deep-synergy-multiplayer-mod](skills/subnautica-2-deep-synergy-multiplayer-mod/) | [install](https://skills.sh/aradotso/devtools-skills/subnautica-2-deep-synergy-multiplayer-mod) | [maglin-jenebellah/Subnautica-II-Coop-Client](https://github.com/maglin-jenebellah/Subnautica-II-Coop-Client) | 2026-05-17 |
 | [subnautica-ii-deep-synergy-multiplayer-mod](skills/subnautica-ii-deep-synergy-multiplayer-mod/) | [install](https://skills.sh/aradotso/devtools-skills/subnautica-ii-deep-synergy-multiplayer-mod) | [maglin-jenebellah/Subnautica-II-Coop-Client](https://github.com/maglin-jenebellah/Subnautica-II-Coop-Client) | 2026-05-17 |
 | [subnautica-ii-coop-bepinex-mod](skills/subnautica-ii-coop-bepinex-mod/) | [install](https://skills.sh/aradotso/devtools-skills/subnautica-ii-coop-bepinex-mod) | [maglin-jenebellah/Subnautica-II-Coop-Client](https://github.com/maglin-jenebellah/Subnautica-II-Coop-Client) | 2026-05-17 |
+| [subnautica-2-deep-synergy-coop-mod](skills/subnautica-2-deep-synergy-coop-mod/) | [install](https://skills.sh/aradotso/devtools-skills/subnautica-2-deep-synergy-coop-mod) | [maglin-jenebellah/Subnautica-II-Coop-Client](https://github.com/maglin-jenebellah/Subnautica-II-Coop-Client) | 2026-05-17 |
 <!-- SKILL_INDEX -->
 
 ---
