@@ -47,6 +47,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [claude-devtools-inspector](skills/claude-devtools-inspector/) | [install](https://skills.sh/aradotso/devtools-skills/claude-devtools-inspector) | [matt1398/claude-devtools](https://github.com/matt1398/claude-devtools) | 2026-05-17 |
 | [twitter-cli-skill](skills/twitter-cli-skill/) | [install](https://skills.sh/aradotso/devtools-skills/twitter-cli-skill) | [public-clis/twitter-cli](https://github.com/public-clis/twitter-cli) | 2026-05-17 |
 | [dingtalk-workspace-cli](skills/dingtalk-workspace-cli/) | [install](https://skills.sh/aradotso/devtools-skills/dingtalk-workspace-cli) | [DingTalk-Real-AI/dingtalk-workspace-cli](https://github.com/DingTalk-Real-AI/dingtalk-workspace-cli) | 2026-05-17 |
+| [mcp2cli-runtime-api-tooling](skills/mcp2cli-runtime-api-tooling/) | [install](https://skills.sh/aradotso/devtools-skills/mcp2cli-runtime-api-tooling) | [knowsuchagency/mcp2cli](https://github.com/knowsuchagency/mcp2cli) | 2026-05-17 |
 <!-- SKILL_INDEX -->
 
 ---
