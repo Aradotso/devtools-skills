@@ -56,6 +56,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [cc-switch-cli](skills/cc-switch-cli/) | [install](https://skills.sh/aradotso/devtools-skills/cc-switch-cli) | [SaladDay/cc-switch-cli](https://github.com/SaladDay/cc-switch-cli) | 2026-05-17 |
 | [byterover-cli-memory-layer](skills/byterover-cli-memory-layer/) | [install](https://skills.sh/aradotso/devtools-skills/byterover-cli-memory-layer) | [campfirein/byterover-cli](https://github.com/campfirein/byterover-cli) | 2026-05-17 |
 | [watch-cli-video-agent](skills/watch-cli-video-agent/) | [install](https://skills.sh/aradotso/devtools-skills/watch-cli-video-agent) | [sonpiaz/watch-cli](https://github.com/sonpiaz/watch-cli) | 2026-05-17 |
+| [blur-autoclicker-automation](skills/blur-autoclicker-automation/) | [install](https://skills.sh/aradotso/devtools-skills/blur-autoclicker-automation) | [Blur009/Blur-AutoClicker](https://github.com/Blur009/Blur-AutoClicker) | 2026-05-17 |
 <!-- SKILL_INDEX -->
 
 ---
