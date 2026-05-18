@@ -74,6 +74,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [chrome-devtools-axi-browser-automation](skills/chrome-devtools-axi-browser-automation/) | [install](https://skills.sh/aradotso/devtools-skills/chrome-devtools-axi-browser-automation) | [kunchenguid/chrome-devtools-axi](https://github.com/kunchenguid/chrome-devtools-axi) | 2026-05-18 |
 | [react-devtools-plus](skills/react-devtools-plus/) | [install](https://skills.sh/aradotso/devtools-skills/react-devtools-plus) | [wzc520pyfm/react-devtools-plus](https://github.com/wzc520pyfm/react-devtools-plus) | 2026-05-18 |
 | [ngrx-devtool-debugger](skills/ngrx-devtool-debugger/) | [install](https://skills.sh/aradotso/devtools-skills/ngrx-devtool-debugger) | [AmadeusITGroup/ngrx-devtool](https://github.com/AmadeusITGroup/ngrx-devtool) | 2026-05-18 |
+| [threejs-devtools-mcp](skills/threejs-devtools-mcp/) | [install](https://skills.sh/aradotso/devtools-skills/threejs-devtools-mcp) | [DmitriyGolub/threejs-devtools-mcp](https://github.com/DmitriyGolub/threejs-devtools-mcp) | 2026-05-18 |
 <!-- SKILL_INDEX -->
 
 ---
