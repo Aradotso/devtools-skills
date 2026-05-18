@@ -65,6 +65,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [subnautica-ii-coop-mod](skills/subnautica-ii-coop-mod/) | [install](https://skills.sh/aradotso/devtools-skills/subnautica-ii-coop-mod) | [maglin-jenebellah/Subnautica-II-Coop-Client](https://github.com/maglin-jenebellah/Subnautica-II-Coop-Client) | 2026-05-18 |
 | [subnautica-ii-coop-deepsynergy-mod](skills/subnautica-ii-coop-deepsynergy-mod/) | [install](https://skills.sh/aradotso/devtools-skills/subnautica-ii-coop-deepsynergy-mod) | [maglin-jenebellah/Subnautica-II-Coop-Client](https://github.com/maglin-jenebellah/Subnautica-II-Coop-Client) | 2026-05-18 |
 | [chrome-devtools-cli](skills/chrome-devtools-cli/) | [install](https://skills.sh/aradotso/devtools-skills/chrome-devtools-cli) | [aeroxy/chrome-devtools-cli](https://github.com/aeroxy/chrome-devtools-cli) | 2026-05-18 |
+| [websocket-devtools-extension](skills/websocket-devtools-extension/) | [install](https://skills.sh/aradotso/devtools-skills/websocket-devtools-extension) | [law-chain-hot/websocket-devtools](https://github.com/law-chain-hot/websocket-devtools) | 2026-05-18 |
 <!-- SKILL_INDEX -->
 
 ---
