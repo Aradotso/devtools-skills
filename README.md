@@ -72,6 +72,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [agent-react-devtools](skills/agent-react-devtools/) | [install](https://skills.sh/aradotso/devtools-skills/agent-react-devtools) | [callstackincubator/agent-react-devtools](https://github.com/callstackincubator/agent-react-devtools) | 2026-05-18 |
 | [devtools-debugger-mcp-nodejs](skills/devtools-debugger-mcp-nodejs/) | [install](https://skills.sh/aradotso/devtools-skills/devtools-debugger-mcp-nodejs) | [ScriptedAlchemy/devtools-debugger-mcp](https://github.com/ScriptedAlchemy/devtools-debugger-mcp) | 2026-05-18 |
 | [chrome-devtools-axi-browser-automation](skills/chrome-devtools-axi-browser-automation/) | [install](https://skills.sh/aradotso/devtools-skills/chrome-devtools-axi-browser-automation) | [kunchenguid/chrome-devtools-axi](https://github.com/kunchenguid/chrome-devtools-axi) | 2026-05-18 |
+| [react-devtools-plus](skills/react-devtools-plus/) | [install](https://skills.sh/aradotso/devtools-skills/react-devtools-plus) | [wzc520pyfm/react-devtools-plus](https://github.com/wzc520pyfm/react-devtools-plus) | 2026-05-18 |
 <!-- SKILL_INDEX -->
 
 ---
