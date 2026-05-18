@@ -76,6 +76,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [ngrx-devtool-debugger](skills/ngrx-devtool-debugger/) | [install](https://skills.sh/aradotso/devtools-skills/ngrx-devtool-debugger) | [AmadeusITGroup/ngrx-devtool](https://github.com/AmadeusITGroup/ngrx-devtool) | 2026-05-18 |
 | [threejs-devtools-mcp](skills/threejs-devtools-mcp/) | [install](https://skills.sh/aradotso/devtools-skills/threejs-devtools-mcp) | [DmitriyGolub/threejs-devtools-mcp](https://github.com/DmitriyGolub/threejs-devtools-mcp) | 2026-05-18 |
 | [laravel-devtoolbox-cli](skills/laravel-devtoolbox-cli/) | [install](https://skills.sh/aradotso/devtools-skills/laravel-devtoolbox-cli) | [Grazulex/laravel-devtoolbox](https://github.com/Grazulex/laravel-devtoolbox) | 2026-05-18 |
+| [1c-devtools-cursor](skills/1c-devtools-cursor/) | [install](https://skills.sh/aradotso/devtools-skills/1c-devtools-cursor) | [asweetand-a11y/DevTool1C](https://github.com/asweetand-a11y/DevTool1C) | 2026-05-18 |
 <!-- SKILL_INDEX -->
 
 ---
