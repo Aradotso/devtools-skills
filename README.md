@@ -67,6 +67,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [chrome-devtools-cli](skills/chrome-devtools-cli/) | [install](https://skills.sh/aradotso/devtools-skills/chrome-devtools-cli) | [aeroxy/chrome-devtools-cli](https://github.com/aeroxy/chrome-devtools-cli) | 2026-05-18 |
 | [websocket-devtools-extension](skills/websocket-devtools-extension/) | [install](https://skills.sh/aradotso/devtools-skills/websocket-devtools-extension) | [law-chain-hot/websocket-devtools](https://github.com/law-chain-hot/websocket-devtools) | 2026-05-18 |
 | [next-devtools-mcp-skill](skills/next-devtools-mcp-skill/) | [install](https://skills.sh/aradotso/devtools-skills/next-devtools-mcp-skill) | [vercel/next-devtools-mcp](https://github.com/vercel/next-devtools-mcp) | 2026-05-18 |
+| [godot-devtool-mcp-server](skills/godot-devtool-mcp-server/) | [install](https://skills.sh/aradotso/devtools-skills/godot-devtool-mcp-server) | [wangdiandao/godot-devtool](https://github.com/wangdiandao/godot-devtool) | 2026-05-18 |
 <!-- SKILL_INDEX -->
 
 ---
