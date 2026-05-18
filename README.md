@@ -64,6 +64,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [sigcli-auth-proxy](skills/sigcli-auth-proxy/) | [install](https://skills.sh/aradotso/devtools-skills/sigcli-auth-proxy) | [sigcli/sigcli](https://github.com/sigcli/sigcli) | 2026-05-17 |
 | [subnautica-ii-coop-mod](skills/subnautica-ii-coop-mod/) | [install](https://skills.sh/aradotso/devtools-skills/subnautica-ii-coop-mod) | [maglin-jenebellah/Subnautica-II-Coop-Client](https://github.com/maglin-jenebellah/Subnautica-II-Coop-Client) | 2026-05-18 |
 | [subnautica-ii-coop-deepsynergy-mod](skills/subnautica-ii-coop-deepsynergy-mod/) | [install](https://skills.sh/aradotso/devtools-skills/subnautica-ii-coop-deepsynergy-mod) | [maglin-jenebellah/Subnautica-II-Coop-Client](https://github.com/maglin-jenebellah/Subnautica-II-Coop-Client) | 2026-05-18 |
+| [chrome-devtools-cli](skills/chrome-devtools-cli/) | [install](https://skills.sh/aradotso/devtools-skills/chrome-devtools-cli) | [aeroxy/chrome-devtools-cli](https://github.com/aeroxy/chrome-devtools-cli) | 2026-05-18 |
 <!-- SKILL_INDEX -->
 
 ---
