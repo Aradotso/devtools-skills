@@ -78,6 +78,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [laravel-devtoolbox-cli](skills/laravel-devtoolbox-cli/) | [install](https://skills.sh/aradotso/devtools-skills/laravel-devtoolbox-cli) | [Grazulex/laravel-devtoolbox](https://github.com/Grazulex/laravel-devtoolbox) | 2026-05-18 |
 | [1c-devtools-cursor](skills/1c-devtools-cursor/) | [install](https://skills.sh/aradotso/devtools-skills/1c-devtools-cursor) | [asweetand-a11y/DevTool1C](https://github.com/asweetand-a11y/DevTool1C) | 2026-05-18 |
 | [kaboom-browser-ai-devtools](skills/kaboom-browser-ai-devtools/) | [install](https://skills.sh/aradotso/devtools-skills/kaboom-browser-ai-devtools) | [brennhill/Kaboom-Browser-AI-Devtools-MCP](https://github.com/brennhill/Kaboom-Browser-AI-Devtools-MCP) | 2026-05-18 |
+| [launchkit-devtool-landing-template](skills/launchkit-devtool-landing-template/) | [install](https://skills.sh/aradotso/devtools-skills/launchkit-devtool-landing-template) | [evilmartians/devtool-template](https://github.com/evilmartians/devtool-template) | 2026-05-18 |
 <!-- SKILL_INDEX -->
 
 ---
