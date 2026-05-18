@@ -70,6 +70,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [godot-devtool-mcp-server](skills/godot-devtool-mcp-server/) | [install](https://skills.sh/aradotso/devtools-skills/godot-devtool-mcp-server) | [wangdiandao/godot-devtool](https://github.com/wangdiandao/godot-devtool) | 2026-05-18 |
 | [htmx-devtools-extension](skills/htmx-devtools-extension/) | [install](https://skills.sh/aradotso/devtools-skills/htmx-devtools-extension) | [atoolz/htmx-devtools](https://github.com/atoolz/htmx-devtools) | 2026-05-18 |
 | [agent-react-devtools](skills/agent-react-devtools/) | [install](https://skills.sh/aradotso/devtools-skills/agent-react-devtools) | [callstackincubator/agent-react-devtools](https://github.com/callstackincubator/agent-react-devtools) | 2026-05-18 |
+| [devtools-debugger-mcp-nodejs](skills/devtools-debugger-mcp-nodejs/) | [install](https://skills.sh/aradotso/devtools-skills/devtools-debugger-mcp-nodejs) | [ScriptedAlchemy/devtools-debugger-mcp](https://github.com/ScriptedAlchemy/devtools-debugger-mcp) | 2026-05-18 |
 <!-- SKILL_INDEX -->
 
 ---
