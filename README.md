@@ -81,6 +81,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [launchkit-devtool-landing-template](skills/launchkit-devtool-landing-template/) | [install](https://skills.sh/aradotso/devtools-skills/launchkit-devtool-landing-template) | [evilmartians/devtool-template](https://github.com/evilmartians/devtool-template) | 2026-05-18 |
 | [microsoft-agent365-devtools-cli](skills/microsoft-agent365-devtools-cli/) | [install](https://skills.sh/aradotso/devtools-skills/microsoft-agent365-devtools-cli) | [microsoft/Agent365-devTools](https://github.com/microsoft/Agent365-devTools) | 2026-05-18 |
 | [firefox-devtools-mcp-automation](skills/firefox-devtools-mcp-automation/) | [install](https://skills.sh/aradotso/devtools-skills/firefox-devtools-mcp-automation) | [mozilla/firefox-devtools-mcp](https://github.com/mozilla/firefox-devtools-mcp) | 2026-05-19 |
+| [browser-devtools-mcp-vscode](skills/browser-devtools-mcp-vscode/) | [install](https://skills.sh/aradotso/devtools-skills/browser-devtools-mcp-vscode) | [serkan-ozal/browser-devtools-mcp-vscode-extension](https://github.com/serkan-ozal/browser-devtools-mcp-vscode-extension) | 2026-05-19 |
 <!-- SKILL_INDEX -->
 
 ---
