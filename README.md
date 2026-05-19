@@ -83,6 +83,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [firefox-devtools-mcp-automation](skills/firefox-devtools-mcp-automation/) | [install](https://skills.sh/aradotso/devtools-skills/firefox-devtools-mcp-automation) | [mozilla/firefox-devtools-mcp](https://github.com/mozilla/firefox-devtools-mcp) | 2026-05-19 |
 | [browser-devtools-mcp-vscode](skills/browser-devtools-mcp-vscode/) | [install](https://skills.sh/aradotso/devtools-skills/browser-devtools-mcp-vscode) | [serkan-ozal/browser-devtools-mcp-vscode-extension](https://github.com/serkan-ozal/browser-devtools-mcp-vscode-extension) | 2026-05-19 |
 | [native-devtools-mcp-automation](skills/native-devtools-mcp-automation/) | [install](https://skills.sh/aradotso/devtools-skills/native-devtools-mcp-automation) | [sh3ll3x3c/native-devtools-mcp](https://github.com/sh3ll3x3c/native-devtools-mcp) | 2026-05-19 |
+| [privatelm-cross-platform-llm-client](skills/privatelm-cross-platform-llm-client/) | [install](https://skills.sh/aradotso/devtools-skills/privatelm-cross-platform-llm-client) | [orailnoor/cross-platform-llm-client](https://github.com/orailnoor/cross-platform-llm-client) | 2026-05-19 |
 <!-- SKILL_INDEX -->
 
 ---
