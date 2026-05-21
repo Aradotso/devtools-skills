@@ -86,6 +86,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [privatelm-cross-platform-llm-client](skills/privatelm-cross-platform-llm-client/) | [install](https://skills.sh/aradotso/devtools-skills/privatelm-cross-platform-llm-client) | [orailnoor/cross-platform-llm-client](https://github.com/orailnoor/cross-platform-llm-client) | 2026-05-19 |
 | [stage-cli-code-review](skills/stage-cli-code-review/) | [install](https://skills.sh/aradotso/devtools-skills/stage-cli-code-review) | [ReviewStage/stage-cli](https://github.com/ReviewStage/stage-cli) | 2026-05-21 |
 | [hermes-client-web-ui](skills/hermes-client-web-ui/) | [install](https://skills.sh/aradotso/devtools-skills/hermes-client-web-ui) | [lotsoftick/hermes_client](https://github.com/lotsoftick/hermes_client) | 2026-05-21 |
+| [folddevtools-android-webview-debugger](skills/folddevtools-android-webview-debugger/) | [install](https://skills.sh/aradotso/devtools-skills/folddevtools-android-webview-debugger) | [achyuki/FoldDevtools](https://github.com/achyuki/FoldDevtools) | 2026-05-21 |
 <!-- SKILL_INDEX -->
 
 ---
