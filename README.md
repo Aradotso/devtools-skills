@@ -85,6 +85,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [native-devtools-mcp-automation](skills/native-devtools-mcp-automation/) | [install](https://skills.sh/aradotso/devtools-skills/native-devtools-mcp-automation) | [sh3ll3x3c/native-devtools-mcp](https://github.com/sh3ll3x3c/native-devtools-mcp) | 2026-05-19 |
 | [privatelm-cross-platform-llm-client](skills/privatelm-cross-platform-llm-client/) | [install](https://skills.sh/aradotso/devtools-skills/privatelm-cross-platform-llm-client) | [orailnoor/cross-platform-llm-client](https://github.com/orailnoor/cross-platform-llm-client) | 2026-05-19 |
 | [stage-cli-code-review](skills/stage-cli-code-review/) | [install](https://skills.sh/aradotso/devtools-skills/stage-cli-code-review) | [ReviewStage/stage-cli](https://github.com/ReviewStage/stage-cli) | 2026-05-21 |
+| [hermes-client-web-ui](skills/hermes-client-web-ui/) | [install](https://skills.sh/aradotso/devtools-skills/hermes-client-web-ui) | [lotsoftick/hermes_client](https://github.com/lotsoftick/hermes_client) | 2026-05-21 |
 <!-- SKILL_INDEX -->
 
 ---
