@@ -87,6 +87,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [stage-cli-code-review](skills/stage-cli-code-review/) | [install](https://skills.sh/aradotso/devtools-skills/stage-cli-code-review) | [ReviewStage/stage-cli](https://github.com/ReviewStage/stage-cli) | 2026-05-21 |
 | [hermes-client-web-ui](skills/hermes-client-web-ui/) | [install](https://skills.sh/aradotso/devtools-skills/hermes-client-web-ui) | [lotsoftick/hermes_client](https://github.com/lotsoftick/hermes_client) | 2026-05-21 |
 | [folddevtools-android-webview-debugger](skills/folddevtools-android-webview-debugger/) | [install](https://skills.sh/aradotso/devtools-skills/folddevtools-android-webview-debugger) | [achyuki/FoldDevtools](https://github.com/achyuki/FoldDevtools) | 2026-05-21 |
+| [guardian-ai-pentest-cli](skills/guardian-ai-pentest-cli/) | [install](https://skills.sh/aradotso/devtools-skills/guardian-ai-pentest-cli) | [zakirkun/guardian-cli](https://github.com/zakirkun/guardian-cli) | 2026-05-22 |
 <!-- SKILL_INDEX -->
 
 ---
