@@ -89,6 +89,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [folddevtools-android-webview-debugger](skills/folddevtools-android-webview-debugger/) | [install](https://skills.sh/aradotso/devtools-skills/folddevtools-android-webview-debugger) | [achyuki/FoldDevtools](https://github.com/achyuki/FoldDevtools) | 2026-05-21 |
 | [guardian-ai-pentest-cli](skills/guardian-ai-pentest-cli/) | [install](https://skills.sh/aradotso/devtools-skills/guardian-ai-pentest-cli) | [zakirkun/guardian-cli](https://github.com/zakirkun/guardian-cli) | 2026-05-22 |
 | [guardian-cli-ai-pentest](skills/guardian-cli-ai-pentest/) | [install](https://skills.sh/aradotso/devtools-skills/guardian-cli-ai-pentest) | [zakirkun/guardian-cli](https://github.com/zakirkun/guardian-cli) | 2026-05-22 |
+| [web3-devkit-cli](skills/web3-devkit-cli/) | [install](https://skills.sh/aradotso/devtools-skills/web3-devkit-cli) | [jazzband/web3-devkit-cli](https://github.com/jazzband/web3-devkit-cli) | 2026-05-23 |
 <!-- SKILL_INDEX -->
 
 ---
