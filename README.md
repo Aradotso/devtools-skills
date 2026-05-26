@@ -96,6 +96,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [tiez-clipboard-manager](skills/tiez-clipboard-manager/) | [install](https://skills.sh/aradotso/devtools-skills/tiez-clipboard-manager) | [jimuzhe/tiez-clipboard](https://github.com/jimuzhe/tiez-clipboard) | 2026-05-26 |
 | [minecraft-cheat-client-detection](skills/minecraft-cheat-client-detection/) | [install](https://skills.sh/aradotso/devtools-skills/minecraft-cheat-client-detection) | [martawewqc7692530/MineCraft-Collection-C-Client](https://github.com/martawewqc7692530/MineCraft-Collection-C-Client) | 2026-05-26 |
 | [minecraft-collection-c-client-utility](skills/minecraft-collection-c-client-utility/) | [install](https://skills.sh/aradotso/devtools-skills/minecraft-collection-c-client-utility) | [martawewqc7692530/MineCraft-Collection-C-Client](https://github.com/martawewqc7692530/MineCraft-Collection-C-Client) | 2026-05-26 |
+| [minecraft-vape-client-analysis](skills/minecraft-vape-client-analysis/) | [install](https://skills.sh/aradotso/devtools-skills/minecraft-vape-client-analysis) | [enugefaq7071002/VapeV4-Client-2026](https://github.com/enugefaq7071002/VapeV4-Client-2026) | 2026-05-26 |
 <!-- SKILL_INDEX -->
 
 ---
