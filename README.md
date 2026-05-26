@@ -94,6 +94,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [minecraft-security-analysis](skills/minecraft-security-analysis/) | [install](https://skills.sh/aradotso/devtools-skills/minecraft-security-analysis) | [ochoaochoa330-design/Aegis-V4-Client-2026](https://github.com/ochoaochoa330-design/Aegis-V4-Client-2026) | 2026-05-23 |
 | [gemini-antigravity-cli](skills/gemini-antigravity-cli/) | [install](https://skills.sh/aradotso/devtools-skills/gemini-antigravity-cli) | [testerlingcodo/gemini-antigravity-cli](https://github.com/testerlingcodo/gemini-antigravity-cli) | 2026-05-23 |
 | [tiez-clipboard-manager](skills/tiez-clipboard-manager/) | [install](https://skills.sh/aradotso/devtools-skills/tiez-clipboard-manager) | [jimuzhe/tiez-clipboard](https://github.com/jimuzhe/tiez-clipboard) | 2026-05-26 |
+| [minecraft-cheat-client-detection](skills/minecraft-cheat-client-detection/) | [install](https://skills.sh/aradotso/devtools-skills/minecraft-cheat-client-detection) | [martawewqc7692530/MineCraft-Collection-C-Client](https://github.com/martawewqc7692530/MineCraft-Collection-C-Client) | 2026-05-26 |
 <!-- SKILL_INDEX -->
 
 ---
