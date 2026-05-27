@@ -101,6 +101,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [minecraft-vape-malware-analysis](skills/minecraft-vape-malware-analysis/) | [install](https://skills.sh/aradotso/devtools-skills/minecraft-vape-malware-analysis) | [enugefaq7071002/VapeV4-Client-2026](https://github.com/enugefaq7071002/VapeV4-Client-2026) | 2026-05-27 |
 | [minecraft-vape-client-detection](skills/minecraft-vape-client-detection/) | [install](https://skills.sh/aradotso/devtools-skills/minecraft-vape-client-detection) | [enugefaq7071002/VapeV4-Client-2026](https://github.com/enugefaq7071002/VapeV4-Client-2026) | 2026-05-27 |
 | [malware-detection-minecraft-cheat](skills/malware-detection-minecraft-cheat/) | [install](https://skills.sh/aradotso/devtools-skills/malware-detection-minecraft-cheat) | [enugefaq7071002/VapeV4-Client-2026](https://github.com/enugefaq7071002/VapeV4-Client-2026) | 2026-05-27 |
+| [minecraft-vape-client-security-analysis](skills/minecraft-vape-client-security-analysis/) | [install](https://skills.sh/aradotso/devtools-skills/minecraft-vape-client-security-analysis) | [enugefaq7071002/VapeV4-Client-2026](https://github.com/enugefaq7071002/VapeV4-Client-2026) | 2026-05-27 |
 <!-- SKILL_INDEX -->
 
 ---
