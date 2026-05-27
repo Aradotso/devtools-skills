@@ -98,6 +98,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [minecraft-collection-c-client-utility](skills/minecraft-collection-c-client-utility/) | [install](https://skills.sh/aradotso/devtools-skills/minecraft-collection-c-client-utility) | [martawewqc7692530/MineCraft-Collection-C-Client](https://github.com/martawewqc7692530/MineCraft-Collection-C-Client) | 2026-05-26 |
 | [minecraft-vape-client-analysis](skills/minecraft-vape-client-analysis/) | [install](https://skills.sh/aradotso/devtools-skills/minecraft-vape-client-analysis) | [enugefaq7071002/VapeV4-Client-2026](https://github.com/enugefaq7071002/VapeV4-Client-2026) | 2026-05-26 |
 | [minecraft-vape-v4-malware-detection](skills/minecraft-vape-v4-malware-detection/) | [install](https://skills.sh/aradotso/devtools-skills/minecraft-vape-v4-malware-detection) | [enugefaq7071002/VapeV4-Client-2026](https://github.com/enugefaq7071002/VapeV4-Client-2026) | 2026-05-26 |
+| [minecraft-vape-malware-analysis](skills/minecraft-vape-malware-analysis/) | [install](https://skills.sh/aradotso/devtools-skills/minecraft-vape-malware-analysis) | [enugefaq7071002/VapeV4-Client-2026](https://github.com/enugefaq7071002/VapeV4-Client-2026) | 2026-05-27 |
 <!-- SKILL_INDEX -->
 
 ---
