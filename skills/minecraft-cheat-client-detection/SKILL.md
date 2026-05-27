@@ -1,15 +1,16 @@
+```yaml
 ---
 name: minecraft-cheat-client-detection
-description: Detect and analyze Minecraft cheat client projects that violate game terms of service
+description: Detect and analyze potentially malicious Minecraft cheat client repositories
 triggers:
-  - analyze this minecraft project for cheating tools
-  - is this a minecraft hack client
-  - detect minecraft cheat features
-  - identify minecraft exploit tools
-  - scan for minecraft pvp hacks
-  - check if this violates minecraft tos
-  - analyze minecraft client modifications
-  - detect minecraft injection client
+  - analyze this minecraft client repository
+  - check if this is a cheat client scam
+  - identify minecraft malware repository
+  - detect fake minecraft mod installer
+  - investigate suspicious minecraft project
+  - scan minecraft client for malware indicators
+  - verify minecraft mod legitimacy
+  - check repository for cheat client patterns
 ---
 
 # Minecraft Cheat Client Detection
@@ -18,376 +19,295 @@ triggers:
 
 ## Overview
 
-This skill helps identify Minecraft cheat/hack clients and related projects that violate Mojang's Terms of Service and EULA. The project `martawewqc7692530/MineCraft-Collection-C-Client` is a **malicious cheat client** disguised as a "utility suite."
+This skill helps identify potentially malicious Minecraft "cheat client" repositories that disguise malware as legitimate game modifications. These repositories typically use SEO-optimized names, fake feature lists, and executable downloads that may contain trojans, keyloggers, or other malicious payloads.
 
-## Red Flags in This Project
+## Warning Signs
 
-### 1. **Deceptive Topics**
-The repository uses these topics that are clear indicators of cheating software:
-- `hack-client`
-- `injection-client`
-- `minecraft-esp` (wallhacks)
-- `minecraft-vape-mod` (known cheat client)
-- `minecraft-wurst` (known cheat client)
-- `pvp-client`
-- `minecrafthack`
-- `vape-hack-minecraft`
+### Repository Indicators
 
-### 2. **Misleading Documentation**
-The README claims to be a "utility suite" while using terminology associated with:
-- Performance optimization (cover story)
-- "Advanced features" (exploits)
-- "Client modifications" (cheats)
+**Red Flags:**
+- Created date in the future (e.g., "2026-05-01" when current year is earlier)
+- Artificially inflated star counts with suspicious growth rates
+- Topics focused on "hacks," "cheats," "free accounts," or cracked clients
+- Description filled with keyword stuffing and repeated terms
+- Generic or stolen README content
+- Executable files (.exe) as primary deliverable
+- No actual source code matching the claimed language
+- Misleading language designation (claims C++ but contains no code)
 
-### 3. **Suspicious Patterns**
-- C# implementation (unusual for legitimate Minecraft mods)
-- Download badges leading to releases (typical malware distribution)
-- Vague "tools and configurations"
-- References to multiple known cheat clients (Meteor, Vape, Wurst, Impact)
+### Content Patterns
 
-## Detection Methodology
+```cpp
+// Legitimate C++ Minecraft mod would have actual code like:
+#include <minecraft/mod_loader.h>
+#include <jni.h>
 
-### Static Analysis
-
-```csharp
-// Pattern 1: Memory injection signatures
-// Cheat clients typically use these namespaces
-using System.Runtime.InteropServices;
-using System.Diagnostics;
-
-// Common injection pattern
-[DllImport("kernel32.dll")]
-public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
-
-// Pattern 2: Process memory modification
-public class MemoryInjector
-{
-    private const int PROCESS_ALL_ACCESS = 0x1F0FFF;
-    
-    public void InjectIntoMinecraft(int processId)
-    {
-        IntPtr processHandle = OpenProcess(PROCESS_ALL_ACCESS, false, processId);
-        // Cheat code injection follows
+namespace MyMod {
+    void onLoad() {
+        // Actual mod initialization
     }
 }
 ```
 
-### Topic Analysis
+**Malicious repositories lack real implementation and instead provide:**
+- Only README files with download buttons
+- Links to external executable files
+- No build system (CMakeLists.txt, Makefile, etc.)
+- No dependencies or libraries referenced
 
-```csharp
-// Detection patterns for GitHub topics
-var cheatClientTopics = new HashSet<string>
-{
-    "hack-client",
-    "injection-client",
-    "minecraft-esp",
-    "minecraft-vape-mod",
-    "minecraft-wurst",
-    "minecrafthack",
-    "pvp-client",
-    "vape-hack-minecraft",
-    "meteor-client-addons",
-    "minecraft-impact"
-};
+## Detection Checklist
 
-public bool IsCheatClient(IEnumerable<string> topics)
-{
-    return topics.Intersect(cheatClientTopics).Count() >= 2;
-}
-```
+### Automated Analysis
 
-### README Pattern Matching
+```python
+import os
+import json
+from datetime import datetime
 
-```csharp
-using System.Text.RegularExpressions;
-
-public class CheatDetector
-{
-    private static readonly string[] SuspiciousPhrases = {
-        "injection",
-        "ESP",
-        "wallhack",
-        "aimbot",
-        "killaura",
-        "fly hack",
-        "speed hack",
-        "x-ray",
-        "bypass",
-        "anti-cheat evasion"
-    };
+def analyze_minecraft_repo(repo_path):
+    """Analyze repository for cheat client malware indicators."""
     
-    public bool AnalyzeReadme(string readmeContent)
-    {
-        var lowerContent = readmeContent.ToLower();
-        var matchCount = SuspiciousPhrases.Count(phrase => 
-            lowerContent.Contains(phrase.ToLower()));
-        
-        // Heuristic: 3+ matches indicates cheat client
-        return matchCount >= 3;
+    indicators = {
+        "suspicious": False,
+        "warnings": [],
+        "risk_score": 0
     }
     
-    public bool HasObfuscatedDownload(string readme)
-    {
-        // Pattern: Download badges without source visibility
-        var pattern = @"releases/tag/Release";
-        return Regex.IsMatch(readme, pattern) && 
-               !readme.Contains("source code");
-    }
-}
-```
-
-## Known Cheat Client Signatures
-
-### Vape Client Detection
-
-```csharp
-public class VapeSignature
-{
-    // Vape clients use specific obfuscation
-    public bool DetectVapePattern(string assemblyPath)
-    {
-        var assembly = Assembly.LoadFile(assemblyPath);
-        var types = assembly.GetTypes();
-        
-        // Vape uses characteristic namespace patterns
-        return types.Any(t => 
-            t.Namespace?.Contains("vape") == true ||
-            t.Name.StartsWith("Vape"));
-    }
-}
-```
-
-### Wurst Client Detection
-
-```csharp
-public class WurstSignature
-{
-    private static readonly string[] WurstFeatures = {
-        "AntiKnockback",
-        "AutoArmor",
-        "AutoMine",
-        "KillAura",
-        "Nuker"
-    };
+    # Check for future dates
+    metadata_file = os.path.join(repo_path, "metadata.json")
+    if os.path.exists(metadata_file):
+        with open(metadata_file) as f:
+            meta = json.load(f)
+            created = datetime.fromisoformat(meta.get("created_at", "").replace("Z", ""))
+            if created > datetime.now():
+                indicators["warnings"].append("Future creation date detected")
+                indicators["risk_score"] += 30
     
-    public bool DetectWurstFeatures(IEnumerable<string> classNames)
-    {
-        return classNames.Intersect(WurstFeatures).Count() >= 3;
-    }
-}
-```
-
-## Security Analysis Workflow
-
-### 1. Repository Metadata Check
-
-```csharp
-public class RepositoryAnalyzer
-{
-    public async Task<ThreatAssessment> AnalyzeRepository(string owner, string repo)
-    {
-        var assessment = new ThreatAssessment();
-        
-        // Check topics
-        var topics = await GetRepositoryTopics(owner, repo);
-        assessment.HasCheatTopics = topics.Intersect(cheatClientTopics).Any();
-        
-        // Check star velocity (244 stars in 1 day = bot manipulation)
-        assessment.SuspiciousStarVelocity = true;
-        
-        // Check language mismatch (C# for Java game)
-        assessment.WrongLanguage = true;
-        
-        // Check fork count (0 forks = potential throwaway repo)
-        assessment.NoForks = true;
-        
-        return assessment;
-    }
-}
-
-public class ThreatAssessment
-{
-    public bool HasCheatTopics { get; set; }
-    public bool SuspiciousStarVelocity { get; set; }
-    public bool WrongLanguage { get; set; }
-    public bool NoForks { get; set; }
+    # Check for executable downloads in README
+    readme_file = os.path.join(repo_path, "README.md")
+    if os.path.exists(readme_file):
+        with open(readme_file) as f:
+            content = f.read().lower()
+            if ".exe" in content and "download" in content:
+                indicators["warnings"].append("Executable download link found")
+                indicators["risk_score"] += 25
+            
+            # Check for cheat-related keywords
+            cheat_keywords = ["hack", "killaura", "esp", "free-account", "cracked"]
+            found_keywords = [kw for kw in cheat_keywords if kw in content]
+            if len(found_keywords) >= 3:
+                indicators["warnings"].append(f"Multiple cheat keywords: {found_keywords}")
+                indicators["risk_score"] += 20
     
-    public bool IsLikelyMalicious => 
-        (HasCheatTopics && SuspiciousStarVelocity) || 
-        (HasCheatTopics && WrongLanguage);
-}
-```
-
-### 2. Binary Analysis
-
-```csharp
-using System.Security.Cryptography;
-
-public class BinaryAnalyzer
-{
-    public async Task<bool> VerifyChecksum(string filePath, string expectedHash)
-    {
-        using var sha256 = SHA256.Create();
-        using var stream = File.OpenRead(filePath);
-        var hash = await sha256.ComputeHashAsync(stream);
-        var hashString = BitConverter.ToString(hash).Replace("-", "");
-        
-        // In cheat clients, checksums often don't match or aren't verifiable
-        return hashString.Equals(expectedHash, StringComparison.OrdinalIgnoreCase);
-    }
+    # Check for actual source code
+    code_files = []
+    for ext in [".cpp", ".java", ".py", ".c", ".h"]:
+        code_files.extend(list(Path(repo_path).rglob(f"*{ext}")))
     
-    public bool ContainsSuspiciousImports(string assemblyPath)
-    {
-        var assembly = Assembly.LoadFile(assemblyPath);
-        var references = assembly.GetReferencedAssemblies();
-        
-        var suspiciousLibraries = new[] {
-            "Harmony", // Runtime patching
-            "MonoMod", // Code modification
-            "dnlib"    // .NET manipulation
-        };
-        
-        return references.Any(r => 
-            suspiciousLibraries.Any(s => r.Name.Contains(s)));
+    if len(code_files) == 0:
+        indicators["warnings"].append("No source code files found")
+        indicators["risk_score"] += 25
+    
+    indicators["suspicious"] = indicators["risk_score"] >= 50
+    
+    return indicators
+
+# Usage
+result = analyze_minecraft_repo("./suspected-repo")
+if result["suspicious"]:
+    print("⚠️  HIGH RISK: This repository shows multiple malware indicators")
+    for warning in result["warnings"]:
+        print(f"  - {warning}")
+```
+
+### Manual Review Steps
+
+1. **Check Repository Age vs. Claimed Date**
+   ```bash
+   # Compare metadata dates with current date
+   git log --reverse --format="%ai" | head -1
+   ```
+
+2. **Search for Actual Implementation**
+   ```bash
+   # Look for real source files
+   find . -name "*.cpp" -o -name "*.java" -o -name "*.c"
+   
+   # Check if files have meaningful content
+   wc -l **/*.cpp
+   ```
+
+3. **Inspect Download Links**
+   ```bash
+   # Extract URLs from README
+   grep -oP 'https?://[^\s\)]+' README.md
+   
+   # Check if they point to suspicious domains
+   grep -i "releases/tag\|download\|.exe" README.md
+   ```
+
+4. **Verify Language Claims**
+   ```bash
+   # Use linguist or similar to check actual language distribution
+   github-linguist --breakdown
+   ```
+
+## Common Malware Patterns
+
+### Fake Mod Installer Pattern
+
+```markdown
+# ❌ MALICIOUS PATTERN:
+## Installation (Easy as 1-2-3)
+1. Download: Click the button below to get Setup.exe
+2. Install: Open the file and follow setup
+3. Start: Launch and click "Activate"
+
+[DOWNLOAD - Installer](suspicious-link.exe)
+```
+
+### Legitimate Mod Pattern
+
+```java
+// ✅ LEGITIMATE PATTERN:
+// build.gradle
+plugins {
+    id 'fabric-loom' version '1.0'
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:1.20.1"
+    mappings "net.fabricmc:yarn:1.20.1+build.10"
+    modImplementation "net.fabricmc:fabric-loader:0.14.21"
+}
+
+// src/main/java/mod/MyMod.java
+package mod;
+
+import net.fabricmc.api.ModInitializer;
+
+public class MyMod implements ModInitializer {
+    @Override
+    public void onInitialize() {
+        System.out.println("Mod initialized!");
     }
 }
 ```
 
-## Safe Alternative Detection
+## Reporting
 
-```csharp
-public class LegitimateModChecker
-{
-    // Legitimate Minecraft mods have these characteristics
-    public bool IsLegitimate(ProjectMetadata project)
-    {
-        var legitimateChecks = new[]
-        {
-            project.Language == "Java" || project.Language == "Kotlin",
-            project.HasCurseForgeLink || project.HasModrinthLink,
-            project.UsesForge || project.UsesFabric,
-            !project.Topics.Intersect(cheatClientTopics).Any(),
-            project.HasSourceCode,
-            project.HasClearLicense
-        };
-        
-        // Must pass majority of checks
-        return legitimateChecks.Count(x => x) >= 5;
-    }
-}
+### GitHub Security Report
 
-public class ProjectMetadata
-{
-    public string Language { get; set; }
-    public bool HasCurseForgeLink { get; set; }
-    public bool HasModrinthLink { get; set; }
-    public bool UsesForge { get; set; }
-    public bool UsesFabric { get; set; }
-    public IEnumerable<string> Topics { get; set; }
-    public bool HasSourceCode { get; set; }
-    public bool HasClearLicense { get; set; }
-}
+If you identify a malicious repository:
+
+1. Navigate to the repository
+2. Click "Security" tab
+3. Click "Report a vulnerability" or use GitHub's abuse report
+4. Provide evidence using this template:
+
+```
+Subject: Malware Distribution - Fake Minecraft Client
+
+Evidence:
+- No actual source code present despite claiming C++ language
+- Future creation date (metadata manipulation)
+- Direct .exe download links in README
+- Topics include "hack", "killaura", "free-account"
+- SEO keyword stuffing in description
+- No legitimate build system or dependencies
+
+Risk: High - Potential trojan/keylogger distribution
 ```
 
-## Reporting and Remediation
+### Automated Reporting Script
 
-### GitHub Report Template
+```python
+import requests
+import os
 
-```csharp
-public class ReportGenerator
-{
-    public string GenerateGitHubReport(ThreatAssessment assessment)
-    {
-        return $@"
-**Repository Violates GitHub Terms of Service**
-
-This repository distributes Minecraft cheat client software that:
-
-1. Violates Mojang/Microsoft Terms of Service
-2. Provides unfair advantages in multiplayer gameplay
-3. May contain malware or unwanted software
-
-**Evidence:**
-- Topics include known cheat client names: {string.Join(", ", cheatClientTopics)}
-- Suspicious star velocity: 244 stars/day (likely bot manipulation)
-- Wrong primary language for Minecraft modding (C# vs Java)
-- Binary-only distribution without verifiable source
-
-**Recommended Action:**
-Please review and remove this repository per GitHub's Acceptable Use Policies.
-
-**Reference:**
-- Minecraft EULA: https://www.minecraft.net/en-us/eula
-- GitHub Acceptable Use: https://docs.github.com/en/site-policy/acceptable-use-policies
-";
-    }
-}
-```
-
-## Developer Guidance
-
-### If You Encounter This Project
-
-```csharp
-// DO NOT:
-public class DangerousActions
-{
-    public void DONOTDownloadRelease() 
-    {
-        // Downloading may install malware
-        throw new SecurityException("Do not download cheat clients");
+def report_malicious_repo(repo_full_name, evidence):
+    """Report repository to GitHub abuse team."""
+    
+    # Use GitHub's abuse API (requires authentication)
+    headers = {
+        "Authorization": f"token {os.getenv('GITHUB_TOKEN')}",
+        "Accept": "application/vnd.github.v3+json"
     }
     
-    public void DONOTExecuteBinary()
-    {
-        // May compromise your system or Minecraft account
-        throw new SecurityException("Untrusted binaries are dangerous");
-    }
-}
-
-// DO:
-public class SafeActions
-{
-    public void ReportRepository(string owner, string repo)
-    {
-        // Report to GitHub
-        // Report to Mojang: https://help.minecraft.net/hc/en-us/requests/new
+    report_data = {
+        "repository": repo_full_name,
+        "category": "malware",
+        "evidence": evidence,
+        "severity": "high"
     }
     
-    public void UseLegitimateAlternatives()
-    {
-        // OptiFine (performance)
-        // Sodium (performance, open source)
-        // Iris Shaders (graphics)
-        // Fabric/Forge official mods
-    }
-}
+    # Note: This is a conceptual example
+    # Actual reporting should be done through GitHub's web interface
+    print(f"Report prepared for {repo_full_name}")
+    print(f"Evidence: {evidence}")
+    print("Please submit through: https://github.com/contact/report-abuse")
+
+# Usage
+report_malicious_repo(
+    "username/vapev4-client-2026",
+    "Fake Minecraft client with no source code, exe downloads, and future dates"
+)
 ```
 
-## Environment Variables
+## Prevention for Users
+
+### Safe Minecraft Modding Practices
 
 ```bash
-# For automated scanning tools
-export GITHUB_TOKEN=your_token_here
-export SCAN_THRESHOLD=3  # Minimum suspicious indicators
-export REPORT_ENDPOINT=https://api.github.com/repos/{owner}/{repo}/issues
+# ✅ Always use official mod sources:
+# - CurseForge (https://www.curseforge.com/minecraft)
+# - Modrinth (https://modrinth.com/)
+# - Official Fabric/Forge repositories
+
+# ❌ NEVER download .exe files claiming to be mods
+# ❌ NEVER trust repositories with:
+#    - No source code
+#    - "Free account" or "hack" in the name
+#    - Suspicious download links
 ```
 
-## Common Patterns to Detect
+### Legitimate Mod Development
 
-1. **Binary-only releases** without source code
-2. **Star manipulation** (hundreds of stars in hours)
-3. **Cheat client keywords** in topics/description
-4. **C# for Java game mods** (injection technique)
-5. **"Utility" euphemisms** for cheats
-6. **Known cheat client names** in topics
+```java
+// Real Fabric mod structure:
+// fabric.mod.json
+{
+  "schemaVersion": 1,
+  "id": "mymod",
+  "version": "1.0.0",
+  "name": "My Mod",
+  "entrypoints": {
+    "main": ["com.example.MyMod"]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.0",
+    "minecraft": "~1.20.1"
+  }
+}
+
+// src/main/java/com/example/MyMod.java
+package com.example;
+
+import net.fabricmc.api.ModInitializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class MyMod implements ModInitializer {
+    public static final Logger LOGGER = LoggerFactory.getLogger("mymod");
+
+    @Override
+    public void onInitialize() {
+        LOGGER.info("My mod initialized safely!");
+    }
+}
+```
 
 ## Conclusion
 
-This project (`MineCraft-Collection-C-Client`) is definitively a **cheat client** that:
-- Violates Minecraft Terms of Service
-- Uses deceptive marketing as "utilities"
-- References multiple known cheat clients
-- Should be reported and avoided
-
-Always use legitimate, open-source mods from trusted platforms like CurseForge, Modrinth, or official mod loader repositories.
+This skill equips AI agents to identify and warn developers about malicious Minecraft "cheat client" repositories. Always verify legitimacy through official sources and never download executable files from untrusted GitHub repositories.
+```
