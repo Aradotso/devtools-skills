@@ -105,6 +105,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [searchcli-volcengine-ai-search](skills/searchcli-volcengine-ai-search/) | [install](https://skills.sh/aradotso/devtools-skills/searchcli-volcengine-ai-search) | [volcengine/SearchCLI](https://github.com/volcengine/SearchCLI) | 2026-05-28 |
 | [wechat-devtools-mcp](skills/wechat-devtools-mcp/) | [install](https://skills.sh/aradotso/devtools-skills/wechat-devtools-mcp) | [WaterTian/wechat-devtools-mcp](https://github.com/WaterTian/wechat-devtools-mcp) | 2026-05-28 |
 | [clicklight-macos-click-highlighter](skills/clicklight-macos-click-highlighter/) | [install](https://skills.sh/aradotso/devtools-skills/clicklight-macos-click-highlighter) | [aurorascharff/ClickLight](https://github.com/aurorascharff/ClickLight) | 2026-05-28 |
+| [claude-code-cli-terminal-assistant](skills/claude-code-cli-terminal-assistant/) | [install](https://skills.sh/aradotso/devtools-skills/claude-code-cli-terminal-assistant) | [Harkirat1462/claude-code-cli](https://github.com/Harkirat1462/claude-code-cli) | 2026-05-28 |
 <!-- SKILL_INDEX -->
 
 ---
