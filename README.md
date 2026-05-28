@@ -103,6 +103,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [malware-detection-minecraft-cheat](skills/malware-detection-minecraft-cheat/) | [install](https://skills.sh/aradotso/devtools-skills/malware-detection-minecraft-cheat) | [enugefaq7071002/VapeV4-Client-2026](https://github.com/enugefaq7071002/VapeV4-Client-2026) | 2026-05-27 |
 | [minecraft-vape-client-security-analysis](skills/minecraft-vape-client-security-analysis/) | [install](https://skills.sh/aradotso/devtools-skills/minecraft-vape-client-security-analysis) | [enugefaq7071002/VapeV4-Client-2026](https://github.com/enugefaq7071002/VapeV4-Client-2026) | 2026-05-27 |
 | [searchcli-volcengine-ai-search](skills/searchcli-volcengine-ai-search/) | [install](https://skills.sh/aradotso/devtools-skills/searchcli-volcengine-ai-search) | [volcengine/SearchCLI](https://github.com/volcengine/SearchCLI) | 2026-05-28 |
+| [wechat-devtools-mcp](skills/wechat-devtools-mcp/) | [install](https://skills.sh/aradotso/devtools-skills/wechat-devtools-mcp) | [WaterTian/wechat-devtools-mcp](https://github.com/WaterTian/wechat-devtools-mcp) | 2026-05-28 |
 <!-- SKILL_INDEX -->
 
 ---
