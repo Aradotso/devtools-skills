@@ -107,6 +107,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [clicklight-macos-click-highlighter](skills/clicklight-macos-click-highlighter/) | [install](https://skills.sh/aradotso/devtools-skills/clicklight-macos-click-highlighter) | [aurorascharff/ClickLight](https://github.com/aurorascharff/ClickLight) | 2026-05-28 |
 | [claude-code-cli-terminal-assistant](skills/claude-code-cli-terminal-assistant/) | [install](https://skills.sh/aradotso/devtools-skills/claude-code-cli-terminal-assistant) | [Harkirat1462/claude-code-cli](https://github.com/Harkirat1462/claude-code-cli) | 2026-05-28 |
 | [lunar-client-minecraft-launcher](skills/lunar-client-minecraft-launcher/) | [install](https://skills.sh/aradotso/devtools-skills/lunar-client-minecraft-launcher) | [Bartates/lunar-client-minecraft](https://github.com/Bartates/lunar-client-minecraft) | 2026-05-29 |
+| [webmcp-chrome-devtools-quickstart](skills/webmcp-chrome-devtools-quickstart/) | [install](https://skills.sh/aradotso/devtools-skills/webmcp-chrome-devtools-quickstart) | [WebMCP-org/chrome-devtools-quickstart](https://github.com/WebMCP-org/chrome-devtools-quickstart) | 2026-05-29 |
 <!-- SKILL_INDEX -->
 
 ---
