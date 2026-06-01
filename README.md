@@ -109,6 +109,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [lunar-client-minecraft-launcher](skills/lunar-client-minecraft-launcher/) | [install](https://skills.sh/aradotso/devtools-skills/lunar-client-minecraft-launcher) | [Bartates/lunar-client-minecraft](https://github.com/Bartates/lunar-client-minecraft) | 2026-05-29 |
 | [webmcp-chrome-devtools-quickstart](skills/webmcp-chrome-devtools-quickstart/) | [install](https://skills.sh/aradotso/devtools-skills/webmcp-chrome-devtools-quickstart) | [WebMCP-org/chrome-devtools-quickstart](https://github.com/WebMCP-org/chrome-devtools-quickstart) | 2026-05-29 |
 | [14days-build-claude-code-cli](skills/14days-build-claude-code-cli/) | [install](https://skills.sh/aradotso/devtools-skills/14days-build-claude-code-cli) | [bozhouDev/14days-build-claude-code-cli](https://github.com/bozhouDev/14days-build-claude-code-cli) | 2026-05-30 |
+| [optiscaler-client-integration](skills/optiscaler-client-integration/) | [install](https://skills.sh/aradotso/devtools-skills/optiscaler-client-integration) | [optiscalerclient/optiscaler-client](https://github.com/optiscalerclient/optiscaler-client) | 2026-06-01 |
 <!-- SKILL_INDEX -->
 
 ---
