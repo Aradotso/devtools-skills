@@ -112,6 +112,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [optiscaler-client-integration](skills/optiscaler-client-integration/) | [install](https://skills.sh/aradotso/devtools-skills/optiscaler-client-integration) | [optiscalerclient/optiscaler-client](https://github.com/optiscalerclient/optiscaler-client) | 2026-06-01 |
 | [breathe-cli-resonance-breathing](skills/breathe-cli-resonance-breathing/) | [install](https://skills.sh/aradotso/devtools-skills/breathe-cli-resonance-breathing) | [marekkowalczyk/breathe-cli](https://github.com/marekkowalczyk/breathe-cli) | 2026-06-02 |
 | [continues-ai-session-transfer](skills/continues-ai-session-transfer/) | [install](https://skills.sh/aradotso/devtools-skills/continues-ai-session-transfer) | [yigitkonur/cli-continues](https://github.com/yigitkonur/cli-continues) | 2026-06-02 |
+| [wechat-cli-local-data](skills/wechat-cli-local-data/) | [install](https://skills.sh/aradotso/devtools-skills/wechat-cli-local-data) | [huohuoer/wechat-cli](https://github.com/huohuoer/wechat-cli) | 2026-06-02 |
 <!-- SKILL_INDEX -->
 
 ---
