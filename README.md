@@ -111,6 +111,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [14days-build-claude-code-cli](skills/14days-build-claude-code-cli/) | [install](https://skills.sh/aradotso/devtools-skills/14days-build-claude-code-cli) | [bozhouDev/14days-build-claude-code-cli](https://github.com/bozhouDev/14days-build-claude-code-cli) | 2026-05-30 |
 | [optiscaler-client-integration](skills/optiscaler-client-integration/) | [install](https://skills.sh/aradotso/devtools-skills/optiscaler-client-integration) | [optiscalerclient/optiscaler-client](https://github.com/optiscalerclient/optiscaler-client) | 2026-06-01 |
 | [breathe-cli-resonance-breathing](skills/breathe-cli-resonance-breathing/) | [install](https://skills.sh/aradotso/devtools-skills/breathe-cli-resonance-breathing) | [marekkowalczyk/breathe-cli](https://github.com/marekkowalczyk/breathe-cli) | 2026-06-02 |
+| [continues-ai-session-transfer](skills/continues-ai-session-transfer/) | [install](https://skills.sh/aradotso/devtools-skills/continues-ai-session-transfer) | [yigitkonur/cli-continues](https://github.com/yigitkonur/cli-continues) | 2026-06-02 |
 <!-- SKILL_INDEX -->
 
 ---
