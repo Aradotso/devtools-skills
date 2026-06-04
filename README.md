@@ -114,6 +114,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [continues-ai-session-transfer](skills/continues-ai-session-transfer/) | [install](https://skills.sh/aradotso/devtools-skills/continues-ai-session-transfer) | [yigitkonur/cli-continues](https://github.com/yigitkonur/cli-continues) | 2026-06-02 |
 | [wechat-cli-local-data](skills/wechat-cli-local-data/) | [install](https://skills.sh/aradotso/devtools-skills/wechat-cli-local-data) | [huohuoer/wechat-cli](https://github.com/huohuoer/wechat-cli) | 2026-06-02 |
 | [clip-finetune-recipes](skills/clip-finetune-recipes/) | [install](https://skills.sh/aradotso/devtools-skills/clip-finetune-recipes) | [thombanal/clip-finetune-recipes](https://github.com/thombanal/clip-finetune-recipes) | 2026-06-03 |
+| [tartarusai-cli-coding-agent](skills/tartarusai-cli-coding-agent/) | [install](https://skills.sh/aradotso/devtools-skills/tartarusai-cli-coding-agent) | [Tartarus-AI/tartarusai-cli](https://github.com/Tartarus-AI/tartarusai-cli) | 2026-06-04 |
 <!-- SKILL_INDEX -->
 
 ---
