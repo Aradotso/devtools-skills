@@ -117,6 +117,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [tartarusai-cli-coding-agent](skills/tartarusai-cli-coding-agent/) | [install](https://skills.sh/aradotso/devtools-skills/tartarusai-cli-coding-agent) | [Tartarus-AI/tartarusai-cli](https://github.com/Tartarus-AI/tartarusai-cli) | 2026-06-04 |
 | [ffmpeg-webcli-browser-video-editor](skills/ffmpeg-webcli-browser-video-editor/) | [install](https://skills.sh/aradotso/devtools-skills/ffmpeg-webcli-browser-video-editor) | [tejaswigowda/ffmpeg-webCLI](https://github.com/tejaswigowda/ffmpeg-webCLI) | 2026-06-05 |
 | [notebooklm-mcp-programmatic-access](skills/notebooklm-mcp-programmatic-access/) | [install](https://skills.sh/aradotso/devtools-skills/notebooklm-mcp-programmatic-access) | [jacob-bd/notebooklm-mcp-cli](https://github.com/jacob-bd/notebooklm-mcp-cli) | 2026-06-07 |
+| [clicd-virtualization-panel](skills/clicd-virtualization-panel/) | [install](https://skills.sh/aradotso/devtools-skills/clicd-virtualization-panel) | [MengMengCode/CLICD](https://github.com/MengMengCode/CLICD) | 2026-06-11 |
 <!-- SKILL_INDEX -->
 
 ---
