@@ -120,6 +120,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [clicd-virtualization-panel](skills/clicd-virtualization-panel/) | [install](https://skills.sh/aradotso/devtools-skills/clicd-virtualization-panel) | [MengMengCode/CLICD](https://github.com/MengMengCode/CLICD) | 2026-06-11 |
 | [clipgstream-dynamic-scene-reconstruction](skills/clipgstream-dynamic-scene-reconstruction/) | [install](https://skills.sh/aradotso/devtools-skills/clipgstream-dynamic-scene-reconstruction) | [liangjie1999/ClipGStream](https://github.com/liangjie1999/ClipGStream) | 2026-06-12 |
 | [testsprite-ai-testing-cli](skills/testsprite-ai-testing-cli/) | [install](https://skills.sh/aradotso/devtools-skills/testsprite-ai-testing-cli) | [TestSprite/testsprite-cli](https://github.com/TestSprite/testsprite-cli) | 2026-06-13 |
+| [narrator-ai-cli-video-generation](skills/narrator-ai-cli-video-generation/) | [install](https://skills.sh/aradotso/devtools-skills/narrator-ai-cli-video-generation) | [NarratorAI-Studio/narrator-ai-cli-skill](https://github.com/NarratorAI-Studio/narrator-ai-cli-skill) | 2026-06-15 |
 <!-- SKILL_INDEX -->
 
 ---
