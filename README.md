@@ -122,6 +122,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [testsprite-ai-testing-cli](skills/testsprite-ai-testing-cli/) | [install](https://skills.sh/aradotso/devtools-skills/testsprite-ai-testing-cli) | [TestSprite/testsprite-cli](https://github.com/TestSprite/testsprite-cli) | 2026-06-13 |
 | [narrator-ai-cli-video-generation](skills/narrator-ai-cli-video-generation/) | [install](https://skills.sh/aradotso/devtools-skills/narrator-ai-cli-video-generation) | [NarratorAI-Studio/narrator-ai-cli-skill](https://github.com/NarratorAI-Studio/narrator-ai-cli-skill) | 2026-06-15 |
 | [narrator-ai-cli-video-narration](skills/narrator-ai-cli-video-narration/) | [install](https://skills.sh/aradotso/devtools-skills/narrator-ai-cli-video-narration) | [NarratorAI-Studio/narrator-ai-cli-skill](https://github.com/NarratorAI-Studio/narrator-ai-cli-skill) | 2026-06-15 |
+| [narrator-ai-video-generation](skills/narrator-ai-video-generation/) | [install](https://skills.sh/aradotso/devtools-skills/narrator-ai-video-generation) | [NarratorAI-Studio/narrator-ai-cli-skill](https://github.com/NarratorAI-Studio/narrator-ai-cli-skill) | 2026-06-15 |
 <!-- SKILL_INDEX -->
 
 ---
