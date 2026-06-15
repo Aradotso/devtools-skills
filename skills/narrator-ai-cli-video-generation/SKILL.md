@@ -1,367 +1,243 @@
+```markdown
 ---
 name: narrator-ai-cli-video-generation
-description: Generate AI-narrated movie commentary videos using narrator-ai-cli through natural language commands
+description: Create AI-narrated movie commentary videos using narrator-ai-cli through natural language commands
 triggers:
   - "create a movie narration video"
-  - "generate a video commentary for a film"
-  - "make a narrated video using narrator-ai"
-  - "produce an AI commentary video"
-  - "convert a movie into a narration video"
-  - "create short drama narration content"
-  - "generate film commentary with AI voices"
-  - "make a video with AI narrator for this movie"
+  - "generate film commentary for"
+  - "make a narrated video about"
+  - "use narrator-ai to create"
+  - "show available movies for narration"
+  - "generate multiple narration videos"
+  - "create original narration content"
+  - "adapt a movie into narrated clips"
 ---
 
-# narrator-ai-cli Video Generation Skill
+# Narrator AI CLI Video Generation Skill
 
 > Skill by [ara.so](https://ara.so) — Devtools Skills collection.
 
-This skill teaches AI agents how to use **narrator-ai-cli**, a command-line tool for automated movie narration video production. The tool provides end-to-end video creation: from selecting movies and templates to generating scripts, composing clips, and exporting final videos.
-
-## What It Does
-
-narrator-ai-cli automates the creation of movie commentary/narration videos by:
-- Searching and selecting from ~100 pre-configured movies
-- Choosing narration styles (comedy, suspense, emotional, etc.) from 90+ templates
-- Selecting background music from 146 BGM tracks
-- Picking AI dubbing voices from 63 options
-- Generating scripts automatically or using custom scripts
-- Composing video clips with narration overlays
-- Exporting final videos with download links
-
-Two main workflows:
-1. **Fast Path (Original Narration)**: Use pre-existing scripts and clip data for hot drama content
-2. **Standard Path (Adapted Narration)**: Generate new scripts and clip data for custom narrations
+This skill enables AI agents to use `narrator-ai-cli`, a Python CLI tool that automates the creation of AI-narrated movie commentary videos. The tool provides two workflows: **Adapted Narration** (using existing movie clips) and **Original Narration** (generating new content), with built-in resources including ~100 movies, 146 BGM tracks, 63 voices, and 90+ templates.
 
 ## Installation
 
-### Install the CLI
+Install via pip from the GitHub repository:
 
 ```bash
-# Via pip from GitHub
 pip install "narrator-ai-cli @ git+https://github.com/NarratorAI-Studio/narrator-ai-cli.git"
+```
 
-# Or clone and install locally
+Or clone and install locally:
+
+```bash
 git clone https://github.com/NarratorAI-Studio/narrator-ai-cli.git
 cd narrator-ai-cli
 pip install -e .
 ```
 
-Requirements:
+**Requirements:**
 - Python 3.10+
 - Dependencies: typer, httpx[socks], httpx-sse, pyyaml, rich
 
-### Configure API Key
+## Configuration
+
+Set your API key (required for all operations):
 
 ```bash
-# Set your API key (contact merlinyang@gridltd.com to obtain)
-narrator-ai-cli config set app_key YOUR_APP_KEY_HERE
+# Set app key
+narrator-ai-cli config set app_key YOUR_APP_KEY
 
-# Verify configuration
+# View current configuration
 narrator-ai-cli config show
+
+# Set proxy (optional)
+narrator-ai-cli config set proxy http://127.0.0.1:7890
 ```
 
-Environment variable alternative:
-```bash
-export NARRATOR_APP_KEY=YOUR_APP_KEY_HERE
-```
+Configuration is stored in `~/.narrator-ai-cli/config.yaml`.
 
-### Verify Installation
+**Environment Variable Alternative:**
 
 ```bash
-narrator-ai-cli --version
-narrator-ai-cli --help
+export NARRATOR_APP_KEY="your_app_key_here"
 ```
 
 ## Core Concepts
 
-### Key Identifiers
-- **file_id**: Unique identifier for movies in the library (e.g., `10001`)
-- **task_id**: Identifier returned when creating tasks (script generation, video composition)
-- **task_order_num**: Specific order number for video composition tasks
-- **drama_id**: Identifier for short drama content
-
-### Workflows
-
-**Fast Path (Original Narration)**:
-- Uses pre-existing scripts and clip data
-- Best for hot drama content and quick turnaround
-- Steps: Select movie → Choose template → Select BGM/voice → Compose video
-
-**Standard Path (Adapted Narration)**:
-- Generates new scripts and clip data
-- Full customization of narration style
-- Steps: Select movie → Choose template → Generate script → Generate clips → Compose video
+- **file_id**: Unique identifier for uploaded scripts or generated audio files
+- **task_id**: Identifier for video generation tasks
+- **task_order_num**: Sequential number for tracking task progress
+- **Adapted Narration**: Uses existing movie clips (Fast Path)
+- **Original Narration**: Generates new video from scratch (Standard Path)
 
 ## Key Commands
 
-### 1. Search and List Movies
+### Resource Discovery
 
 ```bash
-# Search for movies by keyword
-narrator-ai-cli movie search "Shawshank"
-
 # List all available movies
-narrator-ai-cli movie list
+narrator-ai-cli resources movies
 
-# Get detailed movie info
-narrator-ai-cli movie info --file-id 10001
+# List BGM tracks
+narrator-ai-cli resources bgm
+
+# List dubbing voices
+narrator-ai-cli resources dubbing
+
+# List narration templates
+narrator-ai-cli resources templates
+
+# Search for specific movie
+narrator-ai-cli resources movies --search "Shawshank"
 ```
 
-### 2. List Resources
+### Fast Path (Adapted Narration)
+
+Creates narrated videos from existing movie clips:
 
 ```bash
-# List narration templates (90+ styles)
-narrator-ai-cli template list
+# Step 1: Select movie (from resources movies output)
+MOVIE_ID="movie_123"
 
-# List BGM tracks (146 options)
-narrator-ai-cli bgm list
-
-# List dubbing voices (63 options)
-narrator-ai-cli dubbing list
-
-# List visual templates
-narrator-ai-cli visual-template list
-```
-
-### 3. Fast Path: Original Narration (Hot Drama)
-
-```python
-# Step 1: Search for a movie
-narrator-ai-cli movie search "热门剧集名称"
-
-# Step 2: Select template (e.g., comedy style)
-narrator-ai-cli template list | grep "搞笑"
-
-# Step 3: Select BGM
-narrator-ai-cli bgm list | grep "轻快"
-
-# Step 4: Compose video directly (uses pre-existing script/clips)
-narrator-ai-cli video compose \
-  --file-id 10001 \
-  --template-id 1001 \
-  --bgm-id 2001 \
-  --dubbing-id 3001
-
-# Step 5: Check task status
-narrator-ai-cli task status --task-id <returned_task_id>
-```
-
-### 4. Standard Path: Adapted Narration
-
-```bash
-# Step 1: Generate script
+# Step 2: Generate script
 narrator-ai-cli script generate \
-  --file-id 10001 \
-  --template-id 1001
+  --movie-id $MOVIE_ID \
+  --template-id template_456 \
+  --output script.txt
 
-# Step 2: Check script task status and get script content
-narrator-ai-cli task status --task-id <script_task_id>
+# Step 3: Upload script
+FILE_ID=$(narrator-ai-cli file upload script.txt --type script | grep "file_id:" | awk '{print $2}')
+
+# Step 4: Create video task
+TASK_ID=$(narrator-ai-cli task create \
+  --file-id $FILE_ID \
+  --movie-id $MOVIE_ID \
+  --bgm-id bgm_789 \
+  --dubbing-id voice_012 \
+  --mode hot_drama | grep "task_id:" | awk '{print $2}')
+
+# Step 5: Poll for completion
+narrator-ai-cli task status $TASK_ID --wait
+```
+
+### Standard Path (Original Narration)
+
+Generates completely new content:
+
+```bash
+# Step 1: Create script from topic
+narrator-ai-cli script generate \
+  --topic "A detective story set in Victorian London" \
+  --template-id template_creative \
+  --output original_script.txt
+
+# Step 2: Upload script
+FILE_ID=$(narrator-ai-cli file upload original_script.txt --type script | grep "file_id:" | awk '{print $2}')
 
 # Step 3: Generate clip data
-narrator-ai-cli clip generate \
-  --file-id 10001 \
-  --script "Your narration script here..."
+CLIP_FILE_ID=$(narrator-ai-cli clip generate \
+  --script-file-id $FILE_ID \
+  --output clips.json | grep "file_id:" | awk '{print $2}')
 
-# Step 4: Check clip task status
-narrator-ai-cli task status --task-id <clip_task_id>
+# Step 4: Generate audio
+AUDIO_FILE_ID=$(narrator-ai-cli audio generate \
+  --script-file-id $FILE_ID \
+  --dubbing-id voice_012 | grep "file_id:" | awk '{print $2}')
 
-# Step 5: Compose video
-narrator-ai-cli video compose \
-  --file-id 10001 \
-  --template-id 1001 \
-  --bgm-id 2001 \
-  --dubbing-id 3001 \
-  --clip-data-path ./clip_data.json
+# Step 5: Create video task
+TASK_ID=$(narrator-ai-cli task create \
+  --file-id $FILE_ID \
+  --clip-file-id $CLIP_FILE_ID \
+  --audio-file-id $AUDIO_FILE_ID \
+  --bgm-id bgm_789 \
+  --mode original_mix | grep "task_id:" | awk '{print $2}')
 
-# Step 6: Check video task status
-narrator-ai-cli task status --task-id <video_task_id>
+# Step 6: Poll for completion
+narrator-ai-cli task status $TASK_ID --wait
 ```
 
-### 5. Standalone Tasks
+### Standalone Operations
 
 ```bash
-# Voice cloning (upload reference audio)
-narrator-ai-cli voice clone \
-  --audio-file ./reference_voice.mp3 \
-  --voice-name "My Custom Voice"
-
-# Text-to-speech generation
-narrator-ai-cli tts generate \
+# Text-to-speech only
+narrator-ai-cli tts \
   --text "Your narration text here" \
-  --dubbing-id 3001 \
-  --output ./output_audio.mp3
+  --dubbing-id voice_012 \
+  --output narration.mp3
+
+# Voice cloning
+narrator-ai-cli voice clone \
+  --audio-file sample.wav \
+  --voice-name "MyCustomVoice" \
+  --description "Cloned from sample audio"
+
+# Check task status
+narrator-ai-cli task status TASK_ID_HERE
+
+# List all tasks
+narrator-ai-cli task list
+
+# Download completed video
+narrator-ai-cli task download TASK_ID_HERE --output video.mp4
 ```
 
 ## Python API Usage
 
 ```python
-import subprocess
-import json
+from narrator_ai_cli.client import NarratorClient
+from narrator_ai_cli.config import load_config
+
+# Initialize client
+config = load_config()
+client = NarratorClient(
+    app_key=config.get("app_key"),
+    proxy=config.get("proxy")
+)
+
+# List movies
+movies = client.list_movies()
+for movie in movies["data"]:
+    print(f"{movie['id']}: {movie['name']}")
+
+# Generate script
+script_response = client.generate_script(
+    movie_id="movie_123",
+    template_id="template_456"
+)
+script_content = script_response["data"]["script"]
+
+# Upload script
+with open("script.txt", "w") as f:
+    f.write(script_content)
+
+upload_response = client.upload_file(
+    file_path="script.txt",
+    file_type="script"
+)
+file_id = upload_response["data"]["file_id"]
+
+# Create video task
+task_response = client.create_task(
+    file_id=file_id,
+    movie_id="movie_123",
+    bgm_id="bgm_789",
+    dubbing_id="voice_012",
+    mode="hot_drama"
+)
+task_id = task_response["data"]["task_id"]
+
+# Poll for completion
 import time
+while True:
+    status = client.get_task_status(task_id)
+    if status["data"]["status"] in ["completed", "failed"]:
+        break
+    time.sleep(5)
 
-def create_narration_video(movie_keyword: str, style: str = "comedy"):
-    """
-    Complete workflow to create a narration video.
-    
-    Args:
-        movie_keyword: Keyword to search for movie
-        style: Narration style (comedy, suspense, emotional, etc.)
-    """
-    
-    # Step 1: Search for movie
-    result = subprocess.run(
-        ["narrator-ai-cli", "movie", "search", movie_keyword],
-        capture_output=True,
-        text=True
-    )
-    movies = json.loads(result.stdout)
-    if not movies:
-        raise ValueError(f"No movies found for '{movie_keyword}'")
-    
-    file_id = movies[0]["file_id"]
-    print(f"Selected movie: {movies[0]['title']} (file_id: {file_id})")
-    
-    # Step 2: Find template by style
-    result = subprocess.run(
-        ["narrator-ai-cli", "template", "list"],
-        capture_output=True,
-        text=True
-    )
-    templates = json.loads(result.stdout)
-    template = next((t for t in templates if style in t["name"].lower()), templates[0])
-    template_id = template["template_id"]
-    print(f"Selected template: {template['name']} (id: {template_id})")
-    
-    # Step 3: Select default BGM and dubbing
-    result = subprocess.run(
-        ["narrator-ai-cli", "bgm", "list"],
-        capture_output=True,
-        text=True
-    )
-    bgms = json.loads(result.stdout)
-    bgm_id = bgms[0]["bgm_id"]
-    
-    result = subprocess.run(
-        ["narrator-ai-cli", "dubbing", "list"],
-        capture_output=True,
-        text=True
-    )
-    dubbings = json.loads(result.stdout)
-    dubbing_id = dubbings[0]["dubbing_id"]
-    
-    # Step 4: Generate script
-    result = subprocess.run(
-        ["narrator-ai-cli", "script", "generate",
-         "--file-id", str(file_id),
-         "--template-id", str(template_id)],
-        capture_output=True,
-        text=True
-    )
-    script_task = json.loads(result.stdout)
-    script_task_id = script_task["task_id"]
-    print(f"Script generation started (task_id: {script_task_id})")
-    
-    # Step 5: Wait for script completion
-    script_content = None
-    for _ in range(30):  # Poll for up to 5 minutes
-        time.sleep(10)
-        result = subprocess.run(
-            ["narrator-ai-cli", "task", "status", "--task-id", script_task_id],
-            capture_output=True,
-            text=True
-        )
-        status = json.loads(result.stdout)
-        
-        if status["status"] == "completed":
-            script_content = status["result"]["script"]
-            print("Script generation completed")
-            break
-        elif status["status"] == "failed":
-            raise RuntimeError(f"Script generation failed: {status.get('error')}")
-    
-    if not script_content:
-        raise TimeoutError("Script generation timed out")
-    
-    # Step 6: Generate clip data
-    result = subprocess.run(
-        ["narrator-ai-cli", "clip", "generate",
-         "--file-id", str(file_id),
-         "--script", script_content],
-        capture_output=True,
-        text=True
-    )
-    clip_task = json.loads(result.stdout)
-    clip_task_id = clip_task["task_id"]
-    print(f"Clip generation started (task_id: {clip_task_id})")
-    
-    # Step 7: Wait for clip data completion
-    clip_data_path = None
-    for _ in range(30):
-        time.sleep(10)
-        result = subprocess.run(
-            ["narrator-ai-cli", "task", "status", "--task-id", clip_task_id],
-            capture_output=True,
-            text=True
-        )
-        status = json.loads(result.stdout)
-        
-        if status["status"] == "completed":
-            clip_data_path = status["result"]["clip_data_path"]
-            print("Clip generation completed")
-            break
-        elif status["status"] == "failed":
-            raise RuntimeError(f"Clip generation failed: {status.get('error')}")
-    
-    if not clip_data_path:
-        raise TimeoutError("Clip generation timed out")
-    
-    # Step 8: Compose video
-    result = subprocess.run(
-        ["narrator-ai-cli", "video", "compose",
-         "--file-id", str(file_id),
-         "--template-id", str(template_id),
-         "--bgm-id", str(bgm_id),
-         "--dubbing-id", str(dubbing_id),
-         "--clip-data-path", clip_data_path],
-        capture_output=True,
-        text=True
-    )
-    video_task = json.loads(result.stdout)
-    video_task_id = video_task["task_id"]
-    print(f"Video composition started (task_id: {video_task_id})")
-    
-    # Step 9: Wait for video completion
-    video_url = None
-    for _ in range(60):  # Poll for up to 10 minutes
-        time.sleep(10)
-        result = subprocess.run(
-            ["narrator-ai-cli", "task", "status", "--task-id", video_task_id],
-            capture_output=True,
-            text=True
-        )
-        status = json.loads(result.stdout)
-        
-        if status["status"] == "completed":
-            video_url = status["result"]["video_url"]
-            print(f"Video completed! Download: {video_url}")
-            break
-        elif status["status"] == "failed":
-            raise RuntimeError(f"Video composition failed: {status.get('error')}")
-        
-        # Show progress
-        progress = status.get("progress", 0)
-        print(f"Progress: {progress}%")
-    
-    if not video_url:
-        raise TimeoutError("Video composition timed out")
-    
-    return video_url
-
-# Usage example
-if __name__ == "__main__":
-    video_url = create_narration_video("肖申克的救赎", style="comedy")
-    print(f"Final video URL: {video_url}")
+# Download video
+if status["data"]["status"] == "completed":
+    video_url = status["data"]["video_url"]
+    client.download_file(video_url, "output.mp4")
 ```
 
 ## Common Patterns
@@ -369,193 +245,237 @@ if __name__ == "__main__":
 ### Batch Video Generation
 
 ```python
-import subprocess
-import json
+from narrator_ai_cli.client import NarratorClient
+import os
 
-def batch_create_videos(movie_keywords: list[str], template_id: int):
-    """Create multiple videos with the same template."""
-    video_tasks = []
+client = NarratorClient(app_key=os.getenv("NARRATOR_APP_KEY"))
+
+# Get movie list
+movies = client.list_movies()["data"][:5]  # First 5 movies
+
+# Generate videos for each
+task_ids = []
+for movie in movies:
+    # Generate script
+    script = client.generate_script(
+        movie_id=movie["id"],
+        template_id="template_comedy"
+    )
     
-    for keyword in movie_keywords:
-        # Search movie
-        result = subprocess.run(
-            ["narrator-ai-cli", "movie", "search", keyword],
-            capture_output=True, text=True
-        )
-        movies = json.loads(result.stdout)
-        if not movies:
-            continue
-        
-        file_id = movies[0]["file_id"]
-        
-        # Start video composition (fast path if available)
-        result = subprocess.run(
-            ["narrator-ai-cli", "video", "compose",
-             "--file-id", str(file_id),
-             "--template-id", str(template_id)],
-            capture_output=True, text=True
-        )
-        task = json.loads(result.stdout)
-        video_tasks.append({
-            "movie": movies[0]["title"],
-            "task_id": task["task_id"]
-        })
+    # Save and upload
+    script_file = f"script_{movie['id']}.txt"
+    with open(script_file, "w") as f:
+        f.write(script["data"]["script"])
     
-    return video_tasks
+    file_resp = client.upload_file(script_file, "script")
+    
+    # Create task
+    task = client.create_task(
+        file_id=file_resp["data"]["file_id"],
+        movie_id=movie["id"],
+        bgm_id="bgm_001",
+        dubbing_id="voice_001",
+        mode="hot_drama"
+    )
+    task_ids.append(task["data"]["task_id"])
+    
+print(f"Created {len(task_ids)} tasks: {task_ids}")
 ```
 
-### Cost Estimation Before Creation
+### Error Handling
 
-```bash
-# Check cost for a video composition task
-narrator-ai-cli cost estimate \
-  --task-type video_compose \
-  --file-id 10001 \
-  --template-id 1001
+```python
+from narrator_ai_cli.client import NarratorClient
+from narrator_ai_cli.exceptions import NarratorAPIError
+import os
+
+client = NarratorClient(app_key=os.getenv("NARRATOR_APP_KEY"))
+
+try:
+    response = client.create_task(
+        file_id="invalid_file_id",
+        movie_id="movie_123",
+        bgm_id="bgm_001",
+        dubbing_id="voice_001",
+        mode="hot_drama"
+    )
+except NarratorAPIError as e:
+    print(f"API Error: {e.code} - {e.message}")
+    if e.code == 40001:
+        print("Action: Check and refresh app_key")
+    elif e.code == 40301:
+        print("Action: Verify file_id exists and is uploaded")
+    elif e.code == 50001:
+        print("Action: Retry after a delay")
 ```
 
-### Custom Script with Voice Cloning
+## Workflow Decision Logic
 
-```bash
-# Clone a voice
-narrator-ai-cli voice clone \
-  --audio-file ./my_voice.mp3 \
-  --voice-name "MyVoice"
+When a user requests video creation, follow this decision tree:
 
-# Use cloned voice in video
-narrator-ai-cli video compose \
-  --file-id 10001 \
-  --template-id 1001 \
-  --dubbing-id <cloned_voice_id> \
-  --script "Custom narration script..."
-```
+1. **Does the request mention a specific movie?**
+   - Yes → Use **Fast Path** (Adapted Narration)
+   - No → Use **Standard Path** (Original Narration)
 
-## Configuration
+2. **Fast Path steps:**
+   - Search and select movie from `resources movies`
+   - Select template from `resources templates`
+   - Select BGM from `resources bgm`
+   - Select voice from `resources dubbing`
+   - Generate script with `script generate --movie-id`
+   - Upload script with `file upload`
+   - Create task with `task create --mode hot_drama`
 
-Configuration is stored in `~/.narrator-ai-cli/config.yaml`:
+3. **Standard Path steps:**
+   - Generate script from topic with `script generate --topic`
+   - Upload script
+   - Generate clip data with `clip generate`
+   - Generate audio with `audio generate`
+   - Create task with `task create --mode original_mix`
 
-```yaml
-app_key: YOUR_APP_KEY
-api_endpoint: https://api.narrator-ai.com/v1
-timeout: 300
-max_retries: 3
-```
+## Mode Selection
 
-Modify via CLI:
-```bash
-narrator-ai-cli config set api_endpoint https://custom-endpoint.com
-narrator-ai-cli config set timeout 600
-```
-
-## Agent Usage Rules
-
-When helping users with narrator-ai-cli:
-
-1. **Always confirm before acting**: Show the user what movie, template, and settings will be used before starting long-running tasks.
-
-2. **Check resource availability first**: Run `movie list`, `template list`, etc. to show options before asking for selections.
-
-3. **Use appropriate workflow**: Fast Path for hot drama content, Standard Path for custom narrations.
-
-4. **Poll task status**: Video composition can take 5-10 minutes. Poll every 10-20 seconds and show progress updates.
-
-5. **Handle errors gracefully**: If a task fails, check the error code and suggest fixes (e.g., API quota exceeded, invalid file_id).
-
-6. **Resource selection order**:
-   - Movie: User choice or search results
-   - Template: Match user's desired style
-   - BGM: Default or user preference
-   - Dubbing: Default or user preference
-
-7. **Data flow awareness**:
-   - Script generation output → Clip generation input
-   - Clip generation output → Video composition input
-   - Each step depends on the previous completing successfully
+- **hot_drama**: Trending movie clips (requires movie_id)
+- **original_mix**: Original content from scratch
+- **new_drama**: New movie releases (requires movie_id)
 
 ## Troubleshooting
 
-### Common Errors
+### API Key Issues
 
-**Error: "API key not configured"**
 ```bash
-# Solution: Set API key
+# Verify key is set
+narrator-ai-cli config show
+
+# Test with simple command
+narrator-ai-cli resources movies
+
+# Set key if missing
 narrator-ai-cli config set app_key YOUR_APP_KEY
 ```
 
-**Error: "Movie not found (file_id: X)"**
+### Task Stuck in Processing
+
 ```bash
-# Solution: Verify file_id exists
-narrator-ai-cli movie list | grep "10001"
+# Check task status
+narrator-ai-cli task status TASK_ID
+
+# Common statuses: pending, processing, completed, failed
+# Processing can take 5-15 minutes for video generation
+
+# Use --wait flag for auto-polling
+narrator-ai-cli task status TASK_ID --wait --interval 10
 ```
 
-**Error: "Task failed with status: quota_exceeded"**
-```bash
-# Solution: Check account quota
-narrator-ai-cli account quota
-# Or contact support to increase quota
-```
-
-**Error: "Clip data not found"**
-```bash
-# Solution: Ensure script generation completed successfully
-narrator-ai-cli task status --task-id <script_task_id>
-# Then regenerate clip data with the correct script
-```
-
-### Task Status Polling Pattern
+### File Upload Failures
 
 ```python
-import time
-import subprocess
-import json
+# Verify file exists and is readable
+import os
+if not os.path.exists("script.txt"):
+    print("File not found")
+elif os.path.getsize("script.txt") == 0:
+    print("File is empty")
 
-def wait_for_task(task_id: str, timeout: int = 600, poll_interval: int = 10):
-    """Wait for a task to complete with proper error handling."""
-    start_time = time.time()
-    
-    while True:
-        if time.time() - start_time > timeout:
-            raise TimeoutError(f"Task {task_id} timed out after {timeout}s")
-        
-        result = subprocess.run(
-            ["narrator-ai-cli", "task", "status", "--task-id", task_id],
-            capture_output=True,
-            text=True
-        )
-        
-        if result.returncode != 0:
-            raise RuntimeError(f"Failed to check task status: {result.stderr}")
-        
-        status = json.loads(result.stdout)
-        
-        if status["status"] == "completed":
-            return status["result"]
-        elif status["status"] == "failed":
-            error_msg = status.get("error", "Unknown error")
-            raise RuntimeError(f"Task failed: {error_msg}")
-        
-        # Show progress if available
-        if "progress" in status:
-            print(f"Progress: {status['progress']}%")
-        
-        time.sleep(poll_interval)
+# Check file type is correct
+# Valid types: script, clip_data, audio
+client.upload_file("script.txt", file_type="script")
 ```
 
-### Debugging Tips
+### Proxy Configuration
 
 ```bash
-# Enable verbose logging
-narrator-ai-cli --verbose video compose --file-id 10001 --template-id 1001
+# Set proxy for regions with network restrictions
+narrator-ai-cli config set proxy http://127.0.0.1:7890
 
-# Check API connectivity
-narrator-ai-cli doctor
-
-# View recent task history
-narrator-ai-cli task list --limit 10
+# Or use environment variable
+export HTTP_PROXY=http://127.0.0.1:7890
+export HTTPS_PROXY=http://127.0.0.1:7890
 ```
 
-## Links
+### Rate Limiting (Error 50003)
 
-- GitHub: https://github.com/NarratorAI-Studio/narrator-ai-cli
-- API Documentation: https://ceex7z9m67.feishu.cn/wiki/WLPnwBysairenFkZDbicZOfKnbc
-- Contact: merlinyang@gridltd.com
+- Wait 60 seconds between requests
+- Implement exponential backoff for retries
+- Check task status less frequently (every 10-15 seconds)
+
+## Cost Estimation
+
+Before creating tasks, estimate costs:
+
+```python
+# Typical costs per task (approximate)
+# - Script generation: ~100 tokens
+# - Audio generation: ~500 tokens per minute
+# - Video composing: ~1000 tokens
+# - Total per video: ~2000-5000 tokens
+
+# Always confirm with user before creating multiple tasks
+num_videos = 5
+estimated_tokens = num_videos * 3000
+print(f"Creating {num_videos} videos will consume ~{estimated_tokens} tokens")
+```
+
+## Important Notes
+
+1. **Always poll task status** — video generation is asynchronous
+2. **file_id is required** — you cannot skip the upload step
+3. **BGM/dubbing IDs must exist** — verify with `resources` commands first
+4. **Mode determines required parameters** — hot_drama needs movie_id, original_mix needs clip_data
+5. **Scripts are not auto-saved** — explicitly save to file before uploading
+6. **Task IDs are sequential** — use task_order_num for tracking batches
+7. **Confirm before batch operations** — ask user before creating multiple videos
+
+## Agent Best Practices
+
+When helping users create narration videos:
+
+1. **Clarify intent** — Ask if they want to adapt an existing movie or create original content
+2. **Show options** — Display available movies/templates/voices before selecting
+3. **Confirm selections** — Repeat chosen resources before generating
+4. **Explain wait times** — Video generation takes 5-15 minutes
+5. **Handle errors gracefully** — Use error codes to provide specific guidance
+6. **Save outputs** — Store file_ids and task_ids for reference
+7. **Estimate costs** — Warn about token usage for batch operations
+
+## Example Agent Conversation Flow
+
+```
+User: "Create a narration video for The Shawshank Redemption"
+
+Agent: I'll help you create a narration video. Let me:
+1. Search for "The Shawshank Redemption" in available movies
+2. Show you template options
+3. Generate the video
+
+[Executes: narrator-ai-cli resources movies --search "Shawshank"]
+
+Found movie_id: shawshank_001
+
+Which template style would you like?
+- template_dramatic (serious tone)
+- template_comedy (humorous take)
+- template_analytical (film critique)
+
+User: "comedy"
+
+Agent: Great! Using comedy template. Generating script and video...
+[Executes Fast Path workflow]
+
+Video task created (task_id: task_12345)
+Estimated completion: 10-15 minutes
+I'll monitor progress and notify you when ready.
+```
+
+## Reference Files
+
+The skill relies on these reference files (located in `references/` directory):
+
+- `resources.md` — Full lists of movies, BGM, voices, templates
+- `workflows.md` — Detailed workflow diagrams and decision trees
+- `magic-video.md` — Video composing API parameters
+- `operations.md` — All CLI commands with examples
+
+Always check reference files for the most up-to-date resource IDs and parameters.
+
+```
