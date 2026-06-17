@@ -123,6 +123,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [narrator-ai-cli-video-generation](skills/narrator-ai-cli-video-generation/) | [install](https://skills.sh/aradotso/devtools-skills/narrator-ai-cli-video-generation) | [NarratorAI-Studio/narrator-ai-cli-skill](https://github.com/NarratorAI-Studio/narrator-ai-cli-skill) | 2026-06-15 |
 | [narrator-ai-cli-video-narration](skills/narrator-ai-cli-video-narration/) | [install](https://skills.sh/aradotso/devtools-skills/narrator-ai-cli-video-narration) | [NarratorAI-Studio/narrator-ai-cli-skill](https://github.com/NarratorAI-Studio/narrator-ai-cli-skill) | 2026-06-15 |
 | [narrator-ai-video-generation](skills/narrator-ai-video-generation/) | [install](https://skills.sh/aradotso/devtools-skills/narrator-ai-video-generation) | [NarratorAI-Studio/narrator-ai-cli-skill](https://github.com/NarratorAI-Studio/narrator-ai-cli-skill) | 2026-06-15 |
+| [ngx-ai-devtools-angular-llm-debugger](skills/ngx-ai-devtools-angular-llm-debugger/) | [install](https://skills.sh/aradotso/devtools-skills/ngx-ai-devtools-angular-llm-debugger) | [ahmedkhan1/ngx-ai-devtools](https://github.com/ahmedkhan1/ngx-ai-devtools) | 2026-06-17 |
 <!-- SKILL_INDEX -->
 
 ---
