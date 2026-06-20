@@ -125,6 +125,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [narrator-ai-video-generation](skills/narrator-ai-video-generation/) | [install](https://skills.sh/aradotso/devtools-skills/narrator-ai-video-generation) | [NarratorAI-Studio/narrator-ai-cli-skill](https://github.com/NarratorAI-Studio/narrator-ai-cli-skill) | 2026-06-15 |
 | [ngx-ai-devtools-angular-llm-debugger](skills/ngx-ai-devtools-angular-llm-debugger/) | [install](https://skills.sh/aradotso/devtools-skills/ngx-ai-devtools-angular-llm-debugger) | [ahmedkhan1/ngx-ai-devtools](https://github.com/ahmedkhan1/ngx-ai-devtools) | 2026-06-17 |
 | [claude-code-cli-workflow](skills/claude-code-cli-workflow/) | [install](https://skills.sh/aradotso/devtools-skills/claude-code-cli-workflow) | [SheikhSheave/Claude-Code-CLI-Reference](https://github.com/SheikhSheave/Claude-Code-CLI-Reference) | 2026-06-17 |
+| [justanothermusicclient-tauri-youtube-music](skills/justanothermusicclient-tauri-youtube-music/) | [install](https://skills.sh/aradotso/devtools-skills/justanothermusicclient-tauri-youtube-music) | [2latemc/JustAnotherMusicClient](https://github.com/2latemc/JustAnotherMusicClient) | 2026-06-20 |
 <!-- SKILL_INDEX -->
 
 ---
