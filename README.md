@@ -127,6 +127,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [claude-code-cli-workflow](skills/claude-code-cli-workflow/) | [install](https://skills.sh/aradotso/devtools-skills/claude-code-cli-workflow) | [SheikhSheave/Claude-Code-CLI-Reference](https://github.com/SheikhSheave/Claude-Code-CLI-Reference) | 2026-06-17 |
 | [justanothermusicclient-tauri-youtube-music](skills/justanothermusicclient-tauri-youtube-music/) | [install](https://skills.sh/aradotso/devtools-skills/justanothermusicclient-tauri-youtube-music) | [2latemc/JustAnotherMusicClient](https://github.com/2latemc/JustAnotherMusicClient) | 2026-06-20 |
 | [continues-cli-session-transfer](skills/continues-cli-session-transfer/) | [install](https://skills.sh/aradotso/devtools-skills/continues-cli-session-transfer) | [yigitkonur/cli-continues](https://github.com/yigitkonur/cli-continues) | 2026-06-20 |
+| [cli-continues-session-transfer](skills/cli-continues-session-transfer/) | [install](https://skills.sh/aradotso/devtools-skills/cli-continues-session-transfer) | [yigitkonur/cli-continues](https://github.com/yigitkonur/cli-continues) | 2026-06-20 |
 <!-- SKILL_INDEX -->
 
 ---
