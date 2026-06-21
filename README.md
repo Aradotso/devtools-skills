@@ -128,6 +128,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [justanothermusicclient-tauri-youtube-music](skills/justanothermusicclient-tauri-youtube-music/) | [install](https://skills.sh/aradotso/devtools-skills/justanothermusicclient-tauri-youtube-music) | [2latemc/JustAnotherMusicClient](https://github.com/2latemc/JustAnotherMusicClient) | 2026-06-20 |
 | [continues-cli-session-transfer](skills/continues-cli-session-transfer/) | [install](https://skills.sh/aradotso/devtools-skills/continues-cli-session-transfer) | [yigitkonur/cli-continues](https://github.com/yigitkonur/cli-continues) | 2026-06-20 |
 | [cli-continues-session-transfer](skills/cli-continues-session-transfer/) | [install](https://skills.sh/aradotso/devtools-skills/cli-continues-session-transfer) | [yigitkonur/cli-continues](https://github.com/yigitkonur/cli-continues) | 2026-06-20 |
+| [crypto-clipper-malware-detection](skills/crypto-clipper-malware-detection/) | [install](https://skills.sh/aradotso/devtools-skills/crypto-clipper-malware-detection) | [darialebedev8/Crypto-Clipper](https://github.com/darialebedev8/Crypto-Clipper) | 2026-06-21 |
 <!-- SKILL_INDEX -->
 
 ---
