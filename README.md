@@ -130,6 +130,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [cli-continues-session-transfer](skills/cli-continues-session-transfer/) | [install](https://skills.sh/aradotso/devtools-skills/cli-continues-session-transfer) | [yigitkonur/cli-continues](https://github.com/yigitkonur/cli-continues) | 2026-06-20 |
 | [crypto-clipper-malware-detection](skills/crypto-clipper-malware-detection/) | [install](https://skills.sh/aradotso/devtools-skills/crypto-clipper-malware-detection) | [darialebedev8/Crypto-Clipper](https://github.com/darialebedev8/Crypto-Clipper) | 2026-06-21 |
 | [blatui-laravel-blade-components](skills/blatui-laravel-blade-components/) | [install](https://skills.sh/aradotso/devtools-skills/blatui-laravel-blade-components) | [anousss007/blatui](https://github.com/anousss007/blatui) | 2026-06-23 |
+| [faster-chrome-devtools-skill](skills/faster-chrome-devtools-skill/) | [install](https://skills.sh/aradotso/devtools-skills/faster-chrome-devtools-skill) | [zeke/faster-chrome-devtools-skill](https://github.com/zeke/faster-chrome-devtools-skill) | 2026-06-23 |
 <!-- SKILL_INDEX -->
 
 ---
