@@ -131,6 +131,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [crypto-clipper-malware-detection](skills/crypto-clipper-malware-detection/) | [install](https://skills.sh/aradotso/devtools-skills/crypto-clipper-malware-detection) | [darialebedev8/Crypto-Clipper](https://github.com/darialebedev8/Crypto-Clipper) | 2026-06-21 |
 | [blatui-laravel-blade-components](skills/blatui-laravel-blade-components/) | [install](https://skills.sh/aradotso/devtools-skills/blatui-laravel-blade-components) | [anousss007/blatui](https://github.com/anousss007/blatui) | 2026-06-23 |
 | [faster-chrome-devtools-skill](skills/faster-chrome-devtools-skill/) | [install](https://skills.sh/aradotso/devtools-skills/faster-chrome-devtools-skill) | [zeke/faster-chrome-devtools-skill](https://github.com/zeke/faster-chrome-devtools-skill) | 2026-06-23 |
+| [boss-agent-cli-job-search](skills/boss-agent-cli-job-search/) | [install](https://skills.sh/aradotso/devtools-skills/boss-agent-cli-job-search) | [can4hou6joeng4/boss-agent-cli](https://github.com/can4hou6joeng4/boss-agent-cli) | 2026-06-24 |
 <!-- SKILL_INDEX -->
 
 ---
