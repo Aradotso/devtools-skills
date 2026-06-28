@@ -133,6 +133,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [faster-chrome-devtools-skill](skills/faster-chrome-devtools-skill/) | [install](https://skills.sh/aradotso/devtools-skills/faster-chrome-devtools-skill) | [zeke/faster-chrome-devtools-skill](https://github.com/zeke/faster-chrome-devtools-skill) | 2026-06-23 |
 | [boss-agent-cli-job-search](skills/boss-agent-cli-job-search/) | [install](https://skills.sh/aradotso/devtools-skills/boss-agent-cli-job-search) | [can4hou6joeng4/boss-agent-cli](https://github.com/can4hou6joeng4/boss-agent-cli) | 2026-06-24 |
 | [ainovel-cli-vietnamese](skills/ainovel-cli-vietnamese/) | [install](https://skills.sh/aradotso/devtools-skills/ainovel-cli-vietnamese) | [kentjuno/ainovel-cli](https://github.com/kentjuno/ainovel-cli) | 2026-06-28 |
+| [deltarune-chapter5-trainer-analysis](skills/deltarune-chapter5-trainer-analysis/) | [install](https://skills.sh/aradotso/devtools-skills/deltarune-chapter5-trainer-analysis) | [Rohim616/Deltarune-Chapter5-Trainer-Client](https://github.com/Rohim616/Deltarune-Chapter5-Trainer-Client) | 2026-06-28 |
 <!-- SKILL_INDEX -->
 
 ---
