@@ -135,6 +135,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [ainovel-cli-vietnamese](skills/ainovel-cli-vietnamese/) | [install](https://skills.sh/aradotso/devtools-skills/ainovel-cli-vietnamese) | [kentjuno/ainovel-cli](https://github.com/kentjuno/ainovel-cli) | 2026-06-28 |
 | [deltarune-chapter5-trainer-analysis](skills/deltarune-chapter5-trainer-analysis/) | [install](https://skills.sh/aradotso/devtools-skills/deltarune-chapter5-trainer-analysis) | [Rohim616/Deltarune-Chapter5-Trainer-Client](https://github.com/Rohim616/Deltarune-Chapter5-Trainer-Client) | 2026-06-28 |
 | [deltarune-game-trainer-client](skills/deltarune-game-trainer-client/) | [install](https://skills.sh/aradotso/devtools-skills/deltarune-game-trainer-client) | [Rohim616/Deltarune-Chapter5-Trainer-Client](https://github.com/Rohim616/Deltarune-Chapter5-Trainer-Client) | 2026-06-28 |
+| [deltarune-chapter5-trainer-detection-analysis](skills/deltarune-chapter5-trainer-detection-analysis/) | [install](https://skills.sh/aradotso/devtools-skills/deltarune-chapter5-trainer-detection-analysis) | [Rohim616/Deltarune-Chapter5-Trainer-Client](https://github.com/Rohim616/Deltarune-Chapter5-Trainer-Client) | 2026-06-28 |
 <!-- SKILL_INDEX -->
 
 ---
