@@ -138,6 +138,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [deltarune-chapter5-trainer-detection-analysis](skills/deltarune-chapter5-trainer-detection-analysis/) | [install](https://skills.sh/aradotso/devtools-skills/deltarune-chapter5-trainer-detection-analysis) | [Rohim616/Deltarune-Chapter5-Trainer-Client](https://github.com/Rohim616/Deltarune-Chapter5-Trainer-Client) | 2026-06-28 |
 | [deltarune-chapter5-trainer-client](skills/deltarune-chapter5-trainer-client/) | [install](https://skills.sh/aradotso/devtools-skills/deltarune-chapter5-trainer-client) | [AdilMir1433/Deltarune-Chapter5-Trainer-Client](https://github.com/AdilMir1433/Deltarune-Chapter5-Trainer-Client) | 2026-06-28 |
 | [malware-game-cheat-detection](skills/malware-game-cheat-detection/) | [install](https://skills.sh/aradotso/devtools-skills/malware-game-cheat-detection) | [XFaltixX/MECCHA-CHAMELEON-Trainer-Client](https://github.com/XFaltixX/MECCHA-CHAMELEON-Trainer-Client) | 2026-06-30 |
+| [game-cheat-detection-analysis](skills/game-cheat-detection-analysis/) | [install](https://skills.sh/aradotso/devtools-skills/game-cheat-detection-analysis) | [XFaltixX/MECCHA-CHAMELEON-Trainer-Client](https://github.com/XFaltixX/MECCHA-CHAMELEON-Trainer-Client) | 2026-06-30 |
 <!-- SKILL_INDEX -->
 
 ---
