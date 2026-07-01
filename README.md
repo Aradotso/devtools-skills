@@ -147,6 +147,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [meccha-chameleon-game-trainer-analysis](skills/meccha-chameleon-game-trainer-analysis/) | [install](https://skills.sh/aradotso/devtools-skills/meccha-chameleon-game-trainer-analysis) | [AdilMir1433/MECCHA-CHAMELEON-Trainer-Client](https://github.com/AdilMir1433/MECCHA-CHAMELEON-Trainer-Client) | 2026-07-01 |
 | [meccha-chameleon-game-trainer-detection](skills/meccha-chameleon-game-trainer-detection/) | [install](https://skills.sh/aradotso/devtools-skills/meccha-chameleon-game-trainer-detection) | [AdilMir1433/MECCHA-CHAMELEON-Trainer-Client](https://github.com/AdilMir1433/MECCHA-CHAMELEON-Trainer-Client) | 2026-07-01 |
 | [game-cheat-malware-warning](skills/game-cheat-malware-warning/) | [install](https://skills.sh/aradotso/devtools-skills/game-cheat-malware-warning) | [XFaltixX/MECCHA-CHAMELEON-Trainer-Client](https://github.com/XFaltixX/MECCHA-CHAMELEON-Trainer-Client) | 2026-07-01 |
+| [meccha-chameleon-game-cheat-detection](skills/meccha-chameleon-game-cheat-detection/) | [install](https://skills.sh/aradotso/devtools-skills/meccha-chameleon-game-cheat-detection) | [XFaltixX/MECCHA-CHAMELEON-Trainer-Client](https://github.com/XFaltixX/MECCHA-CHAMELEON-Trainer-Client) | 2026-07-01 |
 <!-- SKILL_INDEX -->
 
 ---
