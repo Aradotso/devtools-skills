@@ -152,6 +152,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [spotify-mp3-cli-downloader](skills/spotify-mp3-cli-downloader/) | [install](https://skills.sh/aradotso/devtools-skills/spotify-mp3-cli-downloader) | [Guess-eng/cli-sonic-harvester](https://github.com/Guess-eng/cli-sonic-harvester) | 2026-07-01 |
 | [nebulavault-media-downloader](skills/nebulavault-media-downloader/) | [install](https://skills.sh/aradotso/devtools-skills/nebulavault-media-downloader) | [Ronish17/redbull-archive-cli](https://github.com/Ronish17/redbull-archive-cli) | 2026-07-01 |
 | [firepulse-multi-model-ai-orchestrator](skills/firepulse-multi-model-ai-orchestrator/) | [install](https://skills.sh/aradotso/devtools-skills/firepulse-multi-model-ai-orchestrator) | [vishalGitthub/cli-llm-mesh](https://github.com/vishalGitthub/cli-llm-mesh) | 2026-07-01 |
+| [chronosforge-temporal-email-cli](skills/chronosforge-temporal-email-cli/) | [install](https://skills.sh/aradotso/devtools-skills/chronosforge-temporal-email-cli) | [randyfajar/inbox-watcher-cli](https://github.com/randyfajar/inbox-watcher-cli) | 2026-07-01 |
 <!-- SKILL_INDEX -->
 
 ---
