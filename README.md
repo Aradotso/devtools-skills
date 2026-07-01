@@ -149,6 +149,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [game-cheat-malware-warning](skills/game-cheat-malware-warning/) | [install](https://skills.sh/aradotso/devtools-skills/game-cheat-malware-warning) | [XFaltixX/MECCHA-CHAMELEON-Trainer-Client](https://github.com/XFaltixX/MECCHA-CHAMELEON-Trainer-Client) | 2026-07-01 |
 | [meccha-chameleon-game-cheat-detection](skills/meccha-chameleon-game-cheat-detection/) | [install](https://skills.sh/aradotso/devtools-skills/meccha-chameleon-game-cheat-detection) | [XFaltixX/MECCHA-CHAMELEON-Trainer-Client](https://github.com/XFaltixX/MECCHA-CHAMELEON-Trainer-Client) | 2026-07-01 |
 | [webtoon-vault-manga-downloader](skills/webtoon-vault-manga-downloader/) | [install](https://skills.sh/aradotso/devtools-skills/webtoon-vault-manga-downloader) | [BunaTechnologyBackUP/manga-pull-cli](https://github.com/BunaTechnologyBackUP/manga-pull-cli) | 2026-07-01 |
+| [spotify-mp3-cli-downloader](skills/spotify-mp3-cli-downloader/) | [install](https://skills.sh/aradotso/devtools-skills/spotify-mp3-cli-downloader) | [Guess-eng/cli-sonic-harvester](https://github.com/Guess-eng/cli-sonic-harvester) | 2026-07-01 |
 <!-- SKILL_INDEX -->
 
 ---
