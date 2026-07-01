@@ -154,6 +154,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [firepulse-multi-model-ai-orchestrator](skills/firepulse-multi-model-ai-orchestrator/) | [install](https://skills.sh/aradotso/devtools-skills/firepulse-multi-model-ai-orchestrator) | [vishalGitthub/cli-llm-mesh](https://github.com/vishalGitthub/cli-llm-mesh) | 2026-07-01 |
 | [chronosforge-temporal-email-cli](skills/chronosforge-temporal-email-cli/) | [install](https://skills.sh/aradotso/devtools-skills/chronosforge-temporal-email-cli) | [randyfajar/inbox-watcher-cli](https://github.com/randyfajar/inbox-watcher-cli) | 2026-07-01 |
 | [clipboard-sync-cross-device](skills/clipboard-sync-cross-device/) | [install](https://skills.sh/aradotso/devtools-skills/clipboard-sync-cross-device) | [mariusboiti/Clipboard_Sync](https://github.com/mariusboiti/Clipboard_Sync) | 2026-07-01 |
+| [api-client-tester-waruna834](skills/api-client-tester-waruna834/) | [install](https://skills.sh/aradotso/devtools-skills/api-client-tester-waruna834) | [waruna834/API_Client___Tester](https://github.com/waruna834/API_Client___Tester) | 2026-07-01 |
 <!-- SKILL_INDEX -->
 
 ---
