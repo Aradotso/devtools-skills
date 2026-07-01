@@ -1,675 +1,475 @@
 ---
 name: webtoon-vault-manga-downloader
-description: CLI tool for downloading manga and webcomics from multiple platforms with intelligent source detection and CBZ archiving
+description: CLI tool for downloading webcomics and manga from multiple platforms with intelligent extraction and CBZ packaging
 triggers:
-  - download manga chapters using webtoon vault
-  - how do I use manga-pull-cli to scrape comics
-  - batch download webcomics from manga sites
-  - create CBZ archives from manga chapters
-  - configure webtoon vault for offline manga reading
-  - troubleshoot manga downloader connection issues
-  - download comics from mori manga or dumanwu
-  - set up parallel chapter harvesting for manga
+  - download manga from a website
+  - scrape webcomic chapters
+  - create CBZ archives from manga
+  - batch download comic series
+  - extract manga chapters offline
+  - archive webcomics locally
+  - download manga with webtoon vault
+  - fetch comic images from hosting platforms
 ---
 
 # Webtoon Vault Manga Downloader
 
 > Skill by [ara.so](https://ara.so) — Devtools Skills collection.
 
-Webtoon Vault (manga-pull-cli) is a Python-based CLI tool for downloading manga and webcomics from multiple hosting platforms. It features intelligent source detection, parallel chapter harvesting, CBZ archive creation, and support for platforms like Mori Manga, DuManWu, KanKanManHua, ManhuaDB, and GuFeng.
+## Overview
+
+Webtoon Vault is a Python-based CLI tool for downloading webcomics and manga from multiple hosting platforms. It features intelligent source detection, parallel chapter harvesting, automatic CBZ archive creation, and resume/retry logic for interrupted downloads.
+
+**Key capabilities:**
+- Automatic platform detection from URL patterns
+- Parallel chapter downloads with async I/O
+- CBZ (Comic Book ZIP) archive generation with metadata
+- Multi-platform support (Mori Manga, DuManWu, KanKanManHua, ManhuaDB, GuFeng)
+- Resume interrupted downloads
+- Custom output naming templates
+- Rate limiting and retry logic
 
 ## Installation
 
-### Prerequisites
-- Python 3.9 or higher
-- pip package manager
-
-### Basic Installation
+Based on the project structure, this is likely distributed as a Python package or standalone executable:
 
 ```bash
-# Clone the repository
+# If distributed via pip
+pip install webtoon-vault
+
+# Or clone from repository
 git clone https://github.com/BunaTechnologyBackUP/manga-pull-cli.git
 cd manga-pull-cli
-
-# Install dependencies
 pip install -r requirements.txt
-
-# Or install directly if package is available
-pip install webtoon-vault
+python setup.py install
 ```
 
-### Virtual Environment (Recommended)
+**Requirements:**
+- Python 3.9+
+- Dependencies: asyncio, aiohttp, Pillow, beautifulsoup4, zipfile
 
-```bash
-# Create virtual environment
-python -m venv venv
-
-# Activate (Linux/macOS)
-source venv/bin/activate
-
-# Activate (Windows)
-venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-## Core Commands
+## Core CLI Commands
 
 ### Basic Download
 
 ```bash
-# Download a manga series
-python manga_pull.py "https://mhpic.com/series/one-piece"
+# Download all chapters from a series
+webtoon-vault download "https://mhpic.com/comic/one-piece"
 
-# Download specific chapters
-python manga_pull.py "https://mhpic.com/series/one-piece/chapter-1"
+# Download specific chapter range
+webtoon-vault download "https://dumanwu.com/manga/jujutsu-kaisen" --chapters 1-50
 
-# Download chapter range
-python manga_pull.py "https://dumanwu.com/manga/jujutsu-kaisen" --chapters 1-50
+# Download single chapter
+webtoon-vault download "https://kankanmanhua.com/chapter/123456" --single
 ```
 
 ### Output Configuration
 
 ```bash
 # Specify output directory
-python manga_pull.py "URL" --output ./my_manga
+webtoon-vault download URL --output /path/to/comics
 
-# Custom naming template
-python manga_pull.py "URL" --format "{series}_vol{volume}_ch{chapter}"
+# Use custom naming template
+webtoon-vault download URL --template "{series}_v{volume}_ch{chapter}"
 
-# Flat directory mode (no CBZ)
-python manga_pull.py "URL" --flat --no-archive
+# Save as loose images instead of CBZ
+webtoon-vault download URL --format images
 
-# Create CBZ archives with metadata
-python manga_pull.py "URL" --format cbz --metadata
+# Organize by series folders
+webtoon-vault download URL --organize
 ```
 
 ### Download Options
 
 ```bash
-# Parallel chapter downloads (default: 3)
-python manga_pull.py "URL" --parallel 5
+# Parallel downloads (max concurrent chapters)
+webtoon-vault download URL --parallel 5
 
-# Dry run mode (preview without downloading)
-python manga_pull.py "URL" --dry-run
+# Set rate limit (requests per second)
+webtoon-vault download URL --rate-limit 2
 
 # Resume interrupted download
-python manga_pull.py "URL" --resume
+webtoon-vault download URL --resume
+
+# Dry run (preview without downloading)
+webtoon-vault download URL --dry-run
 
 # Verbose logging
-python manga_pull.py "URL" --verbose
+webtoon-vault download URL --verbose
 ```
 
 ### Advanced Features
 
 ```bash
 # Use proxy
-export HTTP_PROXY="http://proxy.example.com:8080"
-export HTTPS_PROXY="https://proxy.example.com:8080"
-python manga_pull.py "URL"
+webtoon-vault download URL --proxy "http://proxy.example.com:8080"
 
-# Custom user agent
-python manga_pull.py "URL" --user-agent "Mozilla/5.0 Custom"
+# Custom User-Agent
+webtoon-vault download URL --user-agent "Mozilla/5.0..."
 
-# Rate limiting (delay between requests in seconds)
-python manga_pull.py "URL" --delay 2.5
+# Include cookies for authentication
+webtoon-vault download URL --cookies "session=abc123; auth=xyz789"
 
-# Cookie authentication for members-only content
-python manga_pull.py "URL" --cookies cookies.txt
-
-# Checksum verification
-python manga_pull.py "URL" --verify-checksums
+# Generate checksums
+webtoon-vault download URL --checksum
 ```
 
 ## Python API Usage
 
-### Basic Library Usage
-
-```python
-from webtoon_vault import MangaDownloader
-from webtoon_vault.parsers import detect_platform
-
-# Initialize downloader
-downloader = MangaDownloader(
-    output_dir="./downloads",
-    parallel_downloads=3,
-    format="cbz"
-)
-
-# Download a series
-url = "https://mhpic.com/series/one-piece"
-result = downloader.download(url)
-
-print(f"Downloaded {result.chapter_count} chapters")
-print(f"Total size: {result.total_size_mb} MB")
-```
-
-### Platform Detection
-
-```python
-from webtoon_vault.parsers import detect_platform, get_parser
-
-# Detect platform from URL
-url = "https://dumanwu.com/manga/demon-slayer"
-platform = detect_platform(url)  # Returns: "dumanwu"
-
-# Get appropriate parser
-parser = get_parser(platform)
-series_info = parser.get_series_info(url)
-
-print(f"Title: {series_info.title}")
-print(f"Chapters: {series_info.chapter_count}")
-print(f"Language: {series_info.language}")
-```
-
-### Chapter-Level Control
-
-```python
-from webtoon_vault import MangaDownloader
-from webtoon_vault.models import DownloadOptions
-
-# Configure download options
-options = DownloadOptions(
-    chapter_range=(1, 10),
-    create_archive=True,
-    include_metadata=True,
-    retry_count=5,
-    delay_seconds=1.5
-)
-
-downloader = MangaDownloader(output_dir="./manga")
-
-# Download with options
-result = downloader.download(
-    url="https://kankanmanhua.com/series/naruto",
-    options=options
-)
-
-# Access download details
-for chapter in result.chapters:
-    print(f"Chapter {chapter.number}: {chapter.page_count} pages")
-    print(f"  Path: {chapter.output_path}")
-    print(f"  Size: {chapter.size_mb} MB")
-```
-
-### Async Batch Downloads
+If used as a library, here's the typical integration pattern:
 
 ```python
 import asyncio
-from webtoon_vault import AsyncMangaDownloader
+from webtoon_vault import WebcomicDownloader, DownloadConfig
 
-async def batch_download():
-    downloader = AsyncMangaDownloader(
-        output_dir="./batch_downloads",
-        max_concurrent=5
+async def download_manga():
+    # Create configuration
+    config = DownloadConfig(
+        url="https://mhpic.com/comic/one-piece",
+        output_dir="/home/user/comics",
+        format="cbz",
+        parallel=3,
+        rate_limit=2.0,
+        naming_template="{series}_ch{chapter:03d}"
     )
     
-    urls = [
-        "https://mhpic.com/series/one-piece/chapter-1000",
-        "https://dumanwu.com/manga/bleach/chapter-500",
-        "https://kankanmanhua.com/series/naruto/chapter-700"
-    ]
+    # Initialize downloader
+    downloader = WebcomicDownloader(config)
     
-    # Download all concurrently
-    results = await downloader.download_batch(urls)
+    # Download series
+    result = await downloader.download()
     
-    for url, result in zip(urls, results):
-        if result.success:
-            print(f"✓ {url}: {result.chapter_count} chapters")
-        else:
-            print(f"✗ {url}: {result.error}")
+    print(f"Downloaded {result.chapters_downloaded} chapters")
+    print(f"Total size: {result.total_size_mb} MB")
+    print(f"Failed: {result.failed_chapters}")
 
-# Run async download
-asyncio.run(batch_download())
+# Run download
+asyncio.run(download_manga())
 ```
 
-### Custom Parser Implementation
+### Platform-Specific Parsers
 
 ```python
-from webtoon_vault.parsers.base import BaseParser
-from webtoon_vault.models import SeriesInfo, ChapterInfo
+from webtoon_vault.parsers import MoriParser, DuManWuParser
 
-class CustomSiteParser(BaseParser):
-    """Parser for custom manga hosting platform"""
+async def custom_extraction():
+    # Use specific platform parser
+    parser = MoriParser()
     
-    platform_name = "customsite"
-    url_pattern = r"customsite\.com"
+    # Discover chapters
+    chapters = await parser.get_chapter_list("https://mhpic.com/comic/one-piece")
     
-    def get_series_info(self, url: str) -> SeriesInfo:
-        response = self.session.get(url)
-        soup = self.parse_html(response.text)
+    for chapter in chapters[:5]:  # First 5 chapters
+        print(f"Chapter {chapter.number}: {chapter.title}")
         
-        return SeriesInfo(
-            title=soup.select_one("h1.title").text.strip(),
-            url=url,
-            chapter_count=len(soup.select(".chapter-link")),
-            language="en"
-        )
-    
-    def get_chapter_pages(self, chapter_url: str) -> list[str]:
-        response = self.session.get(chapter_url)
-        soup = self.parse_html(response.text)
+        # Extract pages
+        pages = await parser.get_chapter_pages(chapter.url)
         
-        # Extract image URLs
-        images = [
-            img["src"] for img in soup.select("div.page img")
-        ]
+        # Download images
+        images = await parser.download_images(pages)
         
-        return images
+        # Create CBZ
+        await parser.create_cbz(images, f"chapter_{chapter.number}.cbz")
+```
 
-# Register custom parser
-from webtoon_vault.parsers import register_parser
-register_parser(CustomSiteParser)
+### Resume Logic
+
+```python
+from webtoon_vault import SessionCache
+
+async def resume_download():
+    # Load session cache
+    cache = SessionCache.load("/home/user/.webtoon_vault_cache.json")
+    
+    config = DownloadConfig(
+        url="https://dumanwu.com/manga/series",
+        output_dir="/home/user/comics",
+        resume_from_cache=cache
+    )
+    
+    downloader = WebcomicDownloader(config)
+    
+    # Will skip already downloaded chapters
+    await downloader.download()
+    
+    # Save updated cache
+    cache.save()
 ```
 
 ## Configuration File
 
-### JSON Configuration
-
-Create `webtoon_vault_config.json`:
+Create a `webtoon_vault.json` for persistent settings:
 
 ```json
 {
-  "output_directory": "./manga_library",
-  "parallel_downloads": 4,
+  "output_dir": "/home/user/comics",
   "format": "cbz",
-  "naming_template": "{series}_chapter_{chapter:03d}",
-  "rate_limiting": {
-    "enabled": true,
-    "delay_seconds": 1.5,
-    "adaptive": true
-  },
-  "retry_policy": {
-    "max_attempts": 5,
-    "exponential_backoff": true
-  },
-  "metadata": {
-    "include_json": true,
-    "embed_in_cbz": true
-  },
+  "naming_template": "{series}_v{volume:02d}_ch{chapter:03d}",
+  "parallel_downloads": 4,
+  "rate_limit": 2.5,
+  "user_agent": "WebtoonVault/1.0",
+  "retry_attempts": 5,
+  "retry_delay": 2,
+  "organize_by_series": true,
+  "generate_checksums": false,
+  "proxy": null,
   "platforms": {
-    "mori_manga": {
-      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-      "delay": 2.0
+    "mori": {
+      "enabled": true,
+      "custom_headers": {}
     },
     "dumanwu": {
-      "delay": 1.0
+      "enabled": true,
+      "delay_between_requests": 1.5
     }
   }
 }
 ```
 
-### Use Configuration File
+Load config:
 
 ```bash
-# Load config from file
-python manga_pull.py "URL" --config webtoon_vault_config.json
-
-# Override config values
-python manga_pull.py "URL" --config config.json --parallel 8
-```
-
-```python
-# Python API with config
-from webtoon_vault import MangaDownloader
-from webtoon_vault.config import load_config
-
-config = load_config("webtoon_vault_config.json")
-downloader = MangaDownloader.from_config(config)
-
-downloader.download("https://mhpic.com/series/bleach")
+webtoon-vault download URL --config webtoon_vault.json
 ```
 
 ## Common Patterns
 
-### Archiving Entire Series
+### Batch Download Multiple Series
 
 ```python
-from webtoon_vault import MangaDownloader
-from webtoon_vault.models import DownloadOptions
+import asyncio
+from webtoon_vault import WebcomicDownloader, DownloadConfig
 
-def archive_series(series_url: str, output_dir: str):
-    """Download and archive complete manga series"""
+async def batch_download():
+    series_urls = [
+        "https://mhpic.com/comic/one-piece",
+        "https://dumanwu.com/manga/naruto",
+        "https://kankanmanhua.com/comic/bleach"
+    ]
     
-    options = DownloadOptions(
-        create_archive=True,
-        include_metadata=True,
-        verify_checksums=True,
-        retry_count=3
-    )
-    
-    downloader = MangaDownloader(
-        output_dir=output_dir,
-        parallel_downloads=3
-    )
-    
-    result = downloader.download(series_url, options=options)
-    
-    # Generate catalog
-    with open(f"{output_dir}/catalog.txt", "w", encoding="utf-8") as f:
-        f.write(f"Series: {result.series_title}\n")
-        f.write(f"Chapters: {result.chapter_count}\n")
-        f.write(f"Total Size: {result.total_size_mb:.2f} MB\n\n")
+    for url in series_urls:
+        config = DownloadConfig(
+            url=url,
+            output_dir="/home/user/comics",
+            format="cbz"
+        )
         
-        for chapter in result.chapters:
-            f.write(f"Chapter {chapter.number}: {chapter.page_count} pages\n")
-    
-    return result
+        downloader = WebcomicDownloader(config)
+        
+        try:
+            result = await downloader.download()
+            print(f"✓ {result.series_name}: {result.chapters_downloaded} chapters")
+        except Exception as e:
+            print(f"✗ Failed {url}: {e}")
 
-# Usage
-result = archive_series(
-    "https://dumanwu.com/manga/demon-slayer",
-    "./archives/demon_slayer"
-)
-```
-
-### Resume Interrupted Downloads
-
-```python
-from webtoon_vault import MangaDownloader
-from webtoon_vault.cache import SessionCache
-
-def resume_download(series_url: str):
-    """Resume previously interrupted download"""
-    
-    cache = SessionCache.load()
-    
-    if cache.has_session(series_url):
-        print(f"Found cached session for {series_url}")
-        last_chapter = cache.get_last_chapter(series_url)
-        print(f"Resuming from chapter {last_chapter}")
-    
-    downloader = MangaDownloader(
-        output_dir="./downloads",
-        resume_enabled=True
-    )
-    
-    result = downloader.download(series_url)
-    
-    if result.success:
-        cache.clear_session(series_url)
-    
-    return result
-```
-
-### Proxy Rotation
-
-```python
-from webtoon_vault import MangaDownloader
-import random
-
-def download_with_proxy_rotation(url: str, proxy_list: list[str]):
-    """Download with rotating proxy servers"""
-    
-    def get_random_proxy():
-        return random.choice(proxy_list)
-    
-    downloader = MangaDownloader(
-        output_dir="./downloads",
-        proxy_provider=get_random_proxy
-    )
-    
-    result = downloader.download(url)
-    return result
-
-# Usage
-proxies = [
-    "http://proxy1.example.com:8080",
-    "http://proxy2.example.com:8080",
-    "http://proxy3.example.com:8080"
-]
-
-download_with_proxy_rotation(
-    "https://mhpic.com/series/one-piece",
-    proxies
-)
+asyncio.run(batch_download())
 ```
 
 ### Custom Metadata Extraction
 
 ```python
-from webtoon_vault import MangaDownloader
-from webtoon_vault.metadata import MetadataExtractor
+from webtoon_vault import MetadataExtractor
 
-class CustomMetadataExtractor(MetadataExtractor):
-    """Extract additional metadata fields"""
+async def extract_metadata():
+    extractor = MetadataExtractor()
     
-    def extract(self, series_info, chapter_info):
-        metadata = super().extract(series_info, chapter_info)
-        
-        # Add custom fields
-        metadata["downloaded_date"] = self.get_current_date()
-        metadata["user_rating"] = self.fetch_rating(series_info.url)
-        metadata["tags"] = self.extract_tags(series_info.url)
-        
-        return metadata
-
-downloader = MangaDownloader(
-    output_dir="./downloads",
-    metadata_extractor=CustomMetadataExtractor()
-)
+    metadata = await extractor.extract("https://mhpic.com/comic/one-piece")
+    
+    print(f"Title: {metadata.title}")
+    print(f"Author: {metadata.author}")
+    print(f"Genres: {', '.join(metadata.genres)}")
+    print(f"Total chapters: {metadata.total_chapters}")
+    print(f"Status: {metadata.status}")
+    
+    # Save metadata
+    metadata.save_json("one_piece_metadata.json")
 ```
 
-### Batch Processing with Progress Tracking
+### Proxy Rotation
 
 ```python
-import asyncio
-from webtoon_vault import AsyncMangaDownloader
-from tqdm import tqdm
+from webtoon_vault import ProxyManager
 
-async def batch_download_with_progress(urls: list[str]):
-    """Download multiple series with progress bar"""
+async def download_with_proxy_rotation():
+    proxies = [
+        "http://proxy1.example.com:8080",
+        "http://proxy2.example.com:8080",
+        "http://proxy3.example.com:8080"
+    ]
     
-    downloader = AsyncMangaDownloader(
-        output_dir="./batch",
-        max_concurrent=3
+    proxy_mgr = ProxyManager(proxies, rotation_strategy="round_robin")
+    
+    config = DownloadConfig(
+        url="https://mhpic.com/comic/one-piece",
+        output_dir="/home/user/comics",
+        proxy_manager=proxy_mgr
     )
     
-    progress = tqdm(total=len(urls), desc="Series")
-    
-    async def download_one(url):
-        result = await downloader.download(url)
-        progress.update(1)
-        return result
-    
-    tasks = [download_one(url) for url in urls]
-    results = await asyncio.gather(*tasks, return_exceptions=True)
-    
-    progress.close()
-    
-    # Summary
-    successful = sum(1 for r in results if not isinstance(r, Exception))
-    print(f"\nCompleted: {successful}/{len(urls)} series")
-    
-    return results
+    downloader = WebcomicDownloader(config)
+    await downloader.download()
+```
 
-# Usage
-urls = [
-    "https://mhpic.com/series/bleach",
-    "https://dumanwu.com/manga/naruto",
-    "https://kankanmanhua.com/series/one-piece"
-]
+### Error Handling and Logging
 
-asyncio.run(batch_download_with_progress(urls))
+```python
+import logging
+from webtoon_vault import WebcomicDownloader, DownloadConfig
+from webtoon_vault.exceptions import PlatformNotSupported, ChapterNotFound
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("webtoon_vault")
+
+async def robust_download():
+    config = DownloadConfig(
+        url="https://example.com/comic/series",
+        output_dir="/home/user/comics",
+        retry_attempts=5
+    )
+    
+    downloader = WebcomicDownloader(config)
+    
+    try:
+        result = await downloader.download()
+        
+        if result.failed_chapters:
+            logger.warning(f"Failed chapters: {result.failed_chapters}")
+            
+            # Retry failed chapters
+            await downloader.retry_failed()
+            
+    except PlatformNotSupported as e:
+        logger.error(f"Platform not supported: {e}")
+    except ChapterNotFound as e:
+        logger.error(f"Chapter not found: {e}")
+    except Exception as e:
+        logger.exception(f"Unexpected error: {e}")
 ```
 
 ## Environment Variables
 
+Set these for authentication, proxies, or configuration:
+
 ```bash
-# Proxy configuration
+# Proxy settings
 export HTTP_PROXY="http://proxy.example.com:8080"
-export HTTPS_PROXY="https://proxy.example.com:8080"
+export HTTPS_PROXY="http://proxy.example.com:8080"
 
-# User agent override
-export WEBTOON_VAULT_USER_AGENT="Mozilla/5.0 Custom Agent"
-
-# Output directory
-export WEBTOON_VAULT_OUTPUT_DIR="./my_manga"
-
-# Debug mode
-export WEBTOON_VAULT_DEBUG=1
-
-# Cookie file path
-export WEBTOON_VAULT_COOKIES="~/.webtoon_vault/cookies.txt"
+# Output directory default
+export WEBTOON_VAULT_OUTPUT="/home/user/comics"
 
 # Rate limiting
-export WEBTOON_VAULT_DELAY=2.0
+export WEBTOON_VAULT_RATE_LIMIT="2.0"
+
+# Parallel downloads
+export WEBTOON_VAULT_PARALLEL="4"
+
+# User agent
+export WEBTOON_VAULT_USER_AGENT="Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+
+# Cookie authentication (if needed)
+export WEBTOON_VAULT_COOKIES="session=xyz; auth=abc"
 ```
 
 ## Troubleshooting
 
-### Connection Errors
-
-```python
-# Handle connection failures gracefully
-from webtoon_vault import MangaDownloader
-from webtoon_vault.exceptions import ConnectionError, RateLimitError
-
-downloader = MangaDownloader(
-    output_dir="./downloads",
-    retry_count=5,
-    timeout=30
-)
-
-try:
-    result = downloader.download(url)
-except ConnectionError as e:
-    print(f"Connection failed: {e}")
-    print("Check your internet connection or proxy settings")
-except RateLimitError as e:
-    print(f"Rate limited: {e}")
-    print("Increase delay with --delay option")
-```
-
-### Platform-Specific Issues
+### Rate Limiting / 429 Errors
 
 ```bash
-# Enable verbose logging for debugging
-python manga_pull.py "URL" --verbose --log-file debug.log
+# Reduce rate limit
+webtoon-vault download URL --rate-limit 1.0
 
-# Test platform detection
-python manga_pull.py "URL" --dry-run --verbose
-
-# Force specific platform parser
-python manga_pull.py "URL" --platform dumanwu
+# Add delay between requests
+webtoon-vault download URL --delay 2.0
 ```
 
-### Image Download Failures
-
 ```python
-from webtoon_vault import MangaDownloader
-from webtoon_vault.models import DownloadOptions
-
-# Increase retry count and timeout
-options = DownloadOptions(
-    retry_count=10,
-    timeout=60,
-    verify_checksums=True
+config = DownloadConfig(
+    url=url,
+    rate_limit=1.0,  # 1 request per second
+    retry_attempts=10,
+    retry_delay=3  # Wait 3 seconds between retries
 )
+```
 
-downloader = MangaDownloader(output_dir="./downloads")
-result = downloader.download(url, options=options)
+### Platform Detection Failure
 
-# Check failed downloads
-if result.failed_pages:
-    print("Failed pages:")
-    for page in result.failed_pages:
-        print(f"  Chapter {page.chapter}, Page {page.number}: {page.error}")
+```bash
+# Force specific platform parser
+webtoon-vault download URL --platform mori
+
+# Check supported platforms
+webtoon-vault platforms list
+```
+
+### Incomplete Downloads
+
+```bash
+# Resume with session cache
+webtoon-vault download URL --resume
+
+# Verify with checksums
+webtoon-vault verify /path/to/comics --checksums
+```
+
+### Authentication Required
+
+```bash
+# Pass cookies from browser
+webtoon-vault download URL --cookies "$(cat cookies.txt)"
+
+# Use session file
+webtoon-vault download URL --session session.json
 ```
 
 ### Memory Issues with Large Series
 
 ```python
-from webtoon_vault import MangaDownloader
-from webtoon_vault.models import DownloadOptions
-
-# Download in smaller batches
-def download_in_batches(url: str, batch_size: int = 10):
-    downloader = MangaDownloader(output_dir="./downloads")
-    parser = downloader.get_parser_for_url(url)
-    series_info = parser.get_series_info(url)
+# Download in batches
+async def batched_download():
+    config = DownloadConfig(
+        url="https://mhpic.com/comic/one-piece",
+        output_dir="/home/user/comics",
+        parallel=2,  # Reduce parallel downloads
+        batch_size=50  # Process 50 chapters at a time
+    )
     
-    total_chapters = series_info.chapter_count
-    
-    for start in range(1, total_chapters + 1, batch_size):
-        end = min(start + batch_size - 1, total_chapters)
-        
-        options = DownloadOptions(chapter_range=(start, end))
-        result = downloader.download(url, options=options)
-        
-        print(f"Completed chapters {start}-{end}")
-
-# Usage
-download_in_batches("https://mhpic.com/series/one-piece", batch_size=20)
+    downloader = WebcomicDownloader(config)
+    await downloader.download_batched()
 ```
 
-### Cookie/Authentication Issues
+### Image Extraction Failures
+
+```python
+from webtoon_vault.parsers import BaseParser
+
+class CustomParser(BaseParser):
+    async def extract_images(self, page_html):
+        # Custom extraction logic for non-standard sites
+        soup = BeautifulSoup(page_html, 'html.parser')
+        
+        # Try multiple selectors
+        images = soup.select('img.comic-page')
+        if not images:
+            images = soup.select('div.reader img')
+        if not images:
+            images = soup.select('[data-src]')
+            
+        return [img.get('src') or img.get('data-src') for img in images]
+```
+
+## Platform Support Reference
+
+| Platform | URL Pattern | Status | Notes |
+|----------|-------------|--------|-------|
+| Mori Manga | `mhpic.com`, `mori.*` | Active | Supports lazy loading |
+| DuManWu | `dumanwu.*` | Active | Requires rate limiting |
+| KanKanManHua | `kankanmanhua.*` | Active | JavaScript pagination |
+| ManhuaDB | `manhuadb.*` | Beta | Authentication sometimes needed |
+| GuFeng | `gufengmh.*` | Active | Multi-language support |
+
+Check current platform status:
 
 ```bash
-# Export cookies from browser (use browser extension)
-# Save to cookies.txt in Netscape format
-
-# Use cookies for authenticated downloads
-python manga_pull.py "URL" --cookies cookies.txt
-
-# Or set environment variable
-export WEBTOON_VAULT_COOKIES="cookies.txt"
-python manga_pull.py "URL"
+webtoon-vault platforms status
 ```
-
-### CBZ Archive Corruption
-
-```python
-from webtoon_vault import MangaDownloader
-from webtoon_vault.archive import validate_cbz
-
-# Validate existing CBZ files
-def validate_archives(directory: str):
-    import os
-    from pathlib import Path
-    
-    for cbz_file in Path(directory).glob("*.cbz"):
-        is_valid, error = validate_cbz(cbz_file)
-        
-        if not is_valid:
-            print(f"Corrupt: {cbz_file.name} - {error}")
-            # Re-download
-            # Extract series URL from metadata and re-download
-
-# Enable checksum verification during download
-options = DownloadOptions(
-    verify_checksums=True,
-    repair_on_error=True
-)
-```
-
-### Platform Changes/Updates
-
-```python
-# Check for parser updates
-from webtoon_vault.parsers import check_parser_version
-
-parser_status = check_parser_version("mori_manga")
-
-if parser_status.needs_update:
-    print(f"Parser update available: {parser_status.latest_version}")
-    print("Run: pip install --upgrade webtoon-vault")
-
-# Force parser refresh
-from webtoon_vault.parsers import refresh_parsers
-refresh_parsers(force=True)
-```
-
-## Best Practices
-
-1. **Always use `--dry-run` first** to preview downloads before executing
-2. **Set appropriate delays** (`--delay 2.0`) to avoid being rate-limited
-3. **Enable resume functionality** for large series downloads
-4. **Use virtual environments** to isolate dependencies
-5. **Store configuration** in JSON files for reproducible downloads
-6. **Verify checksums** for critical archival work
-7. **Respect platform terms of service** and rate limits
-8. **Use proxies** if downloading from geo-restricted platforms
-9. **Organize output** with custom naming templates
-10. **Monitor disk space** when downloading large series in CBZ format
