@@ -1,607 +1,486 @@
 ---
 name: chronosforge-temporal-email-cli
-description: Generate temporary email inboxes and auto-extract OTP codes for verification workflows
+description: Generate temporary email inboxes, monitor incoming messages in real-time, and auto-extract OTP/verification codes for testing and automation workflows.
 triggers:
-  - create a temporary email address
-  - extract OTP code from email
-  - monitor inbox for verification codes
-  - generate disposable email for testing
-  - watch for authentication codes in email
-  - set up temporary inbox with auto-extraction
-  - automate email verification code retrieval
-  - create ephemeral email for account signup
+  - "create a temporary email address"
+  - "monitor inbox for verification code"
+  - "extract OTP from temporary email"
+  - "set up disposable email for testing"
+  - "watch inbox and get verification token"
+  - "generate temp email and wait for code"
+  - "automate email verification testing"
+  - "extract authentication code from inbox"
 ---
 
 # ChronosForge Temporal Email CLI
 
 > Skill by [ara.so](https://ara.so) — Devtools Skills collection.
 
-ChronosForge (inbox-watcher-cli) is a temporal credential management platform for generating disposable email addresses, monitoring inboxes in real-time, and automatically extracting OTP/verification codes. Built for testing authentication flows, automation pipelines, and secure verification workflows.
+ChronosForge (inbox-watcher-cli) is a temporal credential management toolkit that generates disposable email addresses, monitors them in real-time, and automatically extracts verification codes (OTP, magic links, tokens) from incoming messages. Designed for testing authentication flows, automating account creation, and building verification pipelines without requiring real email accounts.
 
 ## Installation
 
-Download the latest release from the official distribution:
+### Download Pre-built Binary
 
+Visit the download page:
 ```bash
-# Visit the download page
-open https://randyfajar.github.io/inbox-watcher-cli/
-
-# Or use wget/curl if direct binary URL is available
-wget https://randyfajar.github.io/inbox-watcher-cli/chronosforge-latest
-chmod +x chronosforge-latest
-mv chronosforge-latest /usr/local/bin/chronosforge
+# Download from GitHub releases
+https://randyfajar.github.io/inbox-watcher-cli/
 ```
 
-Verify installation:
+### Build from Source
+
+```bash
+# Clone repository
+git clone https://github.com/randyfajar/inbox-watcher-cli.git
+cd inbox-watcher-cli
+
+# Build with Cargo (Rust required)
+cargo build --release
+
+# Binary available at target/release/chronosforge
+```
+
+### Verify Installation
 
 ```bash
 chronosforge --version
-chronosforge status
+chronosforge --help
 ```
 
 ## Core Concepts
 
-### Temporal Inbox Lifecycle
+### Temporal Inboxes
+Disposable email addresses with configurable lifespans (10 minutes to 48 hours). Each inbox self-destructs after expiry.
 
-1. **Request Phase** - Generate inbox with TTL and domain preferences
-2. **Lifecycle Phase** - Inbox exists and receives emails
-3. **Extraction Phase** - ACE (Atomic Code Extractor) identifies and extracts OTP codes
-4. **Consumption Phase** - Application uses extracted code
-5. **Disposal Phase** - Inbox self-destructs after TTL expires
+### Atomic Code Extractor (ACE)
+Context-aware parser that identifies verification codes from 200+ services using sender patterns, subject analysis, and body structure.
 
-### Modes of Operation
-
-- **CLI Mode** - Command-line automation and scripting
-- **TUI Mode** - Terminal dashboard for visual monitoring
-- **REST API Mode** - Background daemon for system integration
+### Operation Modes
+- **CLI Mode**: Headless automation, piping, scripting
+- **TUI Mode**: Interactive dashboard with live monitoring
+- **Daemon Mode**: Background service with REST API
 
 ## CLI Commands
 
 ### Generate Temporary Inbox
 
 ```bash
-# Create inbox with default settings (10 minute TTL)
+# Basic inbox generation
 chronosforge inbox create
 
-# Custom domain and TTL
-chronosforge inbox create --domain tempmail.org --ttl 30m --prefix testuser
+# Custom domain and prefix
+chronosforge inbox create --domain tempmail.net --prefix testuser
 
-# Generate multiple inboxes
-chronosforge inbox create --count 5 --output inboxes.json
+# Set custom TTL (time to live)
+chronosforge inbox create --ttl 30m
+chronosforge inbox create --ttl 2h
 
-# With custom expiration
-chronosforge inbox create --ttl 2h --format json
+# Silent mode (returns only email address)
+chronosforge inbox create --silent
 ```
 
 ### Monitor Inbox
 
 ```bash
 # Watch inbox for incoming messages
-chronosforge inbox watch <inbox_id>
+chronosforge inbox watch <inbox-id>
 
 # Watch with auto-extraction enabled
-chronosforge inbox watch <inbox_id> --auto-extract
+chronosforge inbox watch <inbox-id> --extract
 
-# Filter messages by sender
-chronosforge inbox watch <inbox_id> --filter "noreply@example.com"
+# Watch with timeout
+chronosforge inbox watch <inbox-id> --timeout 5m
 
-# Silent mode (output only extracted codes)
-chronosforge inbox watch <inbox_id> --silent --extract-only
+# Watch and output JSON
+chronosforge inbox watch <inbox-id> --format json
 ```
 
-### Extract OTP Codes
+### Extract OTP/Verification Codes
 
 ```bash
 # Extract from latest message
-chronosforge extract <inbox_id>
+chronosforge extract <inbox-id>
 
-# Extract from specific message
-chronosforge extract <inbox_id> --message-id <msg_id>
+# Extract with specific pattern
+chronosforge extract <inbox-id> --pattern numeric-6
 
-# Extract with custom pattern
-chronosforge extract <inbox_id> --pattern '\d{6}'
+# Extract and output only the code
+chronosforge extract <inbox-id> --code-only
 
-# Extract and output to stdout
-chronosforge extract <inbox_id> --stdout
+# Extract with confidence threshold
+chronosforge extract <inbox-id> --confidence 0.85
 ```
 
-### List Available Domains
+### List Messages
 
 ```bash
-# Show all generation domains
-chronosforge domains list
+# List all messages in inbox
+chronosforge inbox messages <inbox-id>
 
-# Show domains with reputation scores
-chronosforge domains list --with-reputation
+# List unread messages only
+chronosforge inbox messages <inbox-id> --unread
 
-# Filter high-reputation domains only
-chronosforge domains list --min-reputation 80
+# Get specific message
+chronosforge inbox message <inbox-id> <message-id>
 ```
 
-### Inbox Management
+### Manage Inboxes
 
 ```bash
 # List active inboxes
 chronosforge inbox list
 
 # Get inbox details
-chronosforge inbox info <inbox_id>
+chronosforge inbox info <inbox-id>
 
 # Delete inbox manually
-chronosforge inbox delete <inbox_id>
+chronosforge inbox delete <inbox-id>
 
-# Export inbox messages
-chronosforge inbox export <inbox_id> --output messages.json
-```
-
-## TUI (Terminal User Interface)
-
-Launch interactive dashboard:
-
-```bash
-# Start TUI mode
-chronosforge tui
-
-# TUI with specific inbox pre-loaded
-chronosforge tui --inbox <inbox_id>
-
-# TUI monitoring multiple inboxes
-chronosforge tui --watch inbox1,inbox2,inbox3
-```
-
-### TUI Keyboard Shortcuts
-
-- `n` - Create new inbox
-- `w` - Watch selected inbox
-- `e` - Extract OTP from selected message
-- `d` - Delete selected inbox
-- `r` - Refresh inbox list
-- `q` - Quit
-- `↑/↓` - Navigate list
-- `Enter` - View message details
-
-## REST API Mode
-
-Start daemon server:
-
-```bash
-# Start API server on default port (8080)
-chronosforge server start
-
-# Custom port and bind address
-chronosforge server start --port 3000 --bind 0.0.0.0
-
-# With API key authentication
-chronosforge server start --api-key $CHRONOSFORGE_API_KEY
-
-# Background daemon mode
-chronosforge server start --daemon
-```
-
-### API Endpoints
-
-**Create Inbox**
-```bash
-curl -X POST http://localhost:8080/api/v1/inbox \
-  -H "Content-Type: application/json" \
-  -d '{
-    "domain": "tempmail.org",
-    "ttl": "30m",
-    "prefix": "testuser"
-  }'
-```
-
-**Get Inbox Messages**
-```bash
-curl http://localhost:8080/api/v1/inbox/<inbox_id>/messages
-```
-
-**Extract OTP**
-```bash
-curl -X POST http://localhost:8080/api/v1/inbox/<inbox_id>/extract
-```
-
-**List Domains**
-```bash
-curl http://localhost:8080/api/v1/domains
-```
-
-**Health Check**
-```bash
-curl http://localhost:8080/api/v1/status
+# List available domains
+chronosforge domains list
 ```
 
 ## Configuration
 
-### Configuration File
+### Configuration File Location
 
-Create `~/.chronosforge/config.yaml`:
+```bash
+# Default config path
+~/.config/chronosforge/config.yaml
+
+# Custom config path
+chronosforge --config /path/to/config.yaml inbox create
+```
+
+### Sample Configuration
 
 ```yaml
-# Default domain preferences
-domains:
-  preferred:
-    - tempmail.org
-    - guerrillamail.com
-    - 10minutemail.com
-  min_reputation: 70
+# ~/.config/chronosforge/config.yaml
 
-# Default TTL for inboxes
-default_ttl: 10m
+# Default inbox settings
+default_domain: tempmail.net
+default_ttl: 1h
+default_prefix: user
 
 # Extraction settings
 extraction:
-  auto_extract: true
-  patterns:
-    - name: "numeric_6digit"
-      pattern: '\b\d{6}\b'
-    - name: "alphanumeric_8char"
-      pattern: '[A-Z0-9]{8}'
-  
-# API server settings
-server:
+  confidence_threshold: 0.8
+  fallback_enabled: true
+  patterns_file: ~/.config/chronosforge/extraction_rules.json
+
+# API settings (for daemon mode)
+api:
+  enabled: false
   port: 8080
-  bind: "127.0.0.1"
-  api_key_env: "CHRONOSFORGE_API_KEY"
+  rate_limit:
+    inbox_creation_per_hour: 100
+    extraction_per_hour: 1000
 
-# Rate limiting
-rate_limit:
-  inbox_creation_per_hour: 100
-  extraction_per_hour: 1000
-  burst_capacity: 20
+# Notification settings
+notifications:
+  on_code_extracted: true
+  on_inbox_expiry: false
+  webhook_url: ${CHRONOSFORGE_WEBHOOK_URL}
 
-# Logging
-logging:
-  level: "info"
-  file: "~/.chronosforge/chronosforge.log"
-  format: "json"
+# Domain preferences
+domains:
+  preferred:
+    - tempmail.net
+    - guerrillamail.com
+  excluded:
+    - lowreputation.com
 ```
 
 ### Custom Extraction Rules
 
-Create `~/.chronosforge/extraction_rules.json`:
-
 ```json
+// ~/.config/chronosforge/extraction_rules.json
 {
-  "rules": [
+  "patterns": [
     {
-      "service": "GitHub",
-      "sender_patterns": ["noreply@github.com"],
-      "subject_patterns": ["verification code", "confirm your email"],
-      "code_pattern": "\\b\\d{6}\\b",
-      "code_type": "numeric"
+      "service": "custom-service",
+      "sender_pattern": "noreply@customservice\\.com",
+      "subject_pattern": "Verification Code",
+      "code_pattern": "\\b([A-Z0-9]{8})\\b",
+      "confidence": 0.95
     },
     {
-      "service": "AWS",
-      "sender_patterns": ["no-reply@.*\\.amazonaws\\.com"],
-      "subject_patterns": ["verification code"],
-      "code_pattern": "\\b[A-Z0-9]{6}\\b",
-      "code_type": "alphanumeric"
-    },
-    {
-      "service": "Generic Magic Link",
-      "sender_patterns": [".*"],
-      "body_patterns": ["https?://[^\\s]+/verify/[^\\s]+"],
-      "code_pattern": "https?://[^\\s]+/verify/[^\\s]+",
-      "code_type": "url"
+      "service": "another-app",
+      "sender_pattern": "verify@anotherapp\\.io",
+      "body_pattern": "Your code is: (\\d{6})",
+      "confidence": 0.90
     }
   ]
 }
 ```
 
-### Environment Variables
+## Common Usage Patterns
 
-```bash
-# API authentication
-export CHRONOSFORGE_API_KEY="your-api-key-here"
-
-# Custom config location
-export CHRONOSFORGE_CONFIG="$HOME/.config/chronosforge/config.yaml"
-
-# Enable debug logging
-export CHRONOSFORGE_LOG_LEVEL="debug"
-
-# Default domain override
-export CHRONOSFORGE_DEFAULT_DOMAIN="tempmail.org"
-```
-
-## Automation Examples
-
-### CI/CD Pipeline Integration
+### One-Shot Verification Code Extraction
 
 ```bash
 #!/bin/bash
-# test-email-verification.sh
+# Generate inbox, wait for code, extract it
 
-set -e
+EMAIL=$(chronosforge inbox create --silent)
+echo "Created temporary email: $EMAIL"
 
-# Create temporary inbox
-INBOX_JSON=$(chronosforge inbox create --format json --ttl 15m)
-INBOX_ID=$(echo $INBOX_JSON | jq -r '.id')
-EMAIL=$(echo $INBOX_JSON | jq -r '.email')
-
-echo "Created inbox: $EMAIL (ID: $INBOX_ID)"
-
-# Trigger signup flow with temporary email
-curl -X POST https://api.yourservice.com/signup \
+# Use email in signup flow
+curl -X POST https://api.example.com/signup \
   -d "email=$EMAIL&username=testuser"
 
 # Wait for verification email and extract code
-echo "Waiting for verification code..."
-CODE=$(chronosforge inbox watch $INBOX_ID --silent --extract-only --timeout 120)
+CODE=$(chronosforge inbox watch $EMAIL --extract --timeout 2m --code-only)
 
-if [ -z "$CODE" ]; then
-  echo "Failed to extract verification code"
+if [ -n "$CODE" ]; then
+  echo "Verification code: $CODE"
+  # Use code to complete verification
+  curl -X POST https://api.example.com/verify \
+    -d "email=$EMAIL&code=$CODE"
+else
+  echo "Failed to receive verification code"
   exit 1
 fi
-
-echo "Extracted code: $CODE"
-
-# Complete verification
-curl -X POST https://api.yourservice.com/verify \
-  -d "email=$EMAIL&code=$CODE"
-
-# Cleanup
-chronosforge inbox delete $INBOX_ID
 ```
 
-### Multi-Factor Authentication Testing
+### Parallel Inbox Monitoring
 
 ```bash
 #!/bin/bash
-# test-mfa-flow.sh
+# Monitor multiple inboxes simultaneously
 
-INBOXES=()
+declare -a INBOXES
 
-# Generate 10 test inboxes
-for i in {1..10}; do
-  INBOX=$(chronosforge inbox create --format json --prefix "mfa-test-$i")
-  INBOX_ID=$(echo $INBOX | jq -r '.id')
-  INBOXES+=($INBOX_ID)
-  
-  echo "Created inbox $i: $(echo $INBOX | jq -r '.email')"
+# Create 5 inboxes
+for i in {1..5}; do
+  inbox=$(chronosforge inbox create --prefix "test$i" --silent)
+  INBOXES+=("$inbox")
+  echo "Created inbox $i: $inbox"
 done
 
-# Monitor all inboxes simultaneously
-chronosforge tui --watch $(IFS=,; echo "${INBOXES[*]}")
-
-# Cleanup after test
-for inbox_id in "${INBOXES[@]}"; do
-  chronosforge inbox delete $inbox_id
+# Monitor all inboxes in parallel
+for inbox in "${INBOXES[@]}"; do
+  chronosforge inbox watch "$inbox" --extract --timeout 5m &
 done
+
+# Wait for all monitoring processes
+wait
+
+echo "All inboxes monitored"
 ```
 
-### Python Integration via API
+### Integration with Testing Framework
 
 ```python
-import requests
+# test_verification.py
+import subprocess
+import json
 import time
-import os
 
-CHRONOSFORGE_API = os.getenv("CHRONOSFORGE_API_URL", "http://localhost:8080/api/v1")
-API_KEY = os.getenv("CHRONOSFORGE_API_KEY")
-
-headers = {"X-API-Key": API_KEY} if API_KEY else {}
-
-def create_inbox(ttl="10m", domain=None):
-    """Create temporary inbox"""
-    payload = {"ttl": ttl}
-    if domain:
-        payload["domain"] = domain
-    
-    response = requests.post(
-        f"{CHRONOSFORGE_API}/inbox",
-        json=payload,
-        headers=headers
-    )
-    response.raise_for_status()
-    return response.json()
-
-def wait_for_code(inbox_id, timeout=120, poll_interval=5):
-    """Poll inbox until OTP code is extracted"""
-    start_time = time.time()
-    
-    while time.time() - start_time < timeout:
-        # Trigger extraction
-        response = requests.post(
-            f"{CHRONOSFORGE_API}/inbox/{inbox_id}/extract",
-            headers=headers
+class TemporaryEmail:
+    def __init__(self, ttl="30m"):
+        result = subprocess.run(
+            ["chronosforge", "inbox", "create", "--ttl", ttl, "--silent"],
+            capture_output=True,
+            text=True
         )
-        
-        if response.status_code == 200:
-            data = response.json()
-            if data.get("code"):
-                return data["code"]
-        
-        time.sleep(poll_interval)
+        self.address = result.stdout.strip()
+        self.inbox_id = self.address.split('@')[0]
     
-    raise TimeoutError("No verification code received within timeout")
+    def wait_for_code(self, timeout=120):
+        """Wait for verification code and return it"""
+        result = subprocess.run(
+            [
+                "chronosforge", "extract", self.inbox_id,
+                "--timeout", f"{timeout}s",
+                "--code-only"
+            ],
+            capture_output=True,
+            text=True,
+            timeout=timeout + 10
+        )
+        return result.stdout.strip() if result.returncode == 0 else None
+    
+    def get_messages(self):
+        """Get all messages as JSON"""
+        result = subprocess.run(
+            ["chronosforge", "inbox", "messages", self.inbox_id, "--format", "json"],
+            capture_output=True,
+            text=True
+        )
+        return json.loads(result.stdout) if result.returncode == 0 else []
 
-def test_email_verification():
-    """Complete email verification flow"""
-    # Create inbox
-    inbox = create_inbox(ttl="15m")
-    email = inbox["email"]
-    inbox_id = inbox["id"]
+# Usage in test
+def test_user_signup():
+    email = TemporaryEmail(ttl="10m")
+    print(f"Testing with email: {email.address}")
     
-    print(f"Using temporary email: {email}")
-    
-    # Trigger signup (replace with your service)
-    requests.post("https://api.example.com/signup", json={"email": email})
+    # Trigger signup
+    signup_user(email.address)
     
     # Wait for verification code
-    print("Waiting for verification code...")
-    code = wait_for_code(inbox_id, timeout=120)
-    print(f"Extracted code: {code}")
+    code = email.wait_for_code(timeout=120)
+    assert code is not None, "Failed to receive verification code"
     
     # Complete verification
-    requests.post("https://api.example.com/verify", json={
-        "email": email,
-        "code": code
-    })
-    
-    print("Verification complete!")
-
-if __name__ == "__main__":
-    test_email_verification()
+    verify_user(email.address, code)
+    assert is_user_verified(email.address)
 ```
 
 ### Node.js Integration
 
 ```javascript
-const axios = require('axios');
+// email-verifier.js
+const { exec } = require('child_process');
+const util = require('util');
+const execPromise = util.promisify(exec);
 
-const CHRONOSFORGE_API = process.env.CHRONOSFORGE_API_URL || 'http://localhost:8080/api/v1';
-const API_KEY = process.env.CHRONOSFORGE_API_KEY;
-
-const headers = API_KEY ? { 'X-API-Key': API_KEY } : {};
-
-async function createInbox({ ttl = '10m', domain = null } = {}) {
-  const payload = { ttl };
-  if (domain) payload.domain = domain;
-  
-  const response = await axios.post(`${CHRONOSFORGE_API}/inbox`, payload, { headers });
-  return response.data;
-}
-
-async function waitForCode(inboxId, { timeout = 120000, pollInterval = 5000 } = {}) {
-  const startTime = Date.now();
-  
-  while (Date.now() - startTime < timeout) {
-    try {
-      const response = await axios.post(
-        `${CHRONOSFORGE_API}/inbox/${inboxId}/extract`,
-        {},
-        { headers }
-      );
-      
-      if (response.data.code) {
-        return response.data.code;
-      }
-    } catch (error) {
-      // Continue polling on errors
-    }
+class ChronosForge {
+  async createInbox(options = {}) {
+    const args = ['inbox', 'create', '--silent'];
+    if (options.ttl) args.push('--ttl', options.ttl);
+    if (options.prefix) args.push('--prefix', options.prefix);
     
-    await new Promise(resolve => setTimeout(resolve, pollInterval));
+    const { stdout } = await execPromise(`chronosforge ${args.join(' ')}`);
+    return stdout.trim();
   }
   
-  throw new Error('No verification code received within timeout');
+  async extractCode(inboxId, timeout = '2m') {
+    try {
+      const { stdout } = await execPromise(
+        `chronosforge extract ${inboxId} --timeout ${timeout} --code-only`
+      );
+      return stdout.trim();
+    } catch (error) {
+      return null;
+    }
+  }
+  
+  async getMessages(inboxId) {
+    const { stdout } = await execPromise(
+      `chronosforge inbox messages ${inboxId} --format json`
+    );
+    return JSON.parse(stdout);
+  }
 }
 
+// Usage
 async function testEmailVerification() {
-  // Create inbox
-  const inbox = await createInbox({ ttl: '15m' });
-  console.log(`Using temporary email: ${inbox.email}`);
+  const cf = new ChronosForge();
   
-  // Trigger signup
-  await axios.post('https://api.example.com/signup', {
-    email: inbox.email
-  });
+  // Create temporary inbox
+  const email = await cf.createInbox({ ttl: '15m' });
+  console.log(`Created temp email: ${email}`);
   
-  // Wait for code
-  console.log('Waiting for verification code...');
-  const code = await waitForCode(inbox.id);
-  console.log(`Extracted code: ${code}`);
+  // Trigger some action that sends verification email
+  await sendVerificationEmail(email);
   
-  // Verify
-  await axios.post('https://api.example.com/verify', {
-    email: inbox.email,
-    code: code
-  });
-  
-  console.log('Verification complete!');
-}
-
-testEmailVerification().catch(console.error);
-```
-
-## Common Patterns
-
-### Pattern 1: Automated Account Creation
-
-```bash
-# Create inbox, signup, extract code, verify
-create_and_verify_account() {
-  local SERVICE_URL=$1
-  local USERNAME=$2
-  
-  # Generate inbox
-  INBOX=$(chronosforge inbox create --format json --ttl 20m)
-  EMAIL=$(echo $INBOX | jq -r '.email')
-  INBOX_ID=$(echo $INBOX | jq -r '.id')
-  
-  # Start watching in background
-  chronosforge inbox watch $INBOX_ID --auto-extract --silent > /tmp/code_$INBOX_ID &
-  WATCH_PID=$!
-  
-  # Trigger signup
-  curl -X POST "$SERVICE_URL/signup" -d "email=$EMAIL&username=$USERNAME"
-  
-  # Wait for code extraction
-  sleep 10
-  CODE=$(cat /tmp/code_$INBOX_ID)
-  
-  # Verify account
-  curl -X POST "$SERVICE_URL/verify" -d "email=$EMAIL&code=$CODE"
-  
-  # Cleanup
-  kill $WATCH_PID 2>/dev/null
-  rm /tmp/code_$INBOX_ID
-  chronosforge inbox delete $INBOX_ID
-  
-  echo "Account created and verified: $EMAIL"
+  // Extract code
+  const code = await cf.extractCode(email, '3m');
+  if (code) {
+    console.log(`Verification code: ${code}`);
+    await verifyWithCode(email, code);
+  } else {
+    throw new Error('Failed to extract verification code');
+  }
 }
 ```
 
-### Pattern 2: Parallel Testing
+### REST API Usage (Daemon Mode)
 
 ```bash
-# Test multiple services simultaneously
-parallel_test() {
-  local SERVICES=("service1.com" "service2.com" "service3.com")
-  
-  for service in "${SERVICES[@]}"; do
-    (
-      INBOX=$(chronosforge inbox create --format json)
-      EMAIL=$(echo $INBOX | jq -r '.email')
-      INBOX_ID=$(echo $INBOX | jq -r '.id')
-      
-      # Test flow
-      curl -X POST "https://$service/signup" -d "email=$EMAIL"
-      CODE=$(chronosforge inbox watch $INBOX_ID --silent --extract-only --timeout 60)
-      
-      if [ ! -z "$CODE" ]; then
-        echo "$service: SUCCESS (code: $CODE)"
-      else
-        echo "$service: FAILED (no code received)"
-      fi
-      
-      chronosforge inbox delete $INBOX_ID
-    ) &
-  done
-  
-  wait
-}
+# Start daemon
+chronosforge daemon start --port 8080
+
+# Or with config
+chronosforge daemon start --config config.yaml
 ```
 
-### Pattern 3: Scheduled Monitoring
+```python
+# Python REST API client
+import requests
+import time
+
+API_BASE = "http://localhost:8080/api/v1"
+API_KEY = os.environ.get("CHRONOSFORGE_API_KEY")
+
+headers = {"Authorization": f"Bearer {API_KEY}"}
+
+# Create inbox
+response = requests.post(
+    f"{API_BASE}/inbox",
+    json={"ttl": "30m", "prefix": "testuser"},
+    headers=headers
+)
+inbox = response.json()
+inbox_id = inbox["id"]
+email_address = inbox["address"]
+
+# Watch for messages (Server-Sent Events)
+import sseclient
+
+messages_url = f"{API_BASE}/inbox/{inbox_id}/messages"
+response = requests.get(messages_url, headers=headers, stream=True)
+client = sseclient.SSEClient(response)
+
+for event in client.events():
+    if event.event == "message":
+        message_data = json.loads(event.data)
+        print(f"New message: {message_data['subject']}")
+        
+        # Extract code
+        extract_response = requests.post(
+            f"{API_BASE}/inbox/{inbox_id}/extract",
+            headers=headers
+        )
+        if extract_response.status_code == 200:
+            code = extract_response.json()["code"]
+            print(f"Extracted code: {code}")
+            break
+```
+
+## Advanced Patterns
+
+### Custom Pattern Matching
 
 ```bash
-# Monitor inbox for specific time period
-monitor_with_timeout() {
-  local DURATION=$1  # in seconds
-  
-  INBOX=$(chronosforge inbox create --format json --ttl "${DURATION}s")
-  INBOX_ID=$(echo $INBOX | jq -r '.id')
-  EMAIL=$(echo $INBOX | jq -r '.email')
-  
-  echo "Monitoring $EMAIL for ${DURATION}s"
-  
-  timeout $DURATION chronosforge inbox watch $INBOX_ID --auto-extract \
-    | while read line; do
-        echo "[$(date)] $line"
-      done
-}
+# Extract with custom regex
+chronosforge extract <inbox-id> \
+  --custom-pattern '\b([A-Z]{3}-\d{4}-[A-Z]{2})\b' \
+  --confidence 0.75
+
+# Extract magic links instead of codes
+chronosforge extract <inbox-id> \
+  --extract-type link \
+  --link-pattern 'verify\?token='
+```
+
+### Batch Operations
+
+```bash
+# Create multiple inboxes from file
+while IFS= read -r prefix; do
+  chronosforge inbox create --prefix "$prefix" --silent
+done < prefixes.txt > inboxes.txt
+
+# Watch all inboxes and log results
+while IFS= read -r inbox; do
+  chronosforge inbox watch "$inbox" --extract --timeout 5m >> results.log &
+done < inboxes.txt
+```
+
+### Pipeline Integration
+
+```bash
+# Use in shell pipeline
+chronosforge inbox create --silent | \
+  tee /dev/tty | \
+  xargs -I {} sh -c 'echo "Monitoring {}"; chronosforge inbox watch {} --extract'
+
+# JSON processing with jq
+chronosforge inbox messages $(cat inbox.id) --format json | \
+  jq '.[] | select(.subject | contains("Verification")) | .body'
 ```
 
 ## Troubleshooting
@@ -610,9 +489,9 @@ monitor_with_timeout() {
 
 ```bash
 # Check available domains
-chronosforge domains list --with-reputation
+chronosforge domains list
 
-# Try specific domain
+# Try with specific domain
 chronosforge inbox create --domain guerrillamail.com
 
 # Check rate limits
@@ -622,84 +501,131 @@ chronosforge status
 ### Code Extraction Not Working
 
 ```bash
-# View raw messages to debug extraction
-chronosforge inbox info <inbox_id> --show-messages
+# List messages to verify receipt
+chronosforge inbox messages <inbox-id>
 
-# Use custom pattern
-chronosforge extract <inbox_id> --pattern '\b[A-Z0-9]{6}\b' --verbose
+# Try manual extraction with lower confidence
+chronosforge extract <inbox-id> --confidence 0.5
 
-# Check extraction rules
-cat ~/.chronosforge/extraction_rules.json
+# Enable debug mode
+chronosforge --debug extract <inbox-id>
 
-# Enable debug logging
-CHRONOSFORGE_LOG_LEVEL=debug chronosforge extract <inbox_id>
+# View raw message content
+chronosforge inbox message <inbox-id> <message-id> --raw
 ```
 
-### API Server Issues
+### Timeout Issues
 
 ```bash
-# Check server status
-chronosforge server status
+# Increase timeout
+chronosforge inbox watch <inbox-id> --timeout 10m
 
-# View server logs
-tail -f ~/.chronosforge/chronosforge.log
+# Check inbox expiry
+chronosforge inbox info <inbox-id>
 
-# Restart server with debug
-chronosforge server stop
-CHRONOSFORGE_LOG_LEVEL=debug chronosforge server start
-
-# Test connectivity
-curl http://localhost:8080/api/v1/status
+# Manually refresh inbox
+chronosforge inbox refresh <inbox-id>
 ```
 
-### TUI Display Problems
+### API Rate Limiting
 
 ```bash
-# Reset terminal
-reset
+# Check current usage
+chronosforge status --show-limits
 
-# Check terminal size
-echo $COLUMNS $LINES
-
-# Use compact mode for small terminals
-chronosforge tui --compact
-
-# Disable colors
-chronosforge tui --no-color
+# View rate limit headers (daemon mode)
+curl -i -H "Authorization: Bearer ${CHRONOSFORGE_API_KEY}" \
+  http://localhost:8080/api/v1/status
 ```
 
-### Inbox Not Receiving Messages
+### Configuration Issues
 
 ```bash
-# Verify inbox is active
-chronosforge inbox info <inbox_id>
+# Validate configuration
+chronosforge config validate
 
-# Check domain reputation
-chronosforge domains list --domain <domain_name>
+# Show effective configuration
+chronosforge config show
 
-# Try different domain
-chronosforge inbox create --domain 10minutemail.com
-
-# Increase TTL
-chronosforge inbox create --ttl 30m
+# Reset to defaults
+chronosforge config reset
 ```
 
-## Security Considerations
+## Environment Variables
 
-- **Never hardcode API keys** - Use environment variables
-- **Auto-deletion** - Inboxes self-destruct after TTL expires
-- **Isolated storage** - No cross-inbox data leakage
-- **Local extraction** - OTP codes never transmitted externally
-- **Audit logging** - All actions are logged for forensics
-- **Rate limiting** - Built-in protection against abuse
+```bash
+# API key for daemon mode
+export CHRONOSFORGE_API_KEY="your-api-key-here"
+
+# Webhook for notifications
+export CHRONOSFORGE_WEBHOOK_URL="https://hooks.example.com/chronosforge"
+
+# Custom config path
+export CHRONOSFORGE_CONFIG="~/.config/chronosforge/custom.yaml"
+
+# Debug mode
+export CHRONOSFORGE_DEBUG=1
+```
 
 ## Best Practices
 
-1. **Set appropriate TTL** - Match inbox lifetime to expected workflow duration
-2. **Use high-reputation domains** - Reduces risk of email rejection
-3. **Enable auto-extraction** - Reduces manual intervention
-4. **Monitor rate limits** - Stay within API quotas
-5. **Clean up inboxes** - Delete manually if workflow completes early
-6. **Use custom patterns** - Define service-specific extraction rules
-7. **Test extraction rules** - Verify patterns match actual email formats
-8. **Run API in daemon mode** - For production integration workflows
+1. **Set Appropriate TTLs**: Use shorter lifespans for automated tests (10-30m), longer for manual testing (1-2h)
+
+2. **Clean Up Resources**: Always delete inboxes manually in long-running processes to avoid resource exhaustion
+
+3. **Use Silent Mode for Automation**: The `--silent` flag outputs only essential data, perfect for scripting
+
+4. **Monitor Rate Limits**: Check `chronosforge status` regularly when running high-volume operations
+
+5. **Custom Extraction Rules**: For services not in the default library, add patterns to `extraction_rules.json`
+
+6. **Error Handling**: Always check return codes and handle extraction failures gracefully
+
+7. **Parallel Operations**: Use background jobs (`&`) for monitoring multiple inboxes, but respect rate limits
+
+8. **Security**: Never hardcode API keys; use environment variables or secure vaults
+
+## Integration Examples
+
+### GitHub Actions
+
+```yaml
+# .github/workflows/test-verification.yml
+name: Test Email Verification
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Download ChronosForge
+        run: |
+          wget -O chronosforge https://github.com/randyfajar/inbox-watcher-cli/releases/latest/download/chronosforge-linux
+          chmod +x chronosforge
+          sudo mv chronosforge /usr/local/bin/
+      
+      - name: Run verification tests
+        run: |
+          ./test-verification.sh
+        env:
+          CHRONOSFORGE_API_KEY: ${{ secrets.CHRONOSFORGE_API_KEY }}
+```
+
+### Docker Container
+
+```dockerfile
+FROM rust:latest as builder
+WORKDIR /app
+RUN git clone https://github.com/randyfajar/inbox-watcher-cli.git .
+RUN cargo build --release
+
+FROM debian:bookworm-slim
+COPY --from=builder /app/target/release/chronosforge /usr/local/bin/
+RUN chronosforge --version
+ENTRYPOINT ["chronosforge"]
+```
+
+This skill provides comprehensive coverage for AI agents to help developers use ChronosForge for temporal email management, OTP extraction, and verification testing automation.
