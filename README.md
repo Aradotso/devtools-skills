@@ -156,6 +156,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [clipboard-sync-cross-device](skills/clipboard-sync-cross-device/) | [install](https://skills.sh/aradotso/devtools-skills/clipboard-sync-cross-device) | [mariusboiti/Clipboard_Sync](https://github.com/mariusboiti/Clipboard_Sync) | 2026-07-01 |
 | [api-client-tester-waruna834](skills/api-client-tester-waruna834/) | [install](https://skills.sh/aradotso/devtools-skills/api-client-tester-waruna834) | [waruna834/API_Client___Tester](https://github.com/waruna834/API_Client___Tester) | 2026-07-01 |
 | [optiscaler-client-fsr4-manager](skills/optiscaler-client-fsr4-manager/) | [install](https://skills.sh/aradotso/devtools-skills/optiscaler-client-fsr4-manager) | [Devanshu-dev/optiscaler-client-fsr4](https://github.com/Devanshu-dev/optiscaler-client-fsr4) | 2026-07-01 |
+| [cliare-cli-agent-readiness](skills/cliare-cli-agent-readiness/) | [install](https://skills.sh/aradotso/devtools-skills/cliare-cli-agent-readiness) | [modiqo/cliare](https://github.com/modiqo/cliare) | 2026-07-02 |
 <!-- SKILL_INDEX -->
 
 ---
