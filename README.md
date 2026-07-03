@@ -158,6 +158,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [optiscaler-client-fsr4-manager](skills/optiscaler-client-fsr4-manager/) | [install](https://skills.sh/aradotso/devtools-skills/optiscaler-client-fsr4-manager) | [Devanshu-dev/optiscaler-client-fsr4](https://github.com/Devanshu-dev/optiscaler-client-fsr4) | 2026-07-01 |
 | [cliare-cli-agent-readiness](skills/cliare-cli-agent-readiness/) | [install](https://skills.sh/aradotso/devtools-skills/cliare-cli-agent-readiness) | [modiqo/cliare](https://github.com/modiqo/cliare) | 2026-07-02 |
 | [mercadona-cli-shopping](skills/mercadona-cli-shopping/) | [install](https://skills.sh/aradotso/devtools-skills/mercadona-cli-shopping) | [ivorpad/mercadona-cli](https://github.com/ivorpad/mercadona-cli) | 2026-07-03 |
+| [advai-cli-unified-terminal-ai](skills/advai-cli-unified-terminal-ai/) | [install](https://skills.sh/aradotso/devtools-skills/advai-cli-unified-terminal-ai) | [Advai-X/advai-cli](https://github.com/Advai-X/advai-cli) | 2026-07-03 |
 <!-- SKILL_INDEX -->
 
 ---
