@@ -161,6 +161,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [advai-cli-unified-terminal-ai](skills/advai-cli-unified-terminal-ai/) | [install](https://skills.sh/aradotso/devtools-skills/advai-cli-unified-terminal-ai) | [Advai-X/advai-cli](https://github.com/Advai-X/advai-cli) | 2026-07-03 |
 | [google-health-cli](skills/google-health-cli/) | [install](https://skills.sh/aradotso/devtools-skills/google-health-cli) | [Google-Health-API/google-health-cli](https://github.com/Google-Health-API/google-health-cli) | 2026-07-05 |
 | [fastcopy-file-transfer-tool](skills/fastcopy-file-transfer-tool/) | [install](https://skills.sh/aradotso/devtools-skills/fastcopy-file-transfer-tool) | [Raunak64-bit/FastCopy-Clipper-Portable-Utility](https://github.com/Raunak64-bit/FastCopy-Clipper-Portable-Utility) | 2026-07-05 |
+| [fastcopy-file-transfer-detection](skills/fastcopy-file-transfer-detection/) | [install](https://skills.sh/aradotso/devtools-skills/fastcopy-file-transfer-detection) | [Raunak64-bit/FastCopy-Clipper-Portable-Utility](https://github.com/Raunak64-bit/FastCopy-Clipper-Portable-Utility) | 2026-07-05 |
 <!-- SKILL_INDEX -->
 
 ---
