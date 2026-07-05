@@ -163,6 +163,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [fastcopy-file-transfer-tool](skills/fastcopy-file-transfer-tool/) | [install](https://skills.sh/aradotso/devtools-skills/fastcopy-file-transfer-tool) | [Raunak64-bit/FastCopy-Clipper-Portable-Utility](https://github.com/Raunak64-bit/FastCopy-Clipper-Portable-Utility) | 2026-07-05 |
 | [fastcopy-file-transfer-detection](skills/fastcopy-file-transfer-detection/) | [install](https://skills.sh/aradotso/devtools-skills/fastcopy-file-transfer-detection) | [Raunak64-bit/FastCopy-Clipper-Portable-Utility](https://github.com/Raunak64-bit/FastCopy-Clipper-Portable-Utility) | 2026-07-05 |
 | [fastcopy-file-transfer-utility](skills/fastcopy-file-transfer-utility/) | [install](https://skills.sh/aradotso/devtools-skills/fastcopy-file-transfer-utility) | [Raunak64-bit/FastCopy-Clipper-Portable-Utility](https://github.com/Raunak64-bit/FastCopy-Clipper-Portable-Utility) | 2026-07-05 |
+| [fastcopy-file-transfer-optimizer](skills/fastcopy-file-transfer-optimizer/) | [install](https://skills.sh/aradotso/devtools-skills/fastcopy-file-transfer-optimizer) | [Raunak64-bit/FastCopy-Clipper-Portable-Utility](https://github.com/Raunak64-bit/FastCopy-Clipper-Portable-Utility) | 2026-07-05 |
 <!-- SKILL_INDEX -->
 
 ---
