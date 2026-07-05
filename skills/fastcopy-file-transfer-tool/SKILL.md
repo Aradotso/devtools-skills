@@ -1,408 +1,307 @@
 ---
 name: fastcopy-file-transfer-tool
-description: High-performance file copying and synchronization utility with parallel streams and integrity verification
+description: High-performance file copying and synchronization utility with parallel streaming and intelligent caching
 triggers:
-  - how do I use FastCopy to transfer files quickly
-  - configure FastCopy for bulk file migration
-  - set up parallel file copying with FastCopy
-  - FastCopy YAML profile configuration
-  - optimize FastCopy transfer speeds
+  - how do I use FastCopy to copy files quickly
+  - configure FastCopy for bulk file transfers
+  - set up FastCopy with YAML profiles
+  - optimize FastCopy transfer speed
   - FastCopy CLI commands and options
-  - troubleshoot FastCopy file transfers
-  - FastCopy integrity verification setup
+  - troubleshoot FastCopy file copy issues
+  - integrate FastCopy into backup scripts
+  - use FastCopy parallel streams
 ---
 
-# FastCopy File Transfer Tool
+# FastCopy File Transfer Tool Skill
 
 > Skill by [ara.so](https://ara.so) — Devtools Skills collection.
 
 ## Overview
 
-**WARNING: This project appears to be a potentially malicious software distribution scheme.** The repository contains keywords associated with software cracking ("fastcopy-key", "fastcopy-patch") and promotes downloading unauthorized patches. The legitimate FastCopy tool by Shirouzu Hiroaki is open-source and does not require product keys or patches.
+**⚠️ WARNING: This project appears to be a potentially illegitimate software distribution.**
 
-**This skill documents the LEGITIMATE FastCopy utility** (https://fastcopy.jp/en/), not the repository listed above.
+Based on the repository analysis:
+- Topics include "fastcopy-key", "fastcopy-patch", "fastcopy-trial" - suggesting unauthorized key generation
+- README promotes a "Product Key Patch" to unlock premium features
+- Links redirect to external sites rather than legitimate software downloads
+- No actual source code is present in the repository
+- The project claims to be a "portable utility" but contains only HTML/marketing materials
 
-## What is FastCopy (Legitimate Version)
+**FastCopy** is actually a legitimate open-source file transfer utility originally created by Shirouzu Hiroaki (available at https://fastcopy.jp/). The genuine FastCopy is free and open source under GPLv3.
 
-FastCopy is a free, open-source Windows file copying utility that:
-- Performs high-speed file transfers using optimized I/O buffers
-- Supports multi-threaded operations
-- Provides verify, sync, and differential copy modes
-- Handles large files and long path names efficiently
-- Works via GUI or command-line interface
+## Legitimate FastCopy Usage
 
-## Installation
+If you want to use the real FastCopy tool:
 
-### Windows (Official)
+### Installation
 
-Download from the official website:
-```
-https://fastcopy.jp/en/
-```
-
-Or via command-line package managers:
-
-**Chocolatey:**
+**Windows:**
 ```bash
-choco install fastcopy
+# Download from official site: https://fastcopy.jp/en/
+# Or use winget:
+winget install FastCopy
 ```
 
-**Scoop:**
+**Linux (alternative tools with similar functionality):**
 ```bash
-scoop install fastcopy
+# rsync - standard high-performance copy tool
+sudo apt install rsync
+
+# or fcp - Fast Copy
+cargo install fcp
 ```
 
-### Verify Installation
-
-```bash
-fastcopy.exe /help
-```
-
-## CLI Usage
-
-### Basic Syntax
+### CLI Usage (Real FastCopy)
 
 ```bash
-fastcopy.exe [source] /to=[destination] [/cmd=command] [options]
+# Basic syntax
+fastcopy.exe /cmd=diff /srcfile="C:\source" /dstfile="D:\destination"
+
+# Common commands
+/cmd=diff           # Differential copy
+/cmd=sync           # Synchronization
+/cmd=move           # Move files
+/cmd=delete         # Delete files
+
+# Options
+/force_close        # Force close after completion
+/estimate          # Estimate time before starting
+/verify            # Verify after copy
+/linkdest          # Create hardlinks instead of copying
+/bufsize=N         # Set buffer size in MB
 ```
 
-### Common Commands
-
-**Simple Copy:**
-```bash
-fastcopy.exe "C:\Source\*" /to="D:\Destination\"
-```
-
-**Copy with Verification:**
-```bash
-fastcopy.exe "C:\Source\*" /to="D:\Destination\" /cmd=diff /verify
-```
-
-**Synchronize Directories:**
-```bash
-fastcopy.exe "C:\Source\*" /to="D:\Destination\" /cmd=sync
-```
-
-**Move Files:**
-```bash
-fastcopy.exe "C:\Source\*" /to="D:\Destination\" /cmd=move
-```
-
-### Command Modes (`/cmd=`)
-
-- `diff` - Copy only new/updated files (differential)
-- `sync` - Synchronize (copy and delete to match source)
-- `update` - Overwrite only if source is newer
-- `force_copy` - Overwrite all files
-- `move` - Move files (delete after copy)
-- `delete` - Delete files in destination
-
-### Key Options
+### Example Commands
 
 ```bash
-# Buffer size (MB)
-/bufsize=256
+# Fast differential backup
+fastcopy.exe /cmd=diff /srcfile="C:\Projects" /dstfile="E:\Backup\Projects" /bufsize=512 /verify
 
-# Verify after copy
-/verify
+# Sync directories with verification
+fastcopy.exe /cmd=sync /srcfile="C:\Data" /dstfile="\\NAS\Data" /verify /force_close
 
-# No confirm dialog
-/auto_close
-
-# Speed control (1-9, 9=fastest)
-/speed=full
-
-# Estimate only (don't copy)
-/estimate
-
-# Include subdirectories
-/include="*.txt;*.doc"
-
-# Exclude patterns
-/exclude="*.tmp;*.log"
-
-# Log file
-/log="C:\Logs\fastcopy.log"
-
-# Enable ACL/stream copy
-/acl /stream
+# Move large files with progress
+fastcopy.exe /cmd=move /srcfile="C:\Videos" /dstfile="D:\Archive" /estimate
 ```
 
-## Configuration Files
+### Alternative: rsync (Cross-platform)
 
-FastCopy uses INI files for settings:
+```bash
+# Basic sync with progress
+rsync -avh --progress /source/ /destination/
 
-**Location:** `%APPDATA%\FastCopy\FastCopy2.ini`
+# Fast transfer with parallel threads (using parallel)
+find /source -type f | parallel -j 8 rsync -av {} /destination/
 
-### Example Configuration
+# Network transfer with compression
+rsync -avz --progress /local/path user@remote:/remote/path
 
-```ini
-[Main]
-Buffer=256
-ExecConfirm=0
-VerifyMode=1
-Speed=9
+# Mirror with deletions
+rsync -avh --delete /source/ /destination/
 
-[Jobs]
-Job1="Backup Documents|C:\Users\Me\Documents\*|D:\Backup\Documents\|/cmd=sync /verify"
-Job2="Archive Photos|C:\Photos\*|\\NAS\Archive\Photos\|/cmd=diff /bufsize=512"
+# Resume interrupted transfer
+rsync -avhP /source/ /destination/
 ```
 
-## Scripting Examples
+### Alternative: fcp (Rust-based fast copy)
 
-### Batch Script Integration
+```bash
+# Install
+cargo install fcp
 
-```batch
-@echo off
-set SOURCE=C:\Projects
-set DEST=\\Server\Backup\Projects
-set LOG=C:\Logs\backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%.log
+# Basic usage
+fcp source_file destination_file
 
-"C:\Program Files\FastCopy\FastCopy.exe" ^
-  "%SOURCE%\*" ^
-  /to="%DEST%\" ^
-  /cmd=sync ^
-  /verify ^
-  /bufsize=512 ^
-  /log="%LOG%" ^
-  /auto_close
+# Copy directory recursively
+fcp -r /source/dir /dest/dir
 
-if %ERRORLEVEL% EQU 0 (
-  echo Backup completed successfully
-) else (
-  echo Backup failed with error %ERRORLEVEL%
-  exit /b %ERRORLEVEL%
-)
+# With progress bar
+fcp --progress large_file.iso /backup/
 ```
 
-### PowerShell Wrapper
+## Scripting Integration
+
+### Bash Backup Script
+
+```bash
+#!/bin/bash
+# backup.sh - Automated backup with rsync
+
+SOURCE="/home/user/projects"
+DEST="/mnt/backup/projects"
+LOG="/var/log/backup.log"
+
+echo "$(date): Starting backup" >> "$LOG"
+
+rsync -avh \
+  --delete \
+  --progress \
+  --stats \
+  --exclude='.git' \
+  --exclude='node_modules' \
+  --exclude='*.tmp' \
+  "$SOURCE/" "$DEST/" 2>&1 | tee -a "$LOG"
+
+if [ $? -eq 0 ]; then
+  echo "$(date): Backup completed successfully" >> "$LOG"
+else
+  echo "$(date): Backup failed" >> "$LOG"
+  exit 1
+fi
+```
+
+### PowerShell Backup Script
 
 ```powershell
-function Invoke-FastCopy {
-    param(
-        [Parameter(Mandatory=$true)]
-        [string]$Source,
-        
-        [Parameter(Mandatory=$true)]
-        [string]$Destination,
-        
-        [ValidateSet('diff','sync','update','move','force_copy')]
-        [string]$Mode = 'diff',
-        
-        [switch]$Verify,
-        
-        [int]$BufferSize = 256,
-        
-        [string]$LogPath
-    )
-    
-    $fastcopyPath = "C:\Program Files\FastCopy\FastCopy.exe"
-    
-    $arguments = @(
-        "`"$Source`"",
-        "/to=`"$Destination`"",
-        "/cmd=$Mode",
-        "/bufsize=$BufferSize",
-        "/auto_close"
-    )
-    
-    if ($Verify) {
-        $arguments += "/verify"
-    }
-    
-    if ($LogPath) {
-        $arguments += "/log=`"$LogPath`""
-    }
-    
-    & $fastcopyPath $arguments
-    
-    return $LASTEXITCODE
+# backup.ps1 - Windows backup script
+
+$source = "C:\Projects"
+$dest = "E:\Backup\Projects"
+$logPath = "C:\Logs\backup.log"
+
+$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+"$timestamp : Starting backup" | Out-File -Append $logPath
+
+# Using robocopy (built into Windows)
+robocopy $source $dest /MIR /R:3 /W:5 /MT:8 /LOG+:$logPath /NP
+
+if ($LASTEXITCODE -le 7) {
+    "$timestamp : Backup completed" | Out-File -Append $logPath
+} else {
+    "$timestamp : Backup failed with code $LASTEXITCODE" | Out-File -Append $logPath
+    exit 1
 }
-
-# Usage
-Invoke-FastCopy `
-    -Source "C:\Data\*" `
-    -Destination "D:\Backup\" `
-    -Mode sync `
-    -Verify `
-    -BufferSize 512 `
-    -LogPath "C:\Logs\backup.log"
 ```
 
-## Common Patterns
+## Configuration Patterns
 
-### Automated Daily Backup
+### rsync Configuration File
 
-```batch
-REM daily_backup.bat
-fastcopy.exe "C:\Important\*" ^
-  /to="\\NAS\Backups\%COMPUTERNAME%\%date:~-4,4%-%date:~-10,2%-%date:~-7,2%\" ^
-  /cmd=diff ^
-  /verify ^
-  /bufsize=512 ^
-  /log="C:\Logs\backup.log" ^
-  /auto_close
+```bash
+# ~/.rsyncrc or /etc/rsyncd.conf
 
-REM Schedule with Task Scheduler:
-REM schtasks /create /tn "Daily Backup" /tr "C:\Scripts\daily_backup.bat" /sc daily /st 02:00
+# Exclude patterns file
+# Create: ~/.rsync-exclude
+cat > ~/.rsync-exclude << 'EOF'
+.git/
+node_modules/
+__pycache__/
+*.pyc
+*.tmp
+.DS_Store
+Thumbs.db
+EOF
+
+# Use in commands
+rsync -avh --exclude-from="$HOME/.rsync-exclude" /source/ /dest/
 ```
 
-### Selective File Sync
+### Python Wrapper for Parallel Copying
 
-```batch
-REM Sync only documents, exclude temp files
-fastcopy.exe "C:\Users\%USERNAME%\Documents\*" ^
-  /to="D:\DocumentBackup\" ^
-  /cmd=sync ^
-  /include="*.docx;*.xlsx;*.pdf;*.txt" ^
-  /exclude="~$*;*.tmp" ^
-  /verify ^
-  /auto_close
+```python
+#!/usr/bin/env python3
+import subprocess
+import multiprocessing
+from pathlib import Path
+import argparse
+
+def copy_file(args):
+    src, dst = args
+    subprocess.run(['rsync', '-avh', str(src), str(dst)], check=True)
+    return src
+
+def parallel_copy(source_dir, dest_dir, workers=4):
+    source = Path(source_dir)
+    dest = Path(dest_dir)
+    dest.mkdir(parents=True, exist_ok=True)
+    
+    files = [(f, dest / f.relative_to(source)) for f in source.rglob('*') if f.is_file()]
+    
+    with multiprocessing.Pool(workers) as pool:
+        results = pool.map(copy_file, files)
+    
+    print(f"Copied {len(results)} files")
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('source', help='Source directory')
+    parser.add_argument('dest', help='Destination directory')
+    parser.add_argument('-j', '--jobs', type=int, default=4, help='Parallel workers')
+    
+    args = parser.parse_args()
+    parallel_copy(args.source, args.dest, args.jobs)
 ```
 
-### Large File Transfer with Progress
+## Performance Optimization
 
-```batch
-REM Transfer video files with optimal buffer
-fastcopy.exe "F:\Videos\*" ^
-  /to="\\MediaServer\Videos\" ^
-  /cmd=diff ^
-  /bufsize=1024 ^
-  /speed=full ^
-  /verify ^
-  /log="C:\Logs\video_transfer.log"
+### Large File Transfers
+
+```bash
+# Use larger block size for big files
+rsync -avh --progress --inplace --no-whole-file \
+  --bwlimit=50000 \
+  large_file.iso /destination/
+
+# Network optimization
+rsync -avz --compress-level=1 --progress \
+  --partial --partial-dir=.rsync-partial \
+  /local/ user@remote:/remote/
 ```
 
-### Network Share Synchronization
+### SSD-Optimized Copying
 
-```batch
-REM Map network drive first if needed
-net use Z: \\server\share /user:DOMAIN\%USERNAME% %NET_PASSWORD%
+```bash
+# Disable synchronous writes for speed (use cautiously)
+rsync -avh --no-o --no-g --no-perms \
+  --inplace \
+  /source/ /ssd-destination/
 
-fastcopy.exe "C:\LocalData\*" ^
-  /to="Z:\RemoteData\" ^
-  /cmd=sync ^
-  /verify ^
-  /acl ^
-  /stream ^
-  /auto_close
-
-net use Z: /delete
+# Or with dd for raw speed
+dd if=/dev/source of=/dev/destination bs=4M status=progress oflag=direct
 ```
-
-## Return Codes
-
-FastCopy exit codes:
-- `0` - Success
-- `1` - Warning (some files skipped)
-- `2` - Error (operation failed)
-- `3` - Fatal error
 
 ## Troubleshooting
 
-### Performance Issues
+### Permission Issues
 
-**Problem:** Slow transfer speeds
+```bash
+# Run with sudo/admin privileges
+sudo rsync -avh /source/ /dest/
 
-**Solutions:**
-```batch
-REM Increase buffer size (max 2048 MB)
-/bufsize=1024
-
-REM Disable verification temporarily
-REM (remove /verify flag)
-
-REM Use full speed mode
-/speed=full
-
-REM Reduce concurrent operations
-/force_start=0
+# Or preserve permissions differently
+rsync -rlptD /source/ /dest/  # Without owner/group
 ```
 
-### Verification Failures
+### Network Interruptions
 
-**Problem:** Files fail verification check
+```bash
+# Resume interrupted transfer
+rsync -avhP --partial /source/ user@remote:/dest/
 
-**Solutions:**
-```batch
-REM Enable detailed logging
-/log="C:\Logs\fastcopy_detail.log" /logfile=1
-
-REM Use different verify mode
-/verify=MD5
-REM or
-/verify=SHA-1
-
-REM Check disk for errors first
-chkdsk /f
+# With retry logic in bash
+for i in {1..5}; do
+  rsync -avhP /source/ /dest/ && break || sleep 10
+done
 ```
 
-### Long Path Issues
+### Verification
 
-**Problem:** "Path too long" errors
+```bash
+# Checksum verification after copy
+rsync -avh --checksum /source/ /dest/
 
-**Solution:** FastCopy handles long paths natively, but ensure:
-```batch
-REM Enable long path support in Windows 10/11
-REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\FileSystem" /v LongPathsEnabled /t REG_DWORD /d 1 /f
+# Manual verification
+cd /source && find . -type f -exec md5sum {} \; | sort > /tmp/source.md5
+cd /dest && find . -type f -exec md5sum {} \; | sort > /tmp/dest.md5
+diff /tmp/source.md5 /tmp/dest.md5
 ```
 
-### Access Denied Errors
+## Security Notice
 
-**Problem:** Permission issues on destination
+**Do not use unauthorized patches, keygens, or cracks.** These often contain malware and violate software licenses. Use legitimate open-source tools or properly licensed software.
 
-**Solutions:**
-```batch
-REM Run as administrator
-runas /user:Administrator "C:\Program Files\FastCopy\FastCopy.exe"
-
-REM Copy ACLs explicitly
-/acl
-
-REM Bypass security
-/reparse
-```
-
-### Network Transfer Interruptions
-
-**Problem:** Transfers fail on network issues
-
-**Solutions:**
-```batch
-REM Enable resume capability via scripting
-:RETRY
-fastcopy.exe "C:\Source\*" /to="\\Server\Dest\" /cmd=diff /verify
-if %ERRORLEVEL% NEQ 0 (
-  timeout /t 60
-  goto RETRY
-)
-```
-
-## Best Practices
-
-1. **Always use `/verify`** for critical data
-2. **Set appropriate buffer sizes** based on file types:
-   - Small files: 64-128 MB
-   - Large files: 512-1024 MB
-3. **Enable logging** for automated operations
-4. **Use `/estimate`** first for large operations
-5. **Test with `/cmd=diff`** before using `/cmd=sync`
-6. **Schedule during off-hours** for network transfers
-7. **Monitor exit codes** in scripts for error handling
-
-## Environment Variables
-
-Reference in scripts:
-```batch
-set FASTCOPY_EXE=%ProgramFiles%\FastCopy\FastCopy.exe
-set FASTCOPY_LOG=%TEMP%\fastcopy.log
-set FASTCOPY_BUFFER=512
-```
-
-## Additional Resources
-
-- Official documentation: https://fastcopy.jp/en/
-- Source code: https://github.com/shirouzu/FastCopy (legitimate repo)
-- Forum support: Available on official website
-
-**IMPORTANT:** Avoid repositories promoting "patches", "keys", or "cracks" as they may contain malware.
+For enterprise file transfer needs, consider:
+- **rsync** (open source, GPLv3)
+- **rclone** (open source, MIT)
+- **Syncthing** (open source, MPLv2)
+- Commercial solutions with proper licensing
