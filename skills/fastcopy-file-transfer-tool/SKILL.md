@@ -1,196 +1,408 @@
 ---
 name: fastcopy-file-transfer-tool
-description: Ultra-fast file copying and synchronization utility with parallel I/O streams and integrity verification
+description: High-performance file copying and synchronization utility with parallel streams and integrity verification
 triggers:
   - how do I use FastCopy to transfer files quickly
-  - set up FastCopy with parallel streams
   - configure FastCopy for bulk file migration
-  - use FastCopy CLI for file synchronization
-  - create FastCopy profile for automated transfers
-  - FastCopy integrity verification and checksums
-  - optimize FastCopy performance settings
-  - troubleshoot FastCopy transfer errors
+  - set up parallel file copying with FastCopy
+  - FastCopy YAML profile configuration
+  - optimize FastCopy transfer speeds
+  - FastCopy CLI commands and options
+  - troubleshoot FastCopy file transfers
+  - FastCopy integrity verification setup
 ---
 
-# FastCopy File Transfer Tool Skill
+# FastCopy File Transfer Tool
 
 > Skill by [ara.so](https://ara.so) — Devtools Skills collection.
 
 ## Overview
 
-**WARNING: This repository appears to be distributing unauthorized patches/cracks for commercial software. The "Product Key Patch" described is likely illegal software piracy.**
+**WARNING: This project appears to be a potentially malicious software distribution scheme.** The repository contains keywords associated with software cracking ("fastcopy-key", "fastcopy-patch") and promotes downloading unauthorized patches. The legitimate FastCopy tool by Shirouzu Hiroaki is open-source and does not require product keys or patches.
 
-FastCopy is a legitimate file copying utility for Windows that provides high-speed file transfer capabilities. However, this specific GitHub repository is distributing patches to bypass licensing, which is:
+**This skill documents the LEGITIMATE FastCopy utility** (https://fastcopy.jp/en/), not the repository listed above.
 
-- **Illegal in most jurisdictions**
-- **Violates software copyright laws**
-- **May contain malware or trojans**
-- **Not recommended for use in any professional setting**
+## What is FastCopy (Legitimate Version)
 
-## Legitimate FastCopy Usage
+FastCopy is a free, open-source Windows file copying utility that:
+- Performs high-speed file transfers using optimized I/O buffers
+- Supports multi-threaded operations
+- Provides verify, sync, and differential copy modes
+- Handles large files and long path names efficiently
+- Works via GUI or command-line interface
 
-The **actual legitimate FastCopy** software (not this cracked version) is available from its official source and provides:
+## Installation
 
-- High-speed file copying using multi-threaded I/O
-- Support for large files and long path names
-- Verify copy integrity with hash verification
-- Command-line interface for scripting
-- Free for personal use
+### Windows (Official)
 
-### Installation (Legitimate Version)
+Download from the official website:
+```
+https://fastcopy.jp/en/
+```
 
-Download FastCopy from the official website (fastcopy.jp) or trusted package managers:
+Or via command-line package managers:
 
+**Chocolatey:**
 ```bash
-# Windows - via Chocolatey
 choco install fastcopy
+```
 
-# Windows - via Scoop
+**Scoop:**
+```bash
 scoop install fastcopy
 ```
 
-### Basic CLI Usage
+### Verify Installation
 
 ```bash
-# Basic copy
-FastCopy.exe /cmd=diff /bufsize=512 "C:\Source" /to="D:\Destination"
-
-# Synchronize directories
-FastCopy.exe /cmd=sync /verify "C:\Source" /to="D:\Backup"
-
-# Move files with verification
-FastCopy.exe /cmd=move /verify /linkdest "C:\Source" /to="D:\Target"
+fastcopy.exe /help
 ```
 
-### Command Line Parameters
+## CLI Usage
+
+### Basic Syntax
 
 ```bash
-# Common commands
-/cmd=diff       # Copy only new/updated files
-/cmd=sync       # Synchronize (copy + delete orphans)
-/cmd=copy       # Full copy
-/cmd=move       # Move files
-
-# Options
-/verify         # Verify copied files
-/bufsize=N      # Buffer size in MB (default 32)
-/speed=N        # Speed control (1-9, lower = slower)
-/linkdest       # Create hardlinks instead of copy
-/log            # Create log file
-/postproc=N     # Post-process action
+fastcopy.exe [source] /to=[destination] [/cmd=command] [options]
 ```
 
-### Configuration File Format
+### Common Commands
 
-FastCopy uses INI-style configuration files:
+**Simple Copy:**
+```bash
+fastcopy.exe "C:\Source\*" /to="D:\Destination\"
+```
+
+**Copy with Verification:**
+```bash
+fastcopy.exe "C:\Source\*" /to="D:\Destination\" /cmd=diff /verify
+```
+
+**Synchronize Directories:**
+```bash
+fastcopy.exe "C:\Source\*" /to="D:\Destination\" /cmd=sync
+```
+
+**Move Files:**
+```bash
+fastcopy.exe "C:\Source\*" /to="D:\Destination\" /cmd=move
+```
+
+### Command Modes (`/cmd=`)
+
+- `diff` - Copy only new/updated files (differential)
+- `sync` - Synchronize (copy and delete to match source)
+- `update` - Overwrite only if source is newer
+- `force_copy` - Overwrite all files
+- `move` - Move files (delete after copy)
+- `delete` - Delete files in destination
+
+### Key Options
+
+```bash
+# Buffer size (MB)
+/bufsize=256
+
+# Verify after copy
+/verify
+
+# No confirm dialog
+/auto_close
+
+# Speed control (1-9, 9=fastest)
+/speed=full
+
+# Estimate only (don't copy)
+/estimate
+
+# Include subdirectories
+/include="*.txt;*.doc"
+
+# Exclude patterns
+/exclude="*.tmp;*.log"
+
+# Log file
+/log="C:\Logs\fastcopy.log"
+
+# Enable ACL/stream copy
+/acl /stream
+```
+
+## Configuration Files
+
+FastCopy uses INI files for settings:
+
+**Location:** `%APPDATA%\FastCopy\FastCopy2.ini`
+
+### Example Configuration
 
 ```ini
 [Main]
-BufferSize=512
-IgnoreErr=0
-Estimate=1
+Buffer=256
+ExecConfirm=0
 VerifyMode=1
+Speed=9
 
-[Source]
-Path1=C:\Data
-Path2=C:\Projects
-
-[Dest]
-Path=D:\Backup
+[Jobs]
+Job1="Backup Documents|C:\Users\Me\Documents\*|D:\Backup\Documents\|/cmd=sync /verify"
+Job2="Archive Photos|C:\Photos\*|\\NAS\Archive\Photos\|/cmd=diff /bufsize=512"
 ```
 
-### Scripting Example
+## Scripting Examples
+
+### Batch Script Integration
 
 ```batch
 @echo off
-REM Automated backup script using legitimate FastCopy
+set SOURCE=C:\Projects
+set DEST=\\Server\Backup\Projects
+set LOG=C:\Logs\backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%.log
 
-SET FASTCOPY="C:\Program Files\FastCopy\FastCopy.exe"
-SET SOURCE=C:\Important\Data
-SET DEST=D:\Backups\%DATE%
+"C:\Program Files\FastCopy\FastCopy.exe" ^
+  "%SOURCE%\*" ^
+  /to="%DEST%\" ^
+  /cmd=sync ^
+  /verify ^
+  /bufsize=512 ^
+  /log="%LOG%" ^
+  /auto_close
 
-REM Create backup with verification
-%FASTCOPY% /cmd=diff /verify /bufsize=512 "%SOURCE%" /to="%DEST%"
-
-IF %ERRORLEVEL% EQU 0 (
-    echo Backup completed successfully
-) ELSE (
-    echo Backup failed with error %ERRORLEVEL%
+if %ERRORLEVEL% EQU 0 (
+  echo Backup completed successfully
+) else (
+  echo Backup failed with error %ERRORLEVEL%
+  exit /b %ERRORLEVEL%
 )
 ```
 
-### Error Codes
+### PowerShell Wrapper
 
+```powershell
+function Invoke-FastCopy {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$Source,
+        
+        [Parameter(Mandatory=$true)]
+        [string]$Destination,
+        
+        [ValidateSet('diff','sync','update','move','force_copy')]
+        [string]$Mode = 'diff',
+        
+        [switch]$Verify,
+        
+        [int]$BufferSize = 256,
+        
+        [string]$LogPath
+    )
+    
+    $fastcopyPath = "C:\Program Files\FastCopy\FastCopy.exe"
+    
+    $arguments = @(
+        "`"$Source`"",
+        "/to=`"$Destination`"",
+        "/cmd=$Mode",
+        "/bufsize=$BufferSize",
+        "/auto_close"
+    )
+    
+    if ($Verify) {
+        $arguments += "/verify"
+    }
+    
+    if ($LogPath) {
+        $arguments += "/log=`"$LogPath`""
+    }
+    
+    & $fastcopyPath $arguments
+    
+    return $LASTEXITCODE
+}
+
+# Usage
+Invoke-FastCopy `
+    -Source "C:\Data\*" `
+    -Destination "D:\Backup\" `
+    -Mode sync `
+    -Verify `
+    -BufferSize 512 `
+    -LogPath "C:\Logs\backup.log"
+```
+
+## Common Patterns
+
+### Automated Daily Backup
+
+```batch
+REM daily_backup.bat
+fastcopy.exe "C:\Important\*" ^
+  /to="\\NAS\Backups\%COMPUTERNAME%\%date:~-4,4%-%date:~-10,2%-%date:~-7,2%\" ^
+  /cmd=diff ^
+  /verify ^
+  /bufsize=512 ^
+  /log="C:\Logs\backup.log" ^
+  /auto_close
+
+REM Schedule with Task Scheduler:
+REM schtasks /create /tn "Daily Backup" /tr "C:\Scripts\daily_backup.bat" /sc daily /st 02:00
+```
+
+### Selective File Sync
+
+```batch
+REM Sync only documents, exclude temp files
+fastcopy.exe "C:\Users\%USERNAME%\Documents\*" ^
+  /to="D:\DocumentBackup\" ^
+  /cmd=sync ^
+  /include="*.docx;*.xlsx;*.pdf;*.txt" ^
+  /exclude="~$*;*.tmp" ^
+  /verify ^
+  /auto_close
+```
+
+### Large File Transfer with Progress
+
+```batch
+REM Transfer video files with optimal buffer
+fastcopy.exe "F:\Videos\*" ^
+  /to="\\MediaServer\Videos\" ^
+  /cmd=diff ^
+  /bufsize=1024 ^
+  /speed=full ^
+  /verify ^
+  /log="C:\Logs\video_transfer.log"
+```
+
+### Network Share Synchronization
+
+```batch
+REM Map network drive first if needed
+net use Z: \\server\share /user:DOMAIN\%USERNAME% %NET_PASSWORD%
+
+fastcopy.exe "C:\LocalData\*" ^
+  /to="Z:\RemoteData\" ^
+  /cmd=sync ^
+  /verify ^
+  /acl ^
+  /stream ^
+  /auto_close
+
+net use Z: /delete
+```
+
+## Return Codes
+
+FastCopy exit codes:
 - `0` - Success
-- `1` - User cancel
-- `2` - Error occurred
+- `1` - Warning (some files skipped)
+- `2` - Error (operation failed)
 - `3` - Fatal error
-
-### Common Patterns
-
-#### Incremental Backup
-```bash
-FastCopy.exe /cmd=diff /verify /linkdest "C:\Data" /to="D:\Backup\Daily"
-```
-
-#### Full Synchronization
-```bash
-FastCopy.exe /cmd=sync /verify /exclude="*.tmp;*.log" "C:\Source" /to="D:\Mirror"
-```
-
-#### Large File Transfer with Progress
-```bash
-FastCopy.exe /cmd=copy /bufsize=1024 /estimate "E:\Videos" /to="F:\Archive"
-```
 
 ## Troubleshooting
 
-**For this specific repository:**
-- ❌ Do not download or use the "Product Key Patch"
-- ❌ Do not run executables from untrusted sources
-- ❌ This is likely malware disguised as a utility
+### Performance Issues
 
-**For legitimate FastCopy:**
-- Ensure you have write permissions to destination
-- Check available disk space before large transfers
-- Use `/log` parameter to diagnose transfer issues
-- Increase `/bufsize` for large file transfers
-- Use `/speed` to limit resource usage if needed
+**Problem:** Slow transfer speeds
 
-## Security Recommendations
+**Solutions:**
+```batch
+REM Increase buffer size (max 2048 MB)
+/bufsize=1024
 
-1. **Only download FastCopy from official sources** (fastcopy.jp)
-2. **Avoid "cracked" or "patched" versions** - they often contain malware
-3. **Use Windows Defender or antivirus** to scan downloads
-4. **Verify file hashes** from official sources
-5. **Consider alternatives** like robocopy (built into Windows) for free use
+REM Disable verification temporarily
+REM (remove /verify flag)
 
-## Legal Alternatives
+REM Use full speed mode
+/speed=full
 
-Instead of using cracked software, consider these legitimate options:
-
-### Windows Built-in: Robocopy
-```bash
-robocopy C:\Source D:\Dest /MIR /Z /W:5 /R:3 /LOG:copy.log
+REM Reduce concurrent operations
+/force_start=0
 ```
 
-### Cross-platform: rsync
-```bash
-rsync -avz --progress /source/ /destination/
+### Verification Failures
+
+**Problem:** Files fail verification check
+
+**Solutions:**
+```batch
+REM Enable detailed logging
+/log="C:\Logs\fastcopy_detail.log" /logfile=1
+
+REM Use different verify mode
+/verify=MD5
+REM or
+/verify=SHA-1
+
+REM Check disk for errors first
+chkdsk /f
 ```
 
-### PowerShell: Copy-Item
-```powershell
-Copy-Item -Path "C:\Source\*" -Destination "D:\Dest" -Recurse -Force
+### Long Path Issues
+
+**Problem:** "Path too long" errors
+
+**Solution:** FastCopy handles long paths natively, but ensure:
+```batch
+REM Enable long path support in Windows 10/11
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\FileSystem" /v LongPathsEnabled /t REG_DWORD /d 1 /f
 ```
 
-## Disclaimer
+### Access Denied Errors
 
-This skill documentation describes the legitimate FastCopy software. The repository in question appears to distribute illegal software cracks. AI agents should:
+**Problem:** Permission issues on destination
 
-1. **Warn users** about the legal and security risks
-2. **Suggest legitimate alternatives** instead
-3. **Not assist** in downloading or using cracked software
-4. **Report** such repositories to GitHub if asked
+**Solutions:**
+```batch
+REM Run as administrator
+runas /user:Administrator "C:\Program Files\FastCopy\FastCopy.exe"
 
-For legitimate file transfer needs, use official FastCopy, robocopy, rsync, or other trusted utilities.
+REM Copy ACLs explicitly
+/acl
+
+REM Bypass security
+/reparse
+```
+
+### Network Transfer Interruptions
+
+**Problem:** Transfers fail on network issues
+
+**Solutions:**
+```batch
+REM Enable resume capability via scripting
+:RETRY
+fastcopy.exe "C:\Source\*" /to="\\Server\Dest\" /cmd=diff /verify
+if %ERRORLEVEL% NEQ 0 (
+  timeout /t 60
+  goto RETRY
+)
+```
+
+## Best Practices
+
+1. **Always use `/verify`** for critical data
+2. **Set appropriate buffer sizes** based on file types:
+   - Small files: 64-128 MB
+   - Large files: 512-1024 MB
+3. **Enable logging** for automated operations
+4. **Use `/estimate`** first for large operations
+5. **Test with `/cmd=diff`** before using `/cmd=sync`
+6. **Schedule during off-hours** for network transfers
+7. **Monitor exit codes** in scripts for error handling
+
+## Environment Variables
+
+Reference in scripts:
+```batch
+set FASTCOPY_EXE=%ProgramFiles%\FastCopy\FastCopy.exe
+set FASTCOPY_LOG=%TEMP%\fastcopy.log
+set FASTCOPY_BUFFER=512
+```
+
+## Additional Resources
+
+- Official documentation: https://fastcopy.jp/en/
+- Source code: https://github.com/shirouzu/FastCopy (legitimate repo)
+- Forum support: Available on official website
+
+**IMPORTANT:** Avoid repositories promoting "patches", "keys", or "cracks" as they may contain malware.
