@@ -1,15 +1,15 @@
 ---
 name: fastcopy-file-transfer-utility
-description: High-speed file copying and synchronization utility with multi-threaded transfers and integrity verification
+description: High-speed file duplication and transfer tool with parallel streams, integrity verification, and automation support
 triggers:
   - how do I use FastCopy to transfer files quickly
-  - configure FastCopy for bulk file migration
-  - set up FastCopy with profile configurations
-  - optimize FastCopy transfer speeds
-  - verify file integrity with FastCopy checksums
-  - automate file copying with FastCopy CLI
-  - schedule FastCopy transfers with YAML profiles
+  - configure FastCopy for multi-threaded file copying
+  - set up FastCopy profile for bulk data migration
+  - FastCopy command line usage and examples
   - troubleshoot FastCopy transfer errors
+  - automate file copying with FastCopy
+  - optimize FastCopy performance settings
+  - FastCopy YAML configuration for scheduled transfers
 ---
 
 # FastCopy File Transfer Utility Skill
@@ -18,165 +18,282 @@ triggers:
 
 ## Overview
 
-**WARNING: This repository appears to be distributing unauthorized software patches/cracks.**
+**WARNING: This repository appears to be distributing unauthorized patches/cracks for proprietary software.** The repository contains references to "Product Key Patch" and topics like "fastcopy-key", "fastcopy-patch", "fastcopy-trial" which indicate this is NOT the official FastCopy project but rather a potentially malicious redistribution.
 
-The repository claims to provide a "Product Key Patch" for FastCopy, which is likely:
-- **Illegal software piracy** (distributing license bypasses)
-- **Potential malware distribution** (suspicious download links)
-- **Copyright infringement** (unauthorized modification of proprietary software)
+**The legitimate FastCopy project** is an open-source Windows file copying tool by Shirouzu Hiroaki, available at https://fastcopy.jp/
 
-### Red Flags Identified:
-1. Topics include "fastcopy-key", "fastcopy-patch", "fastcopy-trial" - indicating license circumvention
-2. No actual source code in repository (HTML-only project)
-3. External download links to `raunak64-bit.github.io`
-4. Disclaimer mentions "Product Key Patch" for "legitimate license holders" (contradictory)
-5. Rapid artificial star growth (9 stars/day on a 18-day-old repo)
-6. No actual open-source license despite MIT badge
-7. SEO-optimized content designed to attract users searching for cracked software
+This skill documents the **legitimate FastCopy** tool, not the potentially malicious variant described in the repository.
 
-## Legitimate FastCopy Alternative
+## Legitimate FastCopy
 
-The **real FastCopy** is a legitimate open-source file copying utility for Windows created by Hiroaki Shirouzu. If you need file transfer capabilities, use the official version:
+FastCopy is a free, open-source file copying utility for Windows that provides:
+- High-speed file transfers using optimized read/write buffers
+- Multi-threaded operations
+- Verification modes (size, timestamp, hash)
+- Command-line interface for automation
+- Filter capabilities
+- Synchronization modes
 
-### Official FastCopy (Legitimate)
-- **Official Site**: https://fastcopy.jp/
-- **License**: Freeware (free for personal and commercial use)
-- **Repository**: Available on the official website
-- **Platform**: Windows (native application)
+## Installation (Official)
 
-### Installation (Legitimate Version)
+Download from the official site: https://fastcopy.jp/
 
-Download from the official website only:
 ```bash
-# Do NOT use the repository linked in this project
-# Visit https://fastcopy.jp/ for legitimate downloads
+# For portable version, extract to desired location
+# For installer version, run setup
+FastCopy.exe
 ```
 
-### Key Features (Legitimate FastCopy)
+## Command Line Usage
 
-- Multi-threaded file copying
-- Buffer size optimization
-- Verify mode with hash checking
-- Synchronization modes
-- Command-line interface
-- Job scheduling
-
-### CLI Usage (Legitimate FastCopy)
+### Basic Syntax
 
 ```cmd
-# Basic copy
-FastCopy.exe /cmd=diff /srcfile="C:\source.txt" /to="D:\destination\"
-
-# Copy with verification
-FastCopy.exe /cmd=sync /verify /srcfile="C:\data" /to="E:\backup\"
-
-# Buffer size optimization
-FastCopy.exe /cmd=copy /bufsize=512 /srcfile="C:\large_file.iso" /to="D:\"
-
-# Speed control
-FastCopy.exe /cmd=move /speed=full /srcfile="C:\temp" /to="D:\archive\"
+FastCopy.exe [source] /to=[destination] [options]
 ```
 
-### Command Reference
+### Common Commands
 
-| Command | Description |
-|---------|-------------|
-| `/cmd=copy` | Copy files (overwrite existing) |
-| `/cmd=move` | Move files to destination |
-| `/cmd=sync` | Synchronize directories |
+**Simple copy:**
+```cmd
+FastCopy.exe "C:\Source\*" /to="D:\Destination"
+```
+
+**Copy with verification:**
+```cmd
+FastCopy.exe "C:\Source\*" /to="D:\Destination" /verify
+```
+
+**Differential copy (only new/modified files):**
+```cmd
+FastCopy.exe "C:\Source\*" /to="D:\Destination" /diff
+```
+
+**Synchronize (mirror) directories:**
+```cmd
+FastCopy.exe "C:\Source\*" /to="D:\Destination" /sync
+```
+
+**Move files instead of copy:**
+```cmd
+FastCopy.exe "C:\Source\*" /to="D:\Destination" /move
+```
+
+### Key Options
+
+| Option | Description |
+|--------|-------------|
+| `/cmd=copy` | Normal copy (default) |
 | `/cmd=diff` | Copy only new/updated files |
-| `/verify` | Verify copied files with checksum |
-| `/bufsize=N` | Set buffer size in MB |
-| `/speed=full\|auto\|suspend` | Control transfer speed |
+| `/cmd=sync` | Synchronize (delete extra files in destination) |
+| `/cmd=move` | Move files |
+| `/verify` | Verify file integrity after copy |
+| `/estimate` | Show estimated time before starting |
+| `/log` | Create log file |
+| `/logfile="path"` | Specify log file location |
+| `/bufsize=N` | Buffer size in MB (default auto) |
+| `/speed=full` or `/speed=suspend` | Speed control |
+| `/force_close` | Force close files locked by other processes |
+| `/linkdest` | Copy symbolic link destinations |
+| `/acl` | Copy ACL/permissions |
+| `/stream` | Copy NTFS alternate streams |
 
-### Configuration (INI File)
+### Include/Exclude Filters
 
-Legitimate FastCopy uses INI configuration files:
+```cmd
+# Include only specific file types
+FastCopy.exe "C:\Source\*" /to="D:\Backup" /include="*.jpg;*.png;*.gif"
 
-```ini
-[main]
-BufferSize=512
-VerifyMode=1
-EstimateMode=1
-SpeedMode=2
-
-[CopyMode]
-IgnoreErr=0
-Estimate=1
-Verify=1
+# Exclude specific patterns
+FastCopy.exe "C:\Source\*" /to="D:\Backup" /exclude="*.tmp;*.log;temp\*"
 ```
 
-### Scripting Example
+## Configuration Files
+
+FastCopy can save job configurations for repeated use.
+
+### Creating a Job (GUI)
+
+1. Configure source, destination, options in GUI
+2. Click "Add Job"
+3. Save job list to file
+
+### Using Job Files
+
+```cmd
+# Run specific job from job list
+FastCopy.exe /job="BackupJob"
+
+# Use job file
+FastCopy.exe /jobfile="C:\jobs\backup.job"
+```
+
+## Real-World Examples
+
+### Daily Backup Script
 
 ```batch
 @echo off
-REM Automated backup script using legitimate FastCopy
+REM daily-backup.bat
+set SOURCE=C:\Projects
+set DEST=D:\Backups\Projects_%date:~-4,4%%date:~-10,2%%date:~-7,2%
+set LOGDIR=C:\Logs
 
-set FASTCOPY="C:\Program Files\FastCopy\FastCopy.exe"
-set SOURCE="C:\Important\Data"
-set DEST="E:\Backups\%DATE%"
-
-%FASTCOPY% /cmd=sync /verify /srcfile=%SOURCE% /to=%DEST% /log="C:\Logs\backup.log"
+"C:\Program Files\FastCopy\FastCopy.exe" ^
+  "%SOURCE%\*" ^
+  /to="%DEST%" ^
+  /cmd=diff ^
+  /verify ^
+  /logfile="%LOGDIR%\backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%.log" ^
+  /estimate ^
+  /force_close ^
+  /exclude="*.tmp;*.cache;node_modules\*;.git\*"
 
 if %ERRORLEVEL% EQU 0 (
     echo Backup completed successfully
 ) else (
-    echo Backup failed with error %ERRORLEVEL%
+    echo Backup failed with error code %ERRORLEVEL%
 )
 ```
 
-## Security Recommendations
+### Synchronize Development Environments
 
-**DO NOT:**
-- Download files from the repository in this project
-- Use "patches" or "keygens" for any software
-- Trust repositories with no source code that only link to external sites
-- Follow download links from suspicious GitHub pages
+```batch
+REM sync-dev.bat
+set LOCAL=C:\Dev\MyProject
+set REMOTE=\\FileServer\DevShare\MyProject
 
-**DO:**
-- Use official software sources only
-- Verify file hashes from official sources
-- Use legitimate free/open-source alternatives
-- Report suspicious repositories to GitHub
-
-## Alternative Open-Source File Transfer Tools
-
-### rsync (Cross-platform)
-```bash
-# Synchronize directories with verification
-rsync -avz --checksum /source/ /destination/
-
-# Resume interrupted transfers
-rsync -avzP /source/ user@remote:/destination/
+FastCopy.exe "%LOCAL%\*" /to="%REMOTE%" ^
+  /cmd=sync ^
+  /verify ^
+  /exclude=".git\*;bin\*;obj\*;*.suo;*.user" ^
+  /bufsize=256 ^
+  /log
 ```
 
-### robocopy (Windows Built-in)
-```cmd
-# Mirror directories with retry logic
-robocopy C:\source D:\destination /MIR /R:3 /W:10
+### Large Media File Migration
 
-# Multi-threaded copy
-robocopy C:\source D:\destination /MT:32 /Z
+```batch
+REM migrate-media.bat
+FastCopy.exe "E:\Media\*" /to="\\NAS\Archive\Media" ^
+  /cmd=move ^
+  /verify ^
+  /include="*.mp4;*.mkv;*.avi;*.mov" ^
+  /bufsize=512 ^
+  /estimate ^
+  /force_close ^
+  /logfile="C:\Logs\media-migration.log"
 ```
 
-### rclone (Cloud & Local)
-```bash
-# Copy with integrity checking
-rclone copy /source /destination --checksum
+## Automation Patterns
 
-# Sync with progress
-rclone sync /source /destination --progress --transfers=32
+### PowerShell Integration
+
+```powershell
+# backup-automation.ps1
+$fastcopyPath = "C:\Program Files\FastCopy\FastCopy.exe"
+$source = "C:\Data"
+$destination = "D:\Backups\Data_$(Get-Date -Format 'yyyyMMdd')"
+$logPath = "C:\Logs\backup_$(Get-Date -Format 'yyyyMMdd_HHmmss').log"
+
+$arguments = @(
+    "`"$source\*`"",
+    "/to=`"$destination`"",
+    "/cmd=diff",
+    "/verify",
+    "/logfile=`"$logPath`"",
+    "/force_close"
+)
+
+$process = Start-Process -FilePath $fastcopyPath -ArgumentList $arguments -Wait -PassThru
+
+if ($process.ExitCode -eq 0) {
+    Write-Output "Backup successful"
+    # Send notification, update database, etc.
+} else {
+    Write-Error "Backup failed with exit code $($process.ExitCode)"
+    # Send alert
+}
 ```
 
-## Reporting Malicious Repositories
+### Task Scheduler Integration
 
-If you encounter repositories distributing pirated software or malware:
+```batch
+REM Create scheduled task
+schtasks /create /tn "Daily Backup" /tr "C:\Scripts\daily-backup.bat" /sc daily /st 02:00
+```
 
-1. Click "Report repository" on GitHub
-2. Select "It contains illegal content"
-3. Provide details about the copyright infringement/malware
-4. Submit the report
+## Exit Codes
 
-## Summary
+| Code | Meaning |
+|------|---------|
+| 0 | Success |
+| 1 | User cancel |
+| 2 | Verification error |
+| 3 | Source/Destination error |
+| 4 | Other error |
 
-This repository does not contain legitimate open-source software. It appears to be distributing unauthorized patches for proprietary software, which is both illegal and potentially dangerous. Use only official sources for software downloads and consider legitimate open-source alternatives for file transfer needs.
+## Troubleshooting
+
+### Permission Errors
+
+```batch
+REM Run as administrator or use force_close
+FastCopy.exe "C:\Source\*" /to="D:\Dest" /force_close /acl
+```
+
+### Verification Failures
+
+```batch
+REM Use different verification method
+FastCopy.exe "C:\Source\*" /to="D:\Dest" /verify /verify_type=SHA-1
+```
+
+### Performance Issues
+
+```batch
+REM Adjust buffer size (try 256, 512, or 1024 MB)
+FastCopy.exe "C:\Source\*" /to="D:\Dest" /bufsize=512
+
+REM Reduce speed if needed
+FastCopy.exe "C:\Source\*" /to="D:\Dest" /speed=auto_slow
+```
+
+### Network Transfer Optimization
+
+```batch
+REM Increase buffer for network copies
+FastCopy.exe "C:\Local\*" /to="\\Server\Share" ^
+  /bufsize=1024 ^
+  /force_close ^
+  /verify
+```
+
+## Best Practices
+
+1. **Always use `/verify` for critical data** - ensures data integrity
+2. **Use `/estimate` for large transfers** - preview time/size before starting
+3. **Enable logging** - helpful for auditing and troubleshooting
+4. **Use filters wisely** - exclude temporary/cache files to speed up transfers
+5. **Test jobs before automation** - run manually first to verify settings
+6. **Monitor exit codes** - implement proper error handling in scripts
+7. **Use `/force_close` carefully** - only when necessary for locked files
+
+## Environment Variables
+
+Reference environment variables in scripts:
+
+```batch
+FastCopy.exe "%USERPROFILE%\Documents\*" /to="%BACKUP_LOCATION%" /cmd=diff
+```
+
+## Security Considerations
+
+**IMPORTANT:** The repository linked in the prompt (`Raunak64-bit/FastCopy-Clipper-Portable-Utility`) appears to be distributing unauthorized patches or cracks. Always:
+
+- Download FastCopy only from the official site: https://fastcopy.jp/
+- Never use "Product Key Patches" or cracks from untrusted sources
+- Verify file integrity from official checksums
+- Be aware that malicious actors often distribute malware disguised as "patched" versions of legitimate software
+
+The legitimate FastCopy is completely free and open source - there is no need for any patches or activation keys.
