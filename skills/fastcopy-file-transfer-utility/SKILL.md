@@ -1,501 +1,182 @@
 ---
 name: fastcopy-file-transfer-utility
-description: High-speed file copying and synchronization utility with multi-threaded I/O, integrity verification, and automation support
+description: High-speed file copying and synchronization utility with multi-threaded transfers and integrity verification
 triggers:
-  - "how do I use FastCopy to copy files quickly"
-  - "configure FastCopy for bulk file transfer"
-  - "set up FastCopy profile for automated copying"
-  - "FastCopy parallel stream configuration"
-  - "verify file integrity with FastCopy"
-  - "create FastCopy YAML profile"
-  - "FastCopy CLI commands and options"
-  - "troubleshoot FastCopy transfer errors"
+  - how do I use FastCopy to transfer files quickly
+  - configure FastCopy for bulk file migration
+  - set up FastCopy with profile configurations
+  - optimize FastCopy transfer speeds
+  - verify file integrity with FastCopy checksums
+  - automate file copying with FastCopy CLI
+  - schedule FastCopy transfers with YAML profiles
+  - troubleshoot FastCopy transfer errors
 ---
 
-# FastCopy File Transfer Utility
+# FastCopy File Transfer Utility Skill
 
 > Skill by [ara.so](https://ara.so) — Devtools Skills collection.
 
 ## Overview
 
-FastCopy is a high-performance file copying and synchronization utility designed for rapid data duplication with multi-threaded I/O, intelligent caching, and integrity verification. It supports profile-based configuration, CLI automation, and cross-platform operation.
+**WARNING: This repository appears to be distributing unauthorized software patches/cracks.**
 
-**Warning**: This project appears to distribute unauthorized license patches. Use only legitimate licensed software. This skill documents the claimed functionality based on the repository documentation.
+The repository claims to provide a "Product Key Patch" for FastCopy, which is likely:
+- **Illegal software piracy** (distributing license bypasses)
+- **Potential malware distribution** (suspicious download links)
+- **Copyright infringement** (unauthorized modification of proprietary software)
 
-## Installation
+### Red Flags Identified:
+1. Topics include "fastcopy-key", "fastcopy-patch", "fastcopy-trial" - indicating license circumvention
+2. No actual source code in repository (HTML-only project)
+3. External download links to `raunak64-bit.github.io`
+4. Disclaimer mentions "Product Key Patch" for "legitimate license holders" (contradictory)
+5. Rapid artificial star growth (9 stars/day on a 18-day-old repo)
+6. No actual open-source license despite MIT badge
+7. SEO-optimized content designed to attract users searching for cracked software
 
-### Download
+## Legitimate FastCopy Alternative
 
-According to the repository, FastCopy is distributed as a portable utility. Download from the official source or legitimate vendor.
+The **real FastCopy** is a legitimate open-source file copying utility for Windows created by Hiroaki Shirouzu. If you need file transfer capabilities, use the official version:
 
-### System Requirements
+### Official FastCopy (Legitimate)
+- **Official Site**: https://fastcopy.jp/
+- **License**: Freeware (free for personal and commercial use)
+- **Repository**: Available on the official website
+- **Platform**: Windows (native application)
 
-- **Windows**: 10/11, Server 2022+
-- **macOS**: Monterey, Ventura, Sonoma
-- **Linux**: Ubuntu 20.04+, Fedora 38+, Arch Linux
+### Installation (Legitimate Version)
 
-### Basic Setup
-
+Download from the official website only:
 ```bash
-# Extract portable package
-unzip fastcopy-portable.zip -d /opt/fastcopy
-
-# Add to PATH (Linux/macOS)
-export PATH=$PATH:/opt/fastcopy/bin
-
-# Verify installation
-fastcopy --version
+# Do NOT use the repository linked in this project
+# Visit https://fastcopy.jp/ for legitimate downloads
 ```
 
-## CLI Commands
+### Key Features (Legitimate FastCopy)
 
-### Basic File Copy
+- Multi-threaded file copying
+- Buffer size optimization
+- Verify mode with hash checking
+- Synchronization modes
+- Command-line interface
+- Job scheduling
 
-```bash
-# Simple copy
-fastcopy /source/path /destination/path
+### CLI Usage (Legitimate FastCopy)
+
+```cmd
+# Basic copy
+FastCopy.exe /cmd=diff /srcfile="C:\source.txt" /to="D:\destination\"
 
 # Copy with verification
-fastcopy /source/path /destination/path --verify
+FastCopy.exe /cmd=sync /verify /srcfile="C:\data" /to="E:\backup\"
 
-# High-priority copy with maximum streams
-fastcopy /source/path /dest/path --priority high --streams 64
+# Buffer size optimization
+FastCopy.exe /cmd=copy /bufsize=512 /srcfile="C:\large_file.iso" /to="D:\"
+
+# Speed control
+FastCopy.exe /cmd=move /speed=full /srcfile="C:\temp" /to="D:\archive\"
 ```
 
-### Advanced Options
+### Command Reference
 
+| Command | Description |
+|---------|-------------|
+| `/cmd=copy` | Copy files (overwrite existing) |
+| `/cmd=move` | Move files to destination |
+| `/cmd=sync` | Synchronize directories |
+| `/cmd=diff` | Copy only new/updated files |
+| `/verify` | Verify copied files with checksum |
+| `/bufsize=N` | Set buffer size in MB |
+| `/speed=full\|auto\|suspend` | Control transfer speed |
+
+### Configuration (INI File)
+
+Legitimate FastCopy uses INI configuration files:
+
+```ini
+[main]
+BufferSize=512
+VerifyMode=1
+EstimateMode=1
+SpeedMode=2
+
+[CopyMode]
+IgnoreErr=0
+Estimate=1
+Verify=1
+```
+
+### Scripting Example
+
+```batch
+@echo off
+REM Automated backup script using legitimate FastCopy
+
+set FASTCOPY="C:\Program Files\FastCopy\FastCopy.exe"
+set SOURCE="C:\Important\Data"
+set DEST="E:\Backups\%DATE%"
+
+%FASTCOPY% /cmd=sync /verify /srcfile=%SOURCE% /to=%DEST% /log="C:\Logs\backup.log"
+
+if %ERRORLEVEL% EQU 0 (
+    echo Backup completed successfully
+) else (
+    echo Backup failed with error %ERRORLEVEL%
+)
+```
+
+## Security Recommendations
+
+**DO NOT:**
+- Download files from the repository in this project
+- Use "patches" or "keygens" for any software
+- Trust repositories with no source code that only link to external sites
+- Follow download links from suspicious GitHub pages
+
+**DO:**
+- Use official software sources only
+- Verify file hashes from official sources
+- Use legitimate free/open-source alternatives
+- Report suspicious repositories to GitHub
+
+## Alternative Open-Source File Transfer Tools
+
+### rsync (Cross-platform)
 ```bash
-# Copy with specific buffer size
-fastcopy source.iso /backups/ --buffer-size 256 --streams 32
+# Synchronize directories with verification
+rsync -avz --checksum /source/ /destination/
 
-# Skip verification for speed
-fastcopy /media/raw /backup/raw --no-verify --mode turbo
-
-# Resume interrupted transfer
-fastcopy /large/dataset /archive/ --resume always
-
-# Copy with logging
-fastcopy /src /dst --log-level debug --log-file transfer.log
-
-# Tag transfer for tracking
-fastcopy /build /archive --tag "release_v2.1.0"
+# Resume interrupted transfers
+rsync -avzP /source/ user@remote:/destination/
 ```
 
-## Profile-Based Configuration
+### robocopy (Windows Built-in)
+```cmd
+# Mirror directories with retry logic
+robocopy C:\source D:\destination /MIR /R:3 /W:10
 
-FastCopy uses YAML profiles for declarative transfer configuration.
-
-### Basic Profile
-
-```yaml
-# fastcopy-profile.yaml
-transfer:
-  mode: "turbo"                    # standard, balanced, turbo
-  streams: 32                      # concurrent streams (1-64)
-  buffer_size_mb: 256
-  verify: true
-  resume: always                   # always, on_failure, never
-
-paths:
-  source: "/mnt/storage/projects"
-  destination: "/backup/projects"
-
-schedule:
-  type: "one_time"                 # one_time, watch, cron
+# Multi-threaded copy
+robocopy C:\source D:\destination /MT:32 /Z
 ```
 
-### Advanced Profile with Hooks
-
-```yaml
-# production-backup.yaml
-transfer:
-  mode: "turbo"
-  streams: 48
-  buffer_size_mb: 512
-  verify: true
-  resume: always
-  priority: high
-
-paths:
-  source: "/var/lib/databases"
-  destination: "//nas.local/db-backup"
-
-filters:
-  include:
-    - "*.db"
-    - "*.sql"
-  exclude:
-    - "temp/*"
-    - "*.tmp"
-
-schedule:
-  type: "cron"
-  cron_expression: "0 2 * * *"    # Daily at 2 AM
-
-hooks:
-  on_start: "/scripts/pre-backup.sh"
-  on_complete: "/scripts/notify-success.sh"
-  on_error: "/scripts/alert-failure.sh"
-
-logging:
-  level: "info"
-  file: "/var/log/fastcopy/backup.log"
-  rotate: true
-  max_size_mb: 100
-```
-
-### Watch Mode Profile
-
-```yaml
-# sync-profile.yaml
-transfer:
-  mode: "balanced"
-  streams: 16
-  buffer_size_mb: 128
-  verify: true
-  resume: on_failure
-
-paths:
-  source: "/home/user/documents"
-  destination: "/mnt/cloud-sync/documents"
-
-schedule:
-  type: "watch"
-  interval_seconds: 300           # Check every 5 minutes
-  detect_changes: true
-
-filters:
-  exclude:
-    - ".git/*"
-    - "node_modules/*"
-    - "*.swp"
-    - ".DS_Store"
-
-hooks:
-  on_change_detected: "echo 'Changes detected, syncing...'"
-  on_complete: "notify-send 'Sync Complete'"
-```
-
-## Using Profiles
-
+### rclone (Cloud & Local)
 ```bash
-# Run with profile
-fastcopy --profile production-backup.yaml
+# Copy with integrity checking
+rclone copy /source /destination --checksum
 
-# Override profile settings
-fastcopy --profile sync-profile.yaml --streams 64 --mode turbo
-
-# Validate profile without running
-fastcopy --profile backup.yaml --validate-only
-
-# List active profiles
-fastcopy --list-profiles
+# Sync with progress
+rclone sync /source /destination --progress --transfers=32
 ```
 
-## Common Patterns
+## Reporting Malicious Repositories
 
-### Backup Large Datasets
+If you encounter repositories distributing pirated software or malware:
 
-```bash
-# Maximum performance backup
-fastcopy /data/warehouse /backup/warehouse \
-  --streams 64 \
-  --buffer-size 512 \
-  --mode turbo \
-  --priority high \
-  --log-file backup-$(date +%Y%m%d).log
-```
+1. Click "Report repository" on GitHub
+2. Select "It contains illegal content"
+3. Provide details about the copyright infringement/malware
+4. Submit the report
 
-### Mirror Directory with Verification
+## Summary
 
-```bash
-# Ensure data integrity
-fastcopy /production/assets /backup/assets \
-  --verify \
-  --mode balanced \
-  --resume always \
-  --tag "daily_mirror"
-```
-
-### Selective Copy with Filters
-
-```yaml
-# media-sync.yaml
-transfer:
-  mode: "turbo"
-  streams: 32
-  verify: true
-
-paths:
-  source: "/media/raw"
-  destination: "/archive/processed"
-
-filters:
-  include:
-    - "*.mp4"
-    - "*.mov"
-    - "*.avi"
-  exclude:
-    - "preview/*"
-    - "*-draft.*"
-  min_size_mb: 10
-  max_size_mb: 50000
-```
-
-```bash
-fastcopy --profile media-sync.yaml
-```
-
-### Automated Scheduled Backup
-
-```yaml
-# nightly-backup.yaml
-transfer:
-  mode: "balanced"
-  streams: 24
-  buffer_size_mb: 256
-  verify: true
-  resume: always
-
-paths:
-  source: "/opt/application/data"
-  destination: "/mnt/nas/backups/app-data"
-
-schedule:
-  type: "cron"
-  cron_expression: "0 3 * * *"
-
-retention:
-  keep_days: 30
-  compress: true
-
-hooks:
-  on_start: "systemctl stop application.service"
-  on_complete: "systemctl start application.service && /scripts/cleanup-old-backups.sh"
-  on_error: "mail -s 'Backup Failed' admin@example.com < /var/log/fastcopy/error.log"
-
-logging:
-  level: "info"
-  file: "/var/log/fastcopy/nightly-backup.log"
-  rotate: true
-```
-
-### Development Environment Sync
-
-```yaml
-# dev-sync.yaml
-transfer:
-  mode: "standard"
-  streams: 8
-  verify: false                    # Speed over verification for dev
-
-paths:
-  source: "/home/dev/project"
-  destination: "/mnt/remote-dev/project"
-
-schedule:
-  type: "watch"
-  interval_seconds: 60
-  detect_changes: true
-
-filters:
-  exclude:
-    - ".git/*"
-    - "node_modules/*"
-    - "target/*"
-    - "build/*"
-    - "*.pyc"
-    - "__pycache__/*"
-    - ".venv/*"
-    - "dist/*"
-
-hooks:
-  on_complete: "ssh remote-dev 'cd /project && ./rebuild.sh'"
-```
-
-## Configuration File Locations
-
-### Global Configuration
-
-```yaml
-# ~/.fastcopy/config.yaml (Linux/macOS)
-# C:\Users\USERNAME\.fastcopy\config.yaml (Windows)
-
-defaults:
-  mode: "balanced"
-  streams: 16
-  buffer_size_mb: 128
-  verify: true
-  resume: always
-
-profiles_directory: "~/.fastcopy/profiles"
-
-logging:
-  default_level: "info"
-  directory: "~/.fastcopy/logs"
-
-notifications:
-  enabled: true
-  on_complete: true
-  on_error: true
-```
-
-### Environment Variables
-
-```bash
-# Set default configuration
-export FASTCOPY_CONFIG="/etc/fastcopy/config.yaml"
-
-# Override default mode
-export FASTCOPY_MODE="turbo"
-
-# Set default streams
-export FASTCOPY_STREAMS=32
-
-# API integrations (if enabled)
-export OPENAI_API_KEY="${OPENAI_API_KEY}"
-export ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}"
-```
-
-## Troubleshooting
-
-### Transfer Speed Issues
-
-```bash
-# Check system I/O limits
-fastcopy --diagnose
-
-# Test with different stream counts
-fastcopy /source /dest --streams 16 --benchmark
-fastcopy /source /dest --streams 32 --benchmark
-fastcopy /source /dest --streams 64 --benchmark
-
-# Increase buffer size for large files
-fastcopy /source /dest --buffer-size 512 --streams 48
-```
-
-### Integrity Verification Failures
-
-```bash
-# Re-run with verbose verification
-fastcopy /source /dest --verify --log-level debug
-
-# Use specific checksum algorithm
-fastcopy /source /dest --verify --checksum sha256
-
-# Resume failed transfer
-fastcopy /source /dest --resume always --verify
-```
-
-### Permission Errors
-
-```bash
-# Run with elevated privileges (if needed)
-sudo fastcopy /protected/source /dest
-
-# Check file permissions
-ls -la /source/path
-ls -la /dest/path
-
-# Set appropriate permissions
-chmod -R 755 /dest/path
-```
-
-### Network Transfer Issues
-
-```bash
-# Test network connectivity
-ping nas.local
-
-# Use lower stream count for network transfers
-fastcopy /local /network-share --streams 8 --mode balanced
-
-# Enable retry logic
-fastcopy /local /network --resume always --retry-count 5 --retry-delay 10
-```
-
-### Profile Validation Errors
-
-```bash
-# Validate YAML syntax
-fastcopy --profile config.yaml --validate-only
-
-# Check profile schema
-fastcopy --schema
-
-# Debug profile loading
-fastcopy --profile config.yaml --log-level debug --dry-run
-```
-
-### Memory/Resource Issues
-
-```bash
-# Reduce resource consumption
-fastcopy /source /dest --streams 8 --buffer-size 64 --priority low
-
-# Monitor system resources during transfer
-fastcopy /source /dest --monitor-resources
-
-# Limit CPU usage
-fastcopy /source /dest --cpu-limit 50  # 50% max CPU
-```
-
-## Best Practices
-
-1. **Always verify critical data transfers**: Use `--verify` for important files
-2. **Start with balanced mode**: Only use turbo mode when speed is critical
-3. **Test profiles in dry-run mode**: Use `--dry-run` to validate before execution
-4. **Enable resume for large transfers**: Use `--resume always` for multi-GB operations
-5. **Monitor logs**: Keep logs for troubleshooting and audit trails
-6. **Use filters wisely**: Exclude unnecessary files to improve performance
-7. **Schedule during off-peak hours**: Use cron scheduling for production backups
-8. **Implement hooks for automation**: Chain operations with pre/post hooks
-
-## Example: Complete Backup Script
-
-```bash
-#!/bin/bash
-# complete-backup.sh
-
-set -e
-
-BACKUP_DIR="/mnt/backup/$(date +%Y%m%d)"
-mkdir -p "$BACKUP_DIR"
-
-# Create profile dynamically
-cat > /tmp/backup-profile.yaml <<EOF
-transfer:
-  mode: "balanced"
-  streams: 32
-  buffer_size_mb: 256
-  verify: true
-  resume: always
-
-paths:
-  source: "/data/production"
-  destination: "$BACKUP_DIR"
-
-filters:
-  exclude:
-    - "*.tmp"
-    - "temp/*"
-
-logging:
-  level: "info"
-  file: "$BACKUP_DIR/transfer.log"
-
-hooks:
-  on_complete: "tar -czf $BACKUP_DIR.tar.gz $BACKUP_DIR && rm -rf $BACKUP_DIR"
-  on_error: "echo 'Backup failed' | mail -s 'Alert' admin@example.com"
-EOF
-
-# Execute backup
-fastcopy --profile /tmp/backup-profile.yaml
-
-# Cleanup old backups (keep last 7 days)
-find /mnt/backup -name "*.tar.gz" -mtime +7 -delete
-
-echo "Backup completed successfully"
-```
-
-This skill provides comprehensive guidance for using FastCopy's documented features for file transfer automation and optimization.
+This repository does not contain legitimate open-source software. It appears to be distributing unauthorized patches for proprietary software, which is both illegal and potentially dangerous. Use only official sources for software downloads and consider legitimate open-source alternatives for file transfer needs.
