@@ -1,15 +1,15 @@
 ---
 name: fastcopy-file-transfer-utility
-description: High-performance file duplication and transfer tool with multi-threaded I/O, verification, and automation capabilities
+description: High-performance file copying and synchronization tool with multi-threaded transfers and integrity verification
 triggers:
   - "how do I use FastCopy to copy files"
-  - "set up FastCopy with profile configuration"
-  - "configure FastCopy for parallel file transfers"
-  - "automate file copying with FastCopy"
-  - "FastCopy command line usage"
-  - "create FastCopy YAML profiles"
-  - "troubleshoot FastCopy transfer errors"
-  - "optimize FastCopy performance settings"
+  - "configure FastCopy for bulk file transfer"
+  - "set up FastCopy profile for sync"
+  - "FastCopy command line options"
+  - "optimize FastCopy transfer speed"
+  - "create FastCopy YAML configuration"
+  - "FastCopy parallel streams setup"
+  - "verify file integrity with FastCopy"
 ---
 
 # FastCopy File Transfer Utility
@@ -18,540 +18,605 @@ triggers:
 
 ## Overview
 
-FastCopy is a high-performance file duplication and transfer utility optimized for speed and reliability. It features multi-threaded I/O operations, intelligent caching, integrity verification (SHA-256 + CRC-32), and support for automated transfer pipelines. The tool supports both GUI and CLI modes and uses declarative YAML profiles for transfer configuration.
+FastCopy is a high-performance file copying and synchronization utility designed for accelerated data duplication. It provides multi-threaded transfer capabilities, intelligent caching, integrity verification, and automated resume functionality. The tool supports both GUI and CLI modes with declarative YAML-based configuration profiles.
 
 **Key capabilities:**
-- Parallel transfer streams (up to 64 concurrent)
-- Predictive caching for reduced latency
+- Parallel multi-stream transfers (up to 64 concurrent streams)
+- SHA-256 + CRC-32 integrity verification
 - Automatic retry and resume on failures
+- Profile-based configuration with scheduling
 - Cross-platform support (Windows, macOS, Linux)
-- Profile-based configuration system
-- Webhook/hook system for automation
+- Hook-based automation for pipeline integration
 
 ## Installation
 
 ### Windows
-```bash
-# Download from official site or GitHub release
-# Run installer or extract portable version
-fastcopy.exe --version
-```
+Download the portable executable or installer from the official distribution. No system installation required for portable mode.
 
 ### macOS
 ```bash
+# Using Homebrew (if available)
 brew install fastcopy
-# OR download DMG and drag to Applications
+
+# Or download the macOS binary
+curl -O https://[distribution-url]/fastcopy-macos
+chmod +x fastcopy-macos
+sudo mv fastcopy-macos /usr/local/bin/fastcopy
+```
+
+### Linux
+```bash
+# Download binary
+wget https://[distribution-url]/fastcopy-linux
+chmod +x fastcopy-linux
+sudo mv fastcopy-linux /usr/local/bin/fastcopy
+
+# Or install from package manager
+sudo apt install fastcopy  # Debian/Ubuntu
+sudo yum install fastcopy  # RHEL/CentOS
+```
+
+Verify installation:
+```bash
 fastcopy --version
 ```
 
-### Linux (Ubuntu/Debian)
+## Command Line Interface
+
+### Basic Syntax
 ```bash
-sudo apt update
-sudo apt install fastcopy
-fastcopy --version
+fastcopy [SOURCE] [DESTINATION] [OPTIONS]
 ```
 
-### Linux (Fedora)
+### Key Commands
+
+#### Simple File Copy
 ```bash
-sudo dnf install fastcopy
-fastcopy --version
-```
-
-### From Source
-```bash
-git clone https://github.com/fastcopy/fastcopy.git
-cd fastcopy
-make install
-```
-
-## CLI Commands
-
-### Basic Usage
-
-```bash
-# Simple file copy
-fastcopy /path/to/source /path/to/destination
+# Copy single file
+fastcopy /path/to/source.file /path/to/destination/
 
 # Copy directory recursively
-fastcopy /source/dir /dest/dir --recursive
-
-# Copy with verification
-fastcopy source.dat dest.dat --verify
-
-# High-speed mode with maximum streams
-fastcopy large_file.iso /backups/ --streams 64 --mode turbo
-
-# Copy with progress display
-fastcopy /media/videos /backup/videos --progress --verbose
-
-# Dry run (preview without copying)
-fastcopy /source /dest --dry-run
+fastcopy /source/directory/ /destination/directory/ --recursive
 ```
 
-### Profile-Based Operations
+#### High-Performance Transfer
+```bash
+# Maximum speed with 64 streams
+fastcopy /large/dataset/ /backup/location/ \
+  --streams 64 \
+  --buffer-size 256 \
+  --mode turbo \
+  --priority high
 
+# With integrity verification
+fastcopy /critical/data/ /archive/ \
+  --streams 32 \
+  --verify \
+  --checksum sha256
+```
+
+#### Profile-Based Execution
 ```bash
 # Use predefined profile
 fastcopy --profile /path/to/profile.yaml
 
-# Use profile with priority override
-fastcopy --profile backup-profile.yaml --priority high
-
-# Run with debug logging
-fastcopy --profile sync-profile.yaml --log-level debug
-
-# One-time scheduled transfer
-fastcopy --profile nightly-backup.yaml --schedule one_time
-
-# Watch mode (continuous monitoring)
-fastcopy --profile watch-profile.yaml --schedule watch
+# Override profile settings
+fastcopy --profile backup-profile.yaml \
+  --streams 48 \
+  --log-level debug
 ```
 
-### Advanced Options
-
+#### Resume and Retry
 ```bash
-# Set custom buffer size
-fastcopy /source /dest --buffer-size 512
+# Auto-resume interrupted transfers
+fastcopy /source/ /dest/ \
+  --resume always \
+  --retry-attempts 5 \
+  --retry-delay 30
 
-# Skip verification for speed
-fastcopy /source /dest --no-verify
-
-# Resume interrupted transfer
-fastcopy /source /dest --resume always
-
-# Tag transfer for logging
-fastcopy /source /dest --tag "migration_2026"
-
-# Set I/O priority
-fastcopy /source /dest --priority low|normal|high
-
-# Exclude patterns
-fastcopy /source /dest --exclude "*.tmp" --exclude "*.log"
-
-# Include only specific patterns
-fastcopy /source /dest --include "*.mp4" --include "*.mkv"
+# Continue specific transfer session
+fastcopy --resume-session a3f2b9c1
 ```
 
-## Profile Configuration
+#### Monitoring and Logging
+```bash
+# Verbose output with progress
+fastcopy /data/ /backup/ \
+  --verbose \
+  --progress \
+  --log-file /var/log/fastcopy.log
+
+# JSON output for parsing
+fastcopy /src/ /dst/ --output-format json
+```
+
+### Common Options
+
+| Option | Description |
+|--------|-------------|
+| `--streams N` | Number of concurrent streams (1-64) |
+| `--buffer-size MB` | Buffer size in megabytes |
+| `--mode MODE` | Transfer mode: standard, balanced, turbo |
+| `--verify` | Enable integrity verification |
+| `--checksum ALGO` | Checksum algorithm: crc32, sha256, both |
+| `--resume MODE` | Resume mode: always, on_failure, never |
+| `--priority LEVEL` | Process priority: low, normal, high |
+| `--recursive` | Copy directories recursively |
+| `--exclude PATTERN` | Exclude files matching pattern |
+| `--include PATTERN` | Include only files matching pattern |
+| `--dry-run` | Simulate transfer without copying |
+| `--tag NAME` | Tag transfer with identifier |
+
+## YAML Profile Configuration
 
 ### Basic Profile Structure
 
-Create a YAML file (e.g., `transfer-profile.yaml`):
-
 ```yaml
+# fastcopy-profile.yaml
 transfer:
-  mode: "turbo"                # standard, balanced, turbo
-  streams: 32                  # concurrent streams (1-64)
-  buffer_size_mb: 256          # buffer size in MB
-  verify: true                 # enable integrity checks
-  resume: always               # always, on_failure, never
+  mode: "turbo"
+  streams: 32
+  buffer_size_mb: 256
+  verify: true
+  checksum: "sha256"
+  resume: "always"
+  retry_attempts: 3
+  retry_delay_seconds: 30
 
 paths:
   source: "/mnt/storage/data"
-  destination: "/backup/data"
-
-schedule:
-  type: "one_time"             # one_time, watch, cron
-  interval_seconds: 300        # for watch mode
-
-hooks:
-  on_complete: "echo 'Transfer complete' | mail -s 'Backup Done' admin@example.com"
-  on_error: "/opt/scripts/error-notify.sh"
-
-logging:
-  level: "info"                # debug, info, warn, error
-  file: "/var/log/fastcopy/transfer.log"
-```
-
-### Performance-Optimized Profile
-
-```yaml
-transfer:
-  mode: "turbo"
-  streams: 64
-  buffer_size_mb: 512
-  verify: false                # disable for maximum speed
-  resume: on_failure
-  compression: false           # disable compression overhead
-
-paths:
-  source: "/raid/media/raw"
-  destination: "//nas01/archive"
+  destination: "/backup/archive"
+  recursive: true
 
 filters:
-  exclude:
-    - "*.tmp"
-    - "*.cache"
-    - ".DS_Store"
   include:
     - "*.mp4"
-    - "*.mov"
-    - "*.avi"
-
-hooks:
-  on_complete: "curl -X POST https://monitoring.example.com/webhook -d '{\"status\":\"complete\"}'"
-  on_error: "curl -X POST https://monitoring.example.com/webhook -d '{\"status\":\"failed\"}'"
-```
-
-### Automated Backup Profile
-
-```yaml
-transfer:
-  mode: "balanced"
-  streams: 16
-  buffer_size_mb: 128
-  verify: true
-  resume: always
-
-paths:
-  source: "/home/user/documents"
-  destination: "/mnt/backup/documents"
-
-schedule:
-  type: "cron"
-  expression: "0 2 * * *"      # daily at 2 AM
-
-filters:
+    - "*.mkv"
   exclude:
     - "*.tmp"
-    - "node_modules/"
-    - ".git/"
+    - ".DS_Store"
+    - "Thumbs.db"
+
+schedule:
+  type: "one_time"  # one_time, watch, cron
+  
+logging:
+  level: "info"  # debug, info, warn, error
+  file: "/var/log/fastcopy/transfer.log"
+  format: "json"
 
 hooks:
-  on_complete: "/usr/local/bin/backup-success-notify"
-  on_error: "/usr/local/bin/backup-failure-alert"
-
-retention:
-  keep_versions: 7
-  cleanup_old: true
-
-logging:
-  level: "info"
-  file: "/var/log/fastcopy/daily-backup.log"
-  rotate: true
-  max_size_mb: 100
+  on_start: "echo 'Transfer started at $(date)'"
+  on_complete: "notify-send 'FastCopy' 'Transfer complete'"
+  on_error: "/opt/scripts/alert-team.sh"
 ```
 
 ### Watch Mode Profile
 
 ```yaml
-transfer:
-  mode: "standard"
-  streams: 8
-  buffer_size_mb: 64
-  verify: true
-  resume: always
-
-paths:
-  source: "/var/www/uploads"
-  destination: "/mnt/cdn/uploads"
-
-schedule:
-  type: "watch"
-  interval_seconds: 60         # check every minute
-  debounce_seconds: 5          # wait 5s after last change
-
-filters:
-  include:
-    - "*.jpg"
-    - "*.png"
-    - "*.pdf"
-
-hooks:
-  on_file_added: "echo 'New file: $FILE' >> /var/log/uploads.log"
-  on_complete: "/usr/local/bin/invalidate-cdn-cache"
-
-notifications:
-  enabled: true
-  method: "webhook"
-  endpoint: "${WEBHOOK_URL}"
-```
-
-## API Integration Profiles
-
-### OpenAI Integration
-
-```yaml
+# watch-sync-profile.yaml
 transfer:
   mode: "balanced"
   streams: 16
   verify: true
+  resume: "always"
 
 paths:
-  source: "/data/documents"
-  destination: "/archive/categorized"
+  source: "/home/user/Documents"
+  destination: "//nas/backups/documents"
+  recursive: true
 
-integrations:
-  openai:
-    enabled: true
-    api_key: "${OPENAI_API_KEY}"
-    endpoint: "https://api.openai.com/v1"
-    model: "gpt-4-turbo"
-    prompt_template: "Categorize this file and suggest a folder: {filename}"
-    auto_organize: true
+schedule:
+  type: "watch"
+  interval_seconds: 300  # Check every 5 minutes
+  debounce_seconds: 10   # Wait 10s after last change
 
-hooks:
-  on_categorized: "/usr/local/bin/process-category.sh"
-```
-
-### Claude Integration
-
-```yaml
-transfer:
-  mode: "balanced"
-  streams: 12
-  verify: true
-
-paths:
-  source: "/projects/media"
-  destination: "/archive/projects"
-
-integrations:
-  claude:
-    enabled: true
-    api_key: "${ANTHROPIC_API_KEY}"
-    api_base: "https://api.anthropic.com"
-    model: "claude-3-opus-20240229"
-    generate_summary: true
-    summary_output: "/logs/transfer-summaries"
+filters:
+  exclude:
+    - "*.lock"
+    - "*.swp"
+    - ".git/**"
+    - "node_modules/**"
 
 hooks:
-  on_complete: "/usr/local/bin/send-summary-report.sh"
+  on_complete: "logger 'FastCopy sync completed'"
 ```
 
-## Common Patterns
-
-### Bulk Migration Script
-
-```bash
-#!/bin/bash
-# migrate-data.sh
-
-PROFILE="/etc/fastcopy/migration.yaml"
-LOG="/var/log/migration-$(date +%Y%m%d).log"
-
-fastcopy --profile "$PROFILE" \
-  --priority high \
-  --log-level info \
-  --log-file "$LOG" \
-  --tag "migration_phase1"
-
-if [ $? -eq 0 ]; then
-  echo "Migration successful" | mail -s "Migration Complete" admin@example.com
-else
-  echo "Migration failed. Check logs at $LOG" | mail -s "Migration FAILED" admin@example.com
-  exit 1
-fi
-```
-
-### Automated Backup with Rotation
-
-```bash
-#!/bin/bash
-# daily-backup.sh
-
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-SOURCE="/home/user/important"
-DEST="/backups/user_${TIMESTAMP}"
-
-fastcopy "$SOURCE" "$DEST" \
-  --streams 32 \
-  --verify \
-  --resume always \
-  --tag "daily_backup_${TIMESTAMP}"
-
-# Keep only last 7 days
-find /backups -type d -name "user_*" -mtime +7 -exec rm -rf {} \;
-```
-
-### Network Transfer with Progress Monitoring
-
-```bash
-#!/bin/bash
-# network-sync.sh
-
-SOURCE="/local/data"
-DEST="//remote-server/share/data"
-
-fastcopy "$SOURCE" "$DEST" \
-  --streams 16 \
-  --buffer-size 256 \
-  --verify \
-  --progress \
-  --resume always \
-  2>&1 | tee /var/log/sync-$(date +%Y%m%d).log
-```
-
-### Conditional Transfer Based on File Type
+### Cron-Based Profile
 
 ```yaml
-# media-transfer.yaml
+# nightly-backup-profile.yaml
 transfer:
   mode: "turbo"
   streams: 48
   buffer_size_mb: 512
   verify: true
+  priority: "high"
 
 paths:
-  source: "/production/footage"
-  destination: "/archive/footage"
+  source: "/var/lib/database/backups"
+  destination: "/mnt/offsite/db_backups"
+  recursive: true
 
-filters:
-  include:
-    - "*.mp4"
-    - "*.mov"
-    - "*.avi"
-    - "*.mkv"
-  exclude:
-    - "*_preview.*"
-    - "*_proxy.*"
+schedule:
+  type: "cron"
+  expression: "0 2 * * *"  # Daily at 2 AM
 
-conditions:
-  min_file_size_mb: 100        # only files > 100MB
-  max_file_age_days: 30        # only files < 30 days old
+retention:
+  keep_days: 30
+  cleanup_old: true
+
+logging:
+  level: "info"
+  file: "/var/log/fastcopy/nightly-backup.log"
 
 hooks:
-  on_complete: "/usr/local/bin/update-catalog.sh"
+  on_start: "/opt/scripts/pre-backup.sh"
+  on_complete: "/opt/scripts/post-backup.sh --success"
+  on_error: "/opt/scripts/post-backup.sh --failed"
+```
+
+## Common Usage Patterns
+
+### Pattern 1: Large Media File Migration
+
+```bash
+#!/bin/bash
+# Migrate video production files to NAS
+
+fastcopy /production/raw_footage/ //nas/archive/project_alpha/ \
+  --streams 64 \
+  --buffer-size 512 \
+  --mode turbo \
+  --verify \
+  --checksum sha256 \
+  --include "*.mp4" \
+  --include "*.mov" \
+  --exclude "*.tmp" \
+  --resume always \
+  --retry-attempts 5 \
+  --progress \
+  --tag "project_alpha_migration_$(date +%Y%m%d)" \
+  --log-file /var/log/migration.log
+```
+
+### Pattern 2: Incremental Backup Script
+
+```bash
+#!/bin/bash
+# Incremental backup with metadata preservation
+
+PROFILE="/etc/fastcopy/incremental-backup.yaml"
+LOG_DIR="/var/log/fastcopy"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
+fastcopy --profile "$PROFILE" \
+  --log-file "$LOG_DIR/backup_$TIMESTAMP.log" \
+  --output-format json > "$LOG_DIR/backup_$TIMESTAMP.json"
+
+if [ $? -eq 0 ]; then
+  echo "Backup completed successfully" | mail -s "Backup Success" admin@example.com
+else
+  echo "Backup failed - check logs" | mail -s "Backup FAILED" admin@example.com
+  exit 1
+fi
+```
+
+### Pattern 3: Scheduled Sync with Monitoring
+
+```yaml
+# production-sync.yaml
+transfer:
+  mode: "balanced"
+  streams: 24
+  buffer_size_mb: 256
+  verify: true
+  resume: "on_failure"
+
+paths:
+  source: "/app/data/uploads"
+  destination: "/mnt/replicas/app_uploads"
+  recursive: true
+
+schedule:
+  type: "watch"
+  interval_seconds: 60
+
+filters:
+  exclude:
+    - "*.partial"
+    - ".processing/**"
+
+metrics:
+  enabled: true
+  endpoint: "http://monitoring.local:9090/metrics"
+  interval_seconds: 30
+
+hooks:
+  on_error: |
+    curl -X POST https://alerts.local/webhook \
+      -H "Content-Type: application/json" \
+      -d '{"alert": "FastCopy sync failed", "severity": "high"}'
+```
+
+### Pattern 4: Development Environment Sync
+
+```yaml
+# dev-sync.yaml
+transfer:
+  mode: "standard"
+  streams: 8
+  verify: false  # Speed over verification for dev files
+
+paths:
+  source: "/home/dev/projects"
+  destination: "/mnt/dev-backup/projects"
+  recursive: true
+
+schedule:
+  type: "watch"
+  interval_seconds: 120
+  debounce_seconds: 5
+
+filters:
+  exclude:
+    - "node_modules/**"
+    - ".git/**"
+    - "*.pyc"
+    - "__pycache__/**"
+    - ".venv/**"
+    - "build/**"
+    - "dist/**"
+    - ".next/**"
+    - "target/**"
+
+logging:
+  level: "warn"
+  file: "/home/dev/.fastcopy/sync.log"
 ```
 
 ## Environment Variables
 
+FastCopy supports configuration through environment variables:
+
 ```bash
-# Configuration
-export FASTCOPY_CONFIG_DIR="/etc/fastcopy"
-export FASTCOPY_LOG_DIR="/var/log/fastcopy"
-export FASTCOPY_TEMP_DIR="/tmp/fastcopy"
+# Set default behavior
+export FASTCOPY_STREAMS=32
+export FASTCOPY_BUFFER_SIZE=256
+export FASTCOPY_MODE=turbo
+export FASTCOPY_VERIFY=true
+export FASTCOPY_LOG_LEVEL=info
 
-# Performance tuning
-export FASTCOPY_DEFAULT_STREAMS=32
-export FASTCOPY_DEFAULT_BUFFER_MB=256
-export FASTCOPY_MAX_RETRIES=3
+# Custom profile directory
+export FASTCOPY_PROFILE_DIR=/etc/fastcopy/profiles
 
-# API keys (for integrations)
-export OPENAI_API_KEY="sk-..."
-export ANTHROPIC_API_KEY="sk-ant-..."
-export WEBHOOK_URL="https://hooks.example.com/notify"
+# Credentials for network shares (if needed)
+export FASTCOPY_NAS_USER="${NAS_USERNAME}"
+export FASTCOPY_NAS_PASS="${NAS_PASSWORD}"
 
-# Logging
-export FASTCOPY_LOG_LEVEL="info"
-export FASTCOPY_LOG_FORMAT="json"
+# API integration (if enabled)
+export OPENAI_API_KEY="${OPENAI_API_KEY}"
+export ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}"
+```
+
+## API Integration Examples
+
+### OpenAI Content Analysis
+
+```yaml
+# ai-categorized-backup.yaml
+transfer:
+  mode: "balanced"
+  streams: 16
+
+paths:
+  source: "/incoming/media"
+  destination: "/archive/categorized"
+
+openai:
+  endpoint: "https://api.openai.com/v1"
+  api_key_env: "OPENAI_API_KEY"
+  model: "gpt-4-turbo"
+  categorize: true
+  prompt_template: |
+    Analyze this file and categorize it: {filename}
+    Return only one word: documentary, commercial, tutorial, or raw
+
+hooks:
+  on_file_categorized: "/opt/scripts/organize-by-category.sh"
+```
+
+### Claude Documentation Generation
+
+```yaml
+# documented-transfer.yaml
+transfer:
+  mode: "turbo"
+  streams: 32
+
+paths:
+  source: "/projects/archive"
+  destination: "/knowledge-base/archived-projects"
+
+claude:
+  api_base: "https://api.anthropic.com"
+  api_key_env: "ANTHROPIC_API_KEY"
+  model: "claude-3-opus-20240229"
+  generate_summary: true
+  summary_output: "/knowledge-base/summaries"
+
+hooks:
+  on_complete: "/opt/scripts/index-knowledge-base.sh"
 ```
 
 ## Troubleshooting
 
-### Transfer Stalls or Hangs
+### Transfer Speed Issues
 
+**Problem:** Transfers slower than expected
+
+**Solutions:**
 ```bash
-# Reduce stream count
-fastcopy /source /dest --streams 8
+# Increase streams and buffer size
+fastcopy /src/ /dst/ --streams 64 --buffer-size 512 --mode turbo
 
-# Reduce buffer size
-fastcopy /source /dest --buffer-size 64
+# Check system resources
+fastcopy /src/ /dst/ --priority high --verbose
 
-# Check with verbose logging
-fastcopy /source /dest --verbose --log-level debug
+# Disable verification for non-critical transfers
+fastcopy /src/ /dst/ --no-verify
+
+# Check network bottlenecks
+fastcopy /src/ /dst/ --stats-interval 5 --log-level debug
 ```
 
-### Verification Failures
+### Resume Failed Transfers
 
+**Problem:** Transfer interrupted, need to resume
+
+**Solutions:**
 ```bash
-# Retry with slower mode
-fastcopy /source /dest --mode standard --verify
+# Check available sessions
+fastcopy --list-sessions
 
-# Check source file integrity first
-sha256sum /source/file.dat
+# Resume specific session
+fastcopy --resume-session <SESSION_ID>
 
-# Disable caching if corrupted reads
-fastcopy /source /dest --no-cache --verify
-```
-
-### Performance Issues
-
-```bash
-# Profile system resources during transfer
-iostat -x 1 &
-vmstat 1 &
-fastcopy /source /dest --streams 32 --mode turbo
-
-# Optimize for your system
-fastcopy /source /dest \
-  --streams $(nproc) \
-  --buffer-size 512 \
-  --mode turbo \
-  --no-verify
-```
-
-### Network Transfer Failures
-
-```bash
-# Use resume mode with retries
-fastcopy /local //remote/share \
+# Auto-resume with retry
+fastcopy /src/ /dst/ \
   --resume always \
-  --retry-count 5 \
-  --retry-delay 10
-
-# Monitor network during transfer
-iftop -i eth0 &
-fastcopy /local //remote/share --progress
+  --retry-attempts 10 \
+  --retry-delay 60
 ```
 
-### Profile Not Loading
+### Integrity Verification Failures
+
+**Problem:** Checksum mismatches detected
+
+**Solutions:**
+```bash
+# Re-verify existing transfer
+fastcopy --verify-only /src/ /dst/ --checksum sha256
+
+# Use both checksums for maximum confidence
+fastcopy /src/ /dst/ --checksum both --verify
+
+# Export verification report
+fastcopy --verify-only /src/ /dst/ \
+  --output-format json > verification-report.json
+```
+
+### Permission Issues
+
+**Problem:** Access denied on source or destination
+
+**Solutions:**
+```bash
+# Run with elevated privileges (if appropriate)
+sudo fastcopy /src/ /dst/
+
+# Preserve permissions
+fastcopy /src/ /dst/ --preserve-permissions --preserve-ownership
+
+# Skip inaccessible files
+fastcopy /src/ /dst/ --skip-errors --log-errors /tmp/errors.log
+```
+
+### High Memory Usage
+
+**Problem:** FastCopy consuming too much memory
+
+**Solutions:**
+```bash
+# Reduce buffer size
+fastcopy /src/ /dst/ --buffer-size 128 --streams 16
+
+# Use standard mode instead of turbo
+fastcopy /src/ /dst/ --mode standard
+
+# Limit concurrent streams
+fastcopy /src/ /dst/ --streams 8 --priority normal
+```
+
+### Profile Not Found
+
+**Problem:** Cannot load YAML profile
+
+**Solutions:**
+```bash
+# Verify profile path
+fastcopy --profile /full/path/to/profile.yaml --dry-run
+
+# Check YAML syntax
+fastcopy --validate-profile /path/to/profile.yaml
+
+# Use absolute paths in profile
+# In YAML, use full paths for source/destination
+```
+
+## Advanced Techniques
+
+### Parallel Multi-Destination Sync
 
 ```bash
-# Validate YAML syntax
-fastcopy --profile myprofile.yaml --validate
+#!/bin/bash
+# Sync to multiple destinations simultaneously
 
-# Use absolute paths
-fastcopy --profile /etc/fastcopy/profiles/backup.yaml
+DESTINATIONS=(
+  "/backup/local"
+  "//nas01/backup"
+  "//nas02/backup"
+)
 
-# Check file permissions
-ls -la /etc/fastcopy/profiles/backup.yaml
+for dest in "${DESTINATIONS[@]}"; do
+  fastcopy /source/ "$dest" \
+    --streams 32 \
+    --verify \
+    --tag "multi-dest-$(basename $dest)" \
+    --log-file "/var/log/fastcopy/$(basename $dest).log" &
+done
+
+wait
+echo "All transfers complete"
 ```
 
-### Hooks Not Executing
+### Bandwidth Throttling
 
 ```bash
-# Test hook script separately
-bash -x /usr/local/bin/my-hook.sh
+# Limit transfer speed during business hours
+HOUR=$(date +%H)
 
-# Check hook permissions
-chmod +x /usr/local/bin/my-hook.sh
-
-# Enable hook debugging in profile
-logging:
-  level: "debug"
-  hook_output: true
+if [ $HOUR -ge 9 ] && [ $HOUR -le 17 ]; then
+  # Business hours - throttle
+  fastcopy /src/ /dst/ --max-bandwidth 100M --streams 8
+else
+  # Off hours - full speed
+  fastcopy /src/ /dst/ --streams 64 --mode turbo
+fi
 ```
 
-## Best Practices
+### Pre/Post Processing Pipeline
 
-1. **Always enable verification for critical data**: `--verify` flag
-2. **Use profiles for reproducible operations**: Store configs in version control
-3. **Set appropriate stream counts**: Match to disk/network capabilities
-4. **Enable resume for long transfers**: `--resume always`
-5. **Tag transfers for audit trails**: `--tag "project_migration"`
-6. **Test with dry-run first**: `--dry-run` to preview operations
-7. **Monitor logs in production**: Use `--log-file` and rotate regularly
-8. **Use environment variables for secrets**: Never hardcode API keys
+```bash
+#!/bin/bash
+# Complete backup pipeline with validation
 
-## Performance Optimization
+# Pre-backup snapshot
+/opt/scripts/create-snapshot.sh /source/
 
-```yaml
-# Maximum speed profile (use with caution)
-transfer:
-  mode: "turbo"
-  streams: 64                  # max concurrent
-  buffer_size_mb: 1024         # large buffer
-  verify: false                # skip for speed
-  compression: false           # no CPU overhead
-  cache_strategy: "aggressive"
+# Transfer with FastCopy
+fastcopy --profile /etc/fastcopy/backup.yaml \
+  --log-file /var/log/backup_$(date +%Y%m%d).log
 
-# Balanced reliability profile
-transfer:
-  mode: "balanced"
-  streams: 16
-  buffer_size_mb: 256
-  verify: true
-  resume: always
-  compression: false
+# Post-backup validation
+if [ $? -eq 0 ]; then
+  /opt/scripts/verify-backup.sh /destination/
+  /opt/scripts/cleanup-old-backups.sh --keep 30
+  /opt/scripts/update-inventory.sh
+else
+  /opt/scripts/alert-failure.sh
+  exit 1
+fi
 ```
+
+This skill covers the essential usage patterns, configuration options, and troubleshooting steps for FastCopy based on the project documentation.
