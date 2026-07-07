@@ -1,42 +1,43 @@
 ---
 name: fastcopy-file-transfer-utility
-description: High-performance file duplication and transfer tool with multi-threaded I/O, intelligent caching, and verification
+description: High-performance file duplication and transfer tool with multi-threaded I/O, integrity verification, and automation capabilities
 triggers:
   - how do I use FastCopy to copy files quickly
-  - set up FastCopy for bulk file transfers
-  - configure FastCopy profile for migration
-  - FastCopy command line usage
-  - optimize file copy performance with FastCopy
-  - verify file integrity after FastCopy transfer
-  - automate file synchronization with FastCopy
-  - FastCopy YAML configuration examples
+  - configure FastCopy for bulk file transfers
+  - set up FastCopy with profile automation
+  - FastCopy parallel streaming and verification
+  - integrate FastCopy into my workflow
+  - troubleshoot FastCopy transfer errors
+  - optimize FastCopy performance settings
+  - schedule automated file copies with FastCopy
 ---
 
-# FastCopy File Transfer Utility
+# FastCopy File Transfer Utility Skill
 
 > Skill by [ara.so](https://ara.so) — Devtools Skills collection.
 
 ## Overview
 
-FastCopy is a high-performance file duplication and transfer utility designed for enterprise-grade data migration, backup operations, and bulk file synchronization. It features multi-threaded parallel I/O, intelligent predictive caching, automatic retry mechanisms, and integrity verification.
+FastCopy is a high-performance file transfer and duplication tool designed for scenarios requiring rapid data movement: backups, migrations, media workflows, and development environment synchronization. It uses multi-threaded I/O, intelligent buffering, and integrity verification to maximize transfer speeds while ensuring data accuracy.
 
-**Key capabilities:**
+**Key Capabilities:**
 - Parallel stream processing (up to 64 concurrent streams)
-- Profile-based configuration via YAML
+- Automatic resume on interrupted transfers
+- SHA-256 + CRC-32 integrity verification
+- YAML-based profile configuration
 - CLI and GUI modes
 - Cross-platform support (Windows, macOS, Linux)
-- Integrity verification with SHA-256/CRC-32 checksums
-- Auto-resume on interrupted transfers
-- Watch mode for continuous synchronization
 
 ## Installation
 
 ### Windows
-```bash
-# Download from official site or repository
-# Extract to Program Files or portable directory
-# Add to PATH (optional)
-set PATH=%PATH%;C:\Program Files\FastCopy
+```powershell
+# Download from official source or repository release
+# Extract and run installer
+fastcopy-setup.exe
+
+# Add to PATH (if portable)
+$env:PATH += ";C:\Tools\FastCopy"
 ```
 
 ### macOS
@@ -45,7 +46,7 @@ set PATH=%PATH%;C:\Program Files\FastCopy
 brew install fastcopy
 
 # Or manual installation
-curl -L https://example.com/fastcopy-macos.tar.gz -o fastcopy.tar.gz
+curl -L https://fastcopy-releases/fastcopy-macos.tar.gz -o fastcopy.tar.gz
 tar -xzf fastcopy.tar.gz
 sudo mv fastcopy /usr/local/bin/
 ```
@@ -55,294 +56,227 @@ sudo mv fastcopy /usr/local/bin/
 # Debian/Ubuntu
 sudo apt-get install fastcopy
 
-# Fedora/RHEL
+# Fedora
 sudo dnf install fastcopy
 
-# Arch Linux
-yay -S fastcopy
-
 # Manual installation
-wget https://example.com/fastcopy-linux.tar.gz
+wget https://fastcopy-releases/fastcopy-linux.tar.gz
 tar -xzf fastcopy-linux.tar.gz
 sudo install -m 755 fastcopy /usr/local/bin/
 ```
 
-## Command Line Interface
+## CLI Commands
 
 ### Basic Usage
 
 ```bash
-# Simple copy operation
+# Simple copy with default settings
 fastcopy /source/path /destination/path
 
+# Copy with increased parallelism
+fastcopy /source/path /destination/path --streams 32
+
 # Copy with verification
-fastcopy /source/path /destination/path --verify
+fastcopy /source/path /destination/path --verify --checksum sha256
 
-# High-priority transfer with maximum streams
+# Copy with custom buffer size
+fastcopy /source/path /destination/path --buffer-size 512m
+
+# High-priority transfer
 fastcopy /source/path /destination/path --priority high --streams 64
+```
 
-# Copy with logging
-fastcopy /source/path /destination/path --log-level debug --log-file transfer.log
+### Profile-Based Operations
+
+```bash
+# Use a profile configuration
+fastcopy --profile /path/to/profile.yaml
+
+# Override profile settings
+fastcopy --profile backup.yaml --streams 48 --priority high
+
+# List available profiles
+fastcopy --list-profiles
+
+# Validate profile syntax
+fastcopy --validate-profile /path/to/profile.yaml
 ```
 
 ### Advanced Options
 
 ```bash
-# Use custom profile
-fastcopy --profile my-profile.yaml
-
-# Ad-hoc transfer with specific buffer size
-fastcopy /source /dest --buffer-size 256 --streams 32
-
-# Exclude patterns
-fastcopy /source /dest --exclude "*.tmp" --exclude "*.cache"
-
-# Resume interrupted transfer
-fastcopy /source /dest --resume always
-
 # Dry run (preview without copying)
 fastcopy /source /dest --dry-run
 
-# Tag transfer for logging
-fastcopy /source /dest --tag "nightly_backup_20260215"
+# Resume interrupted transfer
+fastcopy /source /dest --resume
 
-# Watch mode for continuous sync
-fastcopy /source /dest --watch --interval 300
+# Copy with file filtering
+fastcopy /source /dest --include "*.mp4" --exclude "*.tmp"
+
+# Logging and monitoring
+fastcopy /source /dest --log-level debug --log-file transfer.log
+
+# Tag transfers for organization
+fastcopy /source /dest --tag "project_backup_20260215"
 ```
-
-### CLI Options Reference
-
-| Option | Description | Example |
-|--------|-------------|---------|
-| `--profile` | Load YAML configuration | `--profile config.yaml` |
-| `--streams` | Concurrent transfer streams (1-64) | `--streams 32` |
-| `--buffer-size` | Buffer size in MB | `--buffer-size 256` |
-| `--verify` | Enable integrity check | `--verify` |
-| `--no-verify` | Disable verification | `--no-verify` |
-| `--resume` | Resume mode (always/on_failure/never) | `--resume always` |
-| `--priority` | Process priority (low/normal/high) | `--priority high` |
-| `--log-level` | Logging verbosity | `--log-level debug` |
-| `--log-file` | Log output file | `--log-file transfer.log` |
-| `--exclude` | Exclude pattern | `--exclude "*.tmp"` |
-| `--dry-run` | Preview without copying | `--dry-run` |
-| `--tag` | Tag for this operation | `--tag "backup_v2"` |
-| `--watch` | Continuous watch mode | `--watch` |
-| `--interval` | Watch interval (seconds) | `--interval 300` |
 
 ## Profile Configuration
 
-FastCopy uses YAML profiles for repeatable, complex transfer operations.
+### Basic Profile Structure
 
-### Basic Profile
+Create a YAML profile for reusable transfer configurations:
 
 ```yaml
-# basic-copy.yaml
+# transfer-profile.yaml
 transfer:
-  mode: "turbo"                # standard, balanced, turbo
-  streams: 32                  # concurrent streams (1-64)
-  buffer_size_mb: 256
-  verify: true
-  resume: always               # always, on_failure, never
+  mode: "turbo"                    # standard, balanced, turbo
+  streams: 32                      # concurrent streams (1-64)
+  buffer_size_mb: 256              # memory buffer per stream
+  verify: true                     # enable integrity checks
+  checksum: "sha256"               # sha256, crc32, or both
+  resume: "always"                 # always, on_failure, never
+  overwrite: "if_newer"            # always, never, if_newer, if_different
 
 paths:
-  source: "/mnt/storage/data"
-  destination: "/backup/data"
+  source: "/data/projects"
+  destination: "/backup/projects"
+  
+filters:
+  include:
+    - "*.cpp"
+    - "*.h"
+    - "*.py"
+  exclude:
+    - "*.tmp"
+    - "*.log"
+    - "node_modules/"
+    - ".git/"
 
 logging:
-  level: "info"                # debug, info, warn, error
+  level: "info"                    # debug, info, warn, error
   file: "/var/log/fastcopy/transfer.log"
+  console: true
 ```
 
-### Advanced Profile with Scheduling
+### Advanced Profile with Hooks
 
 ```yaml
-# scheduled-backup.yaml
+# advanced-profile.yaml
 transfer:
   mode: "turbo"
   streams: 48
   buffer_size_mb: 512
   verify: true
-  resume: always
-  priority: "high"             # low, normal, high
-
+  resume: "always"
+  
 paths:
-  source: "/home/user/projects"
-  destination: "//nas/backups/projects"
-
-filters:
-  exclude:
-    - "*.tmp"
-    - "*.cache"
-    - "node_modules/"
-    - ".git/"
-  include:
-    - "*.js"
-    - "*.py"
-    - "*.md"
+  source: "/mnt/storage/raw_footage"
+  destination: "//nas/archive/project_alpha"
 
 schedule:
-  type: "cron"                 # one_time, watch, cron
-  expression: "0 2 * * *"      # Daily at 2 AM
-  # OR for watch mode:
-  # type: "watch"
-  # interval_seconds: 300
+  type: "watch"                    # one_time, watch, cron
+  interval_seconds: 300            # for watch mode
+  cron: "0 2 * * *"               # for cron mode (2 AM daily)
 
 hooks:
-  on_start: "echo 'Transfer starting...'"
-  on_complete: "notify-send 'Backup Complete' 'All files transferred successfully'"
-  on_error: "/opt/scripts/alert_admin.sh"
-  
-notifications:
-  email: "admin@example.com"
-  smtp_server: "smtp.example.com"
-  smtp_port: 587
-  smtp_user: "${SMTP_USER}"
-  smtp_password: "${SMTP_PASSWORD}"
+  on_start: "echo 'Transfer started' | tee -a /var/log/transfer-audit.log"
+  on_complete: "notify-send 'FastCopy Complete' && /scripts/post-transfer.sh"
+  on_error: "/scripts/alert-admin.sh"
+  on_resume: "logger 'FastCopy resumed after interruption'"
+
+retry:
+  max_attempts: 5
+  backoff_seconds: 30
+  exponential: true
 ```
 
-### Media Production Profile
+### Network Transfer Profile
 
 ```yaml
-# media-migration.yaml
+# network-profile.yaml
 transfer:
-  mode: "turbo"
-  streams: 64
-  buffer_size_mb: 1024         # Large buffer for big files
-  verify: true
-  resume: always
-  chunk_large_files: true      # Split files > 1GB
-  chunk_size_mb: 100
-
-paths:
-  source: "/mnt/raid/raw_footage"
-  destination: "//storage/archive/project_alpha"
-
-filters:
-  include:
-    - "*.mov"
-    - "*.mxf"
-    - "*.r3d"
-    - "*.dpx"
-
-metadata:
-  preserve_timestamps: true
-  preserve_permissions: true
-  preserve_attributes: true
-
-hooks:
-  on_file_complete: "/opt/scripts/index_media.sh {filename}"
-  on_complete: "/opt/scripts/generate_report.py"
-```
-
-### Database Backup Profile
-
-```yaml
-# db-backup.yaml
-transfer:
-  mode: "balanced"             # Avoid saturating production systems
-  streams: 16
+  mode: "balanced"
+  streams: 16                      # lower for network stability
   buffer_size_mb: 128
   verify: true
-  resume: on_failure
-
-paths:
-  source: "/var/lib/postgresql/backups"
-  destination: "/backup/databases"
-
-schedule:
-  type: "cron"
-  expression: "0 */6 * * *"    # Every 6 hours
-
-hooks:
-  pre_transfer: "/opt/scripts/pg_dump_all.sh"
-  on_complete: "/opt/scripts/rotate_old_backups.sh"
-  on_error: "/opt/scripts/page_dba.sh"
-
-retention:
-  keep_days: 30
-  compress: true
-  compression_level: 9
-```
-
-## Common Patterns
-
-### One-Time Bulk Migration
-
-```bash
-# Create profile
-cat > migration.yaml <<EOF
-transfer:
-  mode: "turbo"
-  streams: 64
-  buffer_size_mb: 512
-  verify: true
-  resume: always
-
-paths:
-  source: "/old/storage"
-  destination: "/new/storage"
-
-logging:
-  level: "info"
-  file: "migration.log"
-
-hooks:
-  on_complete: "echo 'Migration complete at \$(date)' >> migration.log"
-EOF
-
-# Execute
-fastcopy --profile migration.yaml --priority high
-```
-
-### Continuous Synchronization
-
-```bash
-# Watch mode with instant sync
-fastcopy /source /destination --watch --interval 60 --verify
-```
-
-### Incremental Backup with Verification
-
-```yaml
-# incremental-backup.yaml
-transfer:
-  mode: "balanced"
-  streams: 24
-  verify: true
-  skip_existing: true          # Only copy new/modified files
-  compare_method: "timestamp"  # timestamp, size, checksum
-
-paths:
-  source: "/home/user/documents"
-  destination: "/backup/documents"
-
-schedule:
-  type: "cron"
-  expression: "0 0 * * *"      # Daily at midnight
-```
-
-### Network Transfer with Bandwidth Limit
-
-```yaml
-# network-transfer.yaml
-transfer:
-  mode: "balanced"
-  streams: 16
-  buffer_size_mb: 64
-  bandwidth_limit_mbps: 100    # Limit to 100 Mbps
-  verify: true
-
+  resume: "always"
+  
 paths:
   source: "/local/data"
-  destination: "//remote-server/data"
+  destination: "ssh://user@remote.host:/remote/data"
 
 network:
-  retry_count: 5
-  retry_delay_seconds: 10
+  bandwidth_limit_mbps: 100        # throttle to prevent saturation
   timeout_seconds: 300
+  retry_on_network_error: true
+  
+compression:
+  enabled: true
+  algorithm: "lz4"                 # lz4, zstd, gzip
+  level: 3                         # 1-9
 ```
 
-## Scripting and Automation
+## Code Examples
+
+### Python Integration
+
+```python
+import subprocess
+import json
+from pathlib import Path
+
+class FastCopyManager:
+    def __init__(self, fastcopy_bin="fastcopy"):
+        self.fastcopy_bin = fastcopy_bin
+    
+    def copy(self, source, destination, streams=32, verify=True, dry_run=False):
+        """Execute a FastCopy transfer."""
+        cmd = [
+            self.fastcopy_bin,
+            str(source),
+            str(destination),
+            f"--streams={streams}",
+            "--log-level=info"
+        ]
+        
+        if verify:
+            cmd.append("--verify")
+        
+        if dry_run:
+            cmd.append("--dry-run")
+        
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        
+        if result.returncode != 0:
+            raise RuntimeError(f"FastCopy failed: {result.stderr}")
+        
+        return result.stdout
+    
+    def copy_with_profile(self, profile_path):
+        """Execute transfer using a profile."""
+        cmd = [self.fastcopy_bin, "--profile", str(profile_path)]
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        
+        if result.returncode != 0:
+            raise RuntimeError(f"Profile transfer failed: {result.stderr}")
+        
+        return result.stdout
+
+# Usage
+manager = FastCopyManager()
+
+# Simple copy
+manager.copy(
+    source="/data/project",
+    destination="/backup/project",
+    streams=48,
+    verify=True
+)
+
+# Profile-based copy
+manager.copy_with_profile("backup-profile.yaml")
+```
 
 ### Bash Script Integration
 
@@ -350,359 +284,358 @@ network:
 #!/bin/bash
 # automated-backup.sh
 
-set -e
+set -euo pipefail
 
-# Configuration
-SOURCE="/critical/data"
-DEST="/backup/data"
-LOG_FILE="/var/log/fastcopy/backup-$(date +%Y%m%d).log"
-EMAIL="admin@example.com"
+SOURCE_DIR="/data/production"
+BACKUP_DIR="/mnt/backup/$(date +%Y%m%d)"
+LOG_FILE="/var/log/fastcopy-backup.log"
+PROFILE="/etc/fastcopy/backup-profile.yaml"
 
-# Pre-backup checks
-if [ ! -d "$SOURCE" ]; then
-    echo "Source directory not found: $SOURCE" | tee -a "$LOG_FILE"
+# Create backup directory
+mkdir -p "$BACKUP_DIR"
+
+# Execute transfer with error handling
+if fastcopy --profile "$PROFILE" \
+    --log-file "$LOG_FILE" \
+    --tag "daily_backup_$(date +%Y%m%d)" 2>&1 | tee -a "$LOG_FILE"; then
+    
+    echo "[$(date)] Backup completed successfully" >> "$LOG_FILE"
+    
+    # Cleanup old backups (keep last 7 days)
+    find /mnt/backup -type d -mtime +7 -exec rm -rf {} +
+    
+else
+    echo "[$(date)] Backup FAILED" >> "$LOG_FILE"
+    # Send alert
+    mail -s "FastCopy Backup Failed" admin@example.com < "$LOG_FILE"
     exit 1
 fi
-
-# Execute FastCopy
-echo "Starting backup at $(date)" | tee -a "$LOG_FILE"
-
-fastcopy "$SOURCE" "$DEST" \
-    --streams 48 \
-    --buffer-size 256 \
-    --verify \
-    --resume always \
-    --priority high \
-    --log-level info \
-    --log-file "$LOG_FILE" \
-    --tag "automated_backup_$(date +%Y%m%d)"
-
-EXIT_CODE=$?
-
-# Post-backup actions
-if [ $EXIT_CODE -eq 0 ]; then
-    echo "Backup completed successfully at $(date)" | tee -a "$LOG_FILE"
-    # Optional: Send success notification
-    echo "Backup successful" | mail -s "Backup Success" "$EMAIL"
-else
-    echo "Backup failed with exit code $EXIT_CODE at $(date)" | tee -a "$LOG_FILE"
-    # Send failure alert
-    echo "Check log: $LOG_FILE" | mail -s "BACKUP FAILED" "$EMAIL"
-    exit $EXIT_CODE
-fi
 ```
 
-### Python Integration
+### Node.js Integration
 
-```python
-#!/usr/bin/env python3
-# fastcopy_manager.py
+```javascript
+const { spawn } = require('child_process');
+const fs = require('fs').promises;
+const path = require('path');
 
-import subprocess
-import json
-import sys
-from datetime import datetime
+class FastCopyClient {
+  constructor(binaryPath = 'fastcopy') {
+    this.binaryPath = binaryPath;
+  }
 
-class FastCopyManager:
-    def __init__(self, profile_path=None):
-        self.profile_path = profile_path
-        
-    def execute_transfer(self, source, destination, **kwargs):
-        """Execute FastCopy transfer with options"""
-        cmd = ['fastcopy', source, destination]
-        
-        if self.profile_path:
-            cmd.extend(['--profile', self.profile_path])
-        
-        # Add optional arguments
-        if kwargs.get('streams'):
-            cmd.extend(['--streams', str(kwargs['streams'])])
-        if kwargs.get('verify'):
-            cmd.append('--verify')
-        if kwargs.get('priority'):
-            cmd.extend(['--priority', kwargs['priority']])
-        if kwargs.get('tag'):
-            cmd.extend(['--tag', kwargs['tag']])
-            
-        # Execute
-        try:
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                check=True
-            )
-            return {
-                'status': 'success',
-                'stdout': result.stdout,
-                'stderr': result.stderr
-            }
-        except subprocess.CalledProcessError as e:
-            return {
-                'status': 'error',
-                'returncode': e.returncode,
-                'stdout': e.stdout,
-                'stderr': e.stderr
-            }
+  async copy(source, destination, options = {}) {
+    const args = [source, destination];
     
-    def batch_transfer(self, transfers):
-        """Execute multiple transfers in sequence"""
-        results = []
-        for transfer in transfers:
-            print(f"Processing: {transfer['source']} -> {transfer['destination']}")
-            result = self.execute_transfer(
-                transfer['source'],
-                transfer['destination'],
-                **transfer.get('options', {})
-            )
-            results.append({
-                'transfer': transfer,
-                'result': result,
-                'timestamp': datetime.now().isoformat()
-            })
-        return results
+    if (options.streams) args.push(`--streams=${options.streams}`);
+    if (options.verify) args.push('--verify');
+    if (options.priority) args.push(`--priority=${options.priority}`);
+    if (options.bufferSize) args.push(`--buffer-size=${options.bufferSize}`);
+    if (options.logLevel) args.push(`--log-level=${options.logLevel}`);
+    
+    return this.execute(args);
+  }
 
-# Usage example
-if __name__ == '__main__':
-    manager = FastCopyManager()
-    
-    # Single transfer
-    result = manager.execute_transfer(
-        '/data/source',
-        '/data/destination',
-        streams=32,
-        verify=True,
-        priority='high',
-        tag='python_automated'
-    )
-    
-    print(json.dumps(result, indent=2))
-    
-    # Batch transfers
-    transfers = [
-        {
-            'source': '/data/set1',
-            'destination': '/backup/set1',
-            'options': {'streams': 24, 'verify': True}
-        },
-        {
-            'source': '/data/set2',
-            'destination': '/backup/set2',
-            'options': {'streams': 32, 'verify': True}
+  async copyWithProfile(profilePath) {
+    return this.execute(['--profile', profilePath]);
+  }
+
+  execute(args) {
+    return new Promise((resolve, reject) => {
+      const proc = spawn(this.binaryPath, args);
+      let stdout = '';
+      let stderr = '';
+
+      proc.stdout.on('data', (data) => {
+        stdout += data.toString();
+        console.log(data.toString());
+      });
+
+      proc.stderr.on('data', (data) => {
+        stderr += data.toString();
+      });
+
+      proc.on('close', (code) => {
+        if (code === 0) {
+          resolve({ stdout, stderr, exitCode: code });
+        } else {
+          reject(new Error(`FastCopy failed with code ${code}: ${stderr}`));
         }
-    ]
-    
-    batch_results = manager.batch_transfer(transfers)
-    for r in batch_results:
-        print(f"{r['timestamp']}: {r['result']['status']}")
+      });
+    });
+  }
+}
+
+// Usage
+(async () => {
+  const client = new FastCopyClient();
+  
+  try {
+    await client.copy('/source/data', '/backup/data', {
+      streams: 32,
+      verify: true,
+      priority: 'high',
+      bufferSize: '256m'
+    });
+    console.log('Transfer completed successfully');
+  } catch (error) {
+    console.error('Transfer failed:', error.message);
+    process.exit(1);
+  }
+})();
 ```
 
-## Integrity Verification
+## Common Patterns
 
-FastCopy provides multiple verification methods:
+### Automated Scheduled Backups
 
 ```yaml
-# verification-profile.yaml
-transfer:
-  mode: "balanced"
-  streams: 16
-  verify: true
-  verification_method: "checksum"  # checksum, size, timestamp
-
-checksum:
-  algorithm: "sha256"              # sha256, md5, crc32
-  parallel_verify: true            # Verify while copying
-  save_checksums: true             # Save checksum file
-  checksum_file: "checksums.sha256"
-```
-
-### Post-Transfer Verification
-
-```bash
-# Verify after transfer
-fastcopy --verify-only /source /destination --checksum sha256
-
-# Generate checksum manifest
-fastcopy /source /destination --generate-checksums checksums.txt
-
-# Verify against manifest
-fastcopy --verify-manifest checksums.txt /destination
-```
-
-## Performance Tuning
-
-### Optimal Settings by Use Case
-
-**SSD to SSD (Local)**
-```yaml
-transfer:
-  mode: "turbo"
-  streams: 64
-  buffer_size_mb: 512
-  verify: true
-```
-
-**HDD to HDD (Local)**
-```yaml
-transfer:
-  mode: "balanced"
-  streams: 16
-  buffer_size_mb: 128
-  verify: true
-```
-
-**Network Transfer (1 Gbps)**
-```yaml
+# scheduled-backup.yaml
 transfer:
   mode: "balanced"
   streams: 24
   buffer_size_mb: 256
-  bandwidth_limit_mbps: 100
   verify: true
+  resume: "always"
+
+paths:
+  source: "/data/production"
+  destination: "/backup/daily"
+
+schedule:
+  type: "cron"
+  cron: "0 2 * * *"              # 2 AM daily
+
+filters:
+  exclude:
+    - "*.tmp"
+    - "*.cache"
+    - ".git/"
+
+hooks:
+  on_complete: "/scripts/notify-success.sh"
+  on_error: "/scripts/alert-failure.sh"
 ```
 
-**Network Transfer (10 Gbps)**
+### Large Media File Transfer
+
 ```yaml
+# media-transfer.yaml
 transfer:
   mode: "turbo"
-  streams: 48
-  buffer_size_mb: 512
-  bandwidth_limit_mbps: 1000
+  streams: 64                    # maximize parallelism
+  buffer_size_mb: 1024           # large buffer for big files
   verify: true
+  checksum: "sha256"
+
+paths:
+  source: "/media/raw_footage"
+  destination: "/nas/archive"
+
+filters:
+  include:
+    - "*.mp4"
+    - "*.mov"
+    - "*.avi"
+    - "*.mkv"
+
+retry:
+  max_attempts: 10               # media files can be large
+  backoff_seconds: 60
+  exponential: true
+```
+
+### Development Environment Sync
+
+```yaml
+# dev-sync.yaml
+transfer:
+  mode: "balanced"
+  streams: 16
+  verify: true
+  overwrite: "if_newer"          # only copy changed files
+
+paths:
+  source: "/home/dev/projects"
+  destination: "/mnt/shared/projects"
+
+filters:
+  exclude:
+    - "node_modules/"
+    - ".git/"
+    - "*.pyc"
+    - "__pycache__/"
+    - "*.o"
+    - "build/"
+    - "dist/"
+    - ".venv/"
+
+schedule:
+  type: "watch"
+  interval_seconds: 60           # sync every minute
 ```
 
 ## Troubleshooting
 
-### Common Issues
+### Transfer Hangs or Stalls
 
-**Transfer Slow**
 ```bash
-# Check system resources
-fastcopy /source /dest --log-level debug
+# Reduce stream count for stability
+fastcopy /source /dest --streams 8 --buffer-size 128m
 
-# Reduce streams if CPU/memory limited
-fastcopy /source /dest --streams 8 --buffer-size 64
+# Enable debug logging
+fastcopy /source /dest --log-level debug --log-file debug.log
 
-# Check disk I/O
+# Check for disk I/O bottlenecks
 iostat -x 1
 ```
 
-**Verification Failures**
-```bash
-# Re-verify with detailed logging
-fastcopy --verify-only /source /dest --log-level debug --log-file verify.log
+### High Memory Usage
 
-# Use more conservative checksum
-fastcopy /source /dest --verify --checksum sha256
-```
-
-**Network Timeouts**
 ```yaml
-# Increase timeouts in profile
+# Reduce buffer sizes in profile
+transfer:
+  streams: 16                    # lower stream count
+  buffer_size_mb: 64             # smaller buffers
+  mode: "standard"               # conservative mode
+```
+
+### Network Timeouts
+
+```yaml
+# Configure network resilience
 network:
-  timeout_seconds: 600
-  retry_count: 10
-  retry_delay_seconds: 30
-  keep_alive: true
+  timeout_seconds: 600           # increase timeout
+  retry_on_network_error: true
+  
+transfer:
+  streams: 8                     # fewer streams for stability
+  resume: "always"
+  
+retry:
+  max_attempts: 10
+  backoff_seconds: 120
 ```
 
-**Interrupted Transfers**
-```bash
-# Resume with same parameters
-fastcopy /source /dest --resume always --streams 32
+### Verification Failures
 
-# Check resume state
-fastcopy --show-resume-state /dest
+```bash
+# Use different checksum algorithm
+fastcopy /source /dest --verify --checksum crc32
+
+# Skip verification for speed (not recommended)
+fastcopy /source /dest --no-verify
+
+# Check source file integrity first
+find /source -type f -exec sha256sum {} \; > checksums.txt
 ```
 
-**Permission Errors**
-```bash
-# Run with elevated privileges (use carefully)
-sudo fastcopy /source /dest --preserve-permissions
+### Permission Issues
 
-# Or adjust ownership after
-fastcopy /source /dest
-sudo chown -R user:group /dest
+```bash
+# Run with elevated privileges
+sudo fastcopy /source /dest
+
+# Set proper ownership after transfer
+fastcopy /source /dest && sudo chown -R user:group /dest
+
+# Preserve permissions in profile
 ```
 
-### Debug Mode
+```yaml
+transfer:
+  preserve_permissions: true
+  preserve_timestamps: true
+  preserve_ownership: true
+```
 
-```bash
-# Full debug output
-fastcopy /source /dest --log-level debug --log-file debug.log
+## Performance Optimization
 
-# Monitor in real-time
-tail -f debug.log
+### Tuning for SSDs
 
-# Check transfer statistics
-fastcopy --stats /dest
+```yaml
+transfer:
+  mode: "turbo"
+  streams: 64                    # SSDs handle high parallelism
+  buffer_size_mb: 512
+  direct_io: true                # bypass OS cache
+```
+
+### Tuning for HDDs
+
+```yaml
+transfer:
+  mode: "balanced"
+  streams: 4                     # HDDs prefer sequential I/O
+  buffer_size_mb: 128
+  direct_io: false
+```
+
+### Network Optimization
+
+```yaml
+transfer:
+  streams: 16
+  buffer_size_mb: 256
+
+network:
+  bandwidth_limit_mbps: 900      # leave headroom
+  tcp_window_size_kb: 2048       # tune for high-latency links
+  
+compression:
+  enabled: true
+  algorithm: "lz4"               # fast compression
+  level: 1
 ```
 
 ## Environment Variables
 
-FastCopy respects the following environment variables:
+FastCopy respects these environment variables:
 
 ```bash
-# Default profile location
-export FASTCOPY_PROFILE="$HOME/.config/fastcopy/default.yaml"
-
-# Default log directory
-export FASTCOPY_LOG_DIR="/var/log/fastcopy"
-
-# Default buffer size (MB)
-export FASTCOPY_BUFFER_SIZE=256
-
-# Default stream count
+# Set default streams
 export FASTCOPY_STREAMS=32
 
-# SMTP credentials for notifications
-export SMTP_USER="notifications@example.com"
-export SMTP_PASSWORD="your-smtp-password"
+# Set default buffer size
+export FASTCOPY_BUFFER_SIZE=256m
 
-# API integrations (if using)
-export OPENAI_API_KEY="sk-..."
-export ANTHROPIC_API_KEY="sk-ant-..."
+# Set default log level
+export FASTCOPY_LOG_LEVEL=info
+
+# Set profile directory
+export FASTCOPY_PROFILE_DIR=/etc/fastcopy/profiles
+
+# Disable verification by default (not recommended)
+export FASTCOPY_NO_VERIFY=1
 ```
 
-## Integration Examples
+## Integration with CI/CD
 
-### Cron Job
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy Artifacts
 
-```bash
-# Add to crontab: crontab -e
-# Daily backup at 2 AM
-0 2 * * * /usr/local/bin/fastcopy --profile /etc/fastcopy/daily-backup.yaml >> /var/log/fastcopy/cron.log 2>&1
+on:
+  push:
+    branches: [main]
 
-# Hourly sync
-0 * * * * /usr/local/bin/fastcopy /data/live /data/mirror --watch --interval 3600
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install FastCopy
+        run: |
+          wget https://fastcopy-releases/fastcopy-linux.tar.gz
+          tar -xzf fastcopy-linux.tar.gz
+          sudo install -m 755 fastcopy /usr/local/bin/
+      
+      - name: Transfer Artifacts
+        run: |
+          fastcopy ./dist /deploy/artifacts \
+            --streams 32 \
+            --verify \
+            --tag "build_${{ github.sha }}" \
+            --log-level info
 ```
-
-### Systemd Service
-
-```ini
-# /etc/systemd/system/fastcopy-sync.service
-[Unit]
-Description=FastCopy Continuous Sync Service
-After=network.target
-
-[Service]
-Type=simple
-User=fastcopy
-Group=fastcopy
-ExecStart=/usr/local/bin/fastcopy --profile /etc/fastcopy/sync.yaml
-Restart=always
-RestartSec=10
-Environment="FASTCOPY_LOG_DIR=/var/log/fastcopy"
-
-[Install]
-WantedBy=multi-user.target
-```
-
-```bash
-# Enable and start
-sudo systemctl enable fastcopy-sync
-sudo systemctl start fastcopy-sync
-sudo systemctl status fastcopy-sync
-```
-
-This skill provides comprehensive coverage of FastCopy's functionality for AI coding agents to assist developers with file transfer operations, automation, and optimization.
