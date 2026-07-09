@@ -169,6 +169,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [fastcopy-file-transfer-warning](skills/fastcopy-file-transfer-warning/) | [install](https://skills.sh/aradotso/devtools-skills/fastcopy-file-transfer-warning) | [Raunak64-bit/FastCopy-Clipper-Portable-Utility](https://github.com/Raunak64-bit/FastCopy-Clipper-Portable-Utility) | 2026-07-06 |
 | [fastcopy-file-transfer-automation](skills/fastcopy-file-transfer-automation/) | [install](https://skills.sh/aradotso/devtools-skills/fastcopy-file-transfer-automation) | [Raunak64-bit/FastCopy-Clipper-Portable-Utility](https://github.com/Raunak64-bit/FastCopy-Clipper-Portable-Utility) | 2026-07-06 |
 | [fastcopy-file-transfer-optimization](skills/fastcopy-file-transfer-optimization/) | [install](https://skills.sh/aradotso/devtools-skills/fastcopy-file-transfer-optimization) | [Raunak64-bit/FastCopy-Clipper-Portable-Utility](https://github.com/Raunak64-bit/FastCopy-Clipper-Portable-Utility) | 2026-07-07 |
+| [sesion-clinic-workflow](skills/sesion-clinic-workflow/) | [install](https://skills.sh/aradotso/devtools-skills/sesion-clinic-workflow) | [fahad-hamid/psique-workflow-clinic](https://github.com/fahad-hamid/psique-workflow-clinic) | 2026-07-09 |
 <!-- SKILL_INDEX -->
 
 ---
