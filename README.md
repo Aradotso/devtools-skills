@@ -173,6 +173,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [tabbit-browser-devtools-skill](skills/tabbit-browser-devtools-skill/) | [install](https://skills.sh/aradotso/devtools-skills/tabbit-browser-devtools-skill) | [Tabbit-Browser/Tabbit-Devtools-Skill](https://github.com/Tabbit-Browser/Tabbit-Devtools-Skill) | 2026-07-09 |
 | [sesion-mental-health-clinic-platform](skills/sesion-mental-health-clinic-platform/) | [install](https://skills.sh/aradotso/devtools-skills/sesion-mental-health-clinic-platform) | [fahad-hamid/psique-workflow-clinic](https://github.com/fahad-hamid/psique-workflow-clinic) | 2026-07-11 |
 | [sesion-mental-health-platform](skills/sesion-mental-health-platform/) | [install](https://skills.sh/aradotso/devtools-skills/sesion-mental-health-platform) | [fahad-hamid/psique-workflow-clinic](https://github.com/fahad-hamid/psique-workflow-clinic) | 2026-07-11 |
+| [sesion-mental-health-saas](skills/sesion-mental-health-saas/) | [install](https://skills.sh/aradotso/devtools-skills/sesion-mental-health-saas) | [fahad-hamid/psique-workflow-clinic](https://github.com/fahad-hamid/psique-workflow-clinic) | 2026-07-11 |
 <!-- SKILL_INDEX -->
 
 ---
