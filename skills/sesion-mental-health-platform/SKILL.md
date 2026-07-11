@@ -1,58 +1,59 @@
 ---
 name: sesion-mental-health-platform
-description: SaaS platform for psychology clinics with intelligent scheduling, WhatsApp automation, AFIP billing, video consultations, and Claude AI integration
+description: Full-stack SaaS platform for psychology clinics in Argentina with AI-powered scheduling, WhatsApp automation, AFIP billing, and video consultations
 triggers:
   - "set up Sesión mental health platform"
   - "integrate WhatsApp automation for clinic appointments"
-  - "configure AFIP electronic invoicing for psychology practice"
-  - "implement video consultation with LiveKit"
-  - "use Claude AI for clinical note summarization"
-  - "create appointment scheduling system with Prisma"
-  - "build psychology clinic management dashboard"
-  - "configure Mercado Pago payment integration"
+  - "configure AFIP electronic invoicing for Argentina"
+  - "implement Claude AI for clinical notes"
+  - "add video consultation to psychology practice"
+  - "create patient journey pipeline with Sesión"
+  - "configure Mercado Pago billing integration"
+  - "set up LiveKit for therapy video calls"
 ---
 
-# Sesión Mental Health Platform Skill
+# Sesión Mental Health Platform
 
 > Skill by [ara.so](https://ara.so) — Devtools Skills collection.
 
-Sesión is a comprehensive SaaS platform for psychology clinics in Argentina that orchestrates appointment scheduling, automated WhatsApp messaging, AFIP-compliant billing, secure video consultations, and AI-powered clinical workflows using Claude Opus 4.6 and Sonnet 4.6.
+Sesión is a comprehensive SaaS orchestration platform for psychology clinics in Argentina, providing intelligent appointment scheduling, WhatsApp automation (via Baileys), AFIP-compliant electronic invoicing, secure video consultations (LiveKit), and AI-powered clinical assistance (Claude Opus 4.6 and Sonnet 4.6). Built with SvelteKit 5, NestJS, Prisma, and TypeScript.
 
 ## Architecture Overview
 
-The platform is built as a microservices ecosystem with:
-- **Backend**: NestJS with TypeScript
-- **Frontend**: SvelteKit 5 with Tailwind CSS
-- **Database**: PostgreSQL with Prisma ORM
-- **WhatsApp**: Baileys library for automation
-- **Video**: LiveKit for WebRTC consultations
-- **AI**: Anthropic Claude models (Opus & Sonnet)
-- **Payments**: Stripe + Mercado Pago
-- **Caching**: Redis for session management
+The platform uses a microservices architecture with:
+- **Frontend**: SvelteKit 5 + Tailwind CSS
+- **Backend**: NestJS with Prisma ORM
+- **Database**: PostgreSQL (relational data), Redis (caching), Elasticsearch (search)
+- **Messaging**: Baileys (WhatsApp automation)
+- **Video**: LiveKit WebRTC
+- **AI**: Anthropic Claude Opus 4.6 and Sonnet 4.6
+- **Payments**: Stripe (international), Mercado Pago (Argentina)
+- **Storage**: MinIO (encrypted documents)
 
-## Installation & Setup
+## Installation
 
 ### Prerequisites
 
 ```bash
 # Required versions
-node >= 18.x
-pnpm >= 8.x
-postgresql >= 14.x
-redis >= 7.x
+node >= 18.0.0
+pnpm >= 8.0.0
+docker >= 24.0.0
+postgresql >= 15.0
+redis >= 7.0
 ```
 
 ### Initial Setup
 
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/fahad-hamid/psique-workflow-clinic.git
 cd psique-workflow-clinic
 
 # Install dependencies
 pnpm install
 
-# Setup environment variables
+# Set up environment variables
 cp .env.example .env
 ```
 
@@ -64,230 +65,215 @@ DATABASE_URL="postgresql://user:password@localhost:5432/sesion"
 REDIS_URL="redis://localhost:6379"
 
 # Anthropic AI
-ANTHROPIC_API_KEY="your-key-here"
+ANTHROPIC_API_KEY=sk-ant-xxxxx
 CLAUDE_OPUS_MODEL="claude-opus-4.6"
 CLAUDE_SONNET_MODEL="claude-sonnet-4.6"
 
 # WhatsApp (Baileys)
 WHATSAPP_SESSION_PATH="./whatsapp-sessions"
-WHATSAPP_WEBHOOK_SECRET="your-webhook-secret"
+WHATSAPP_WEBHOOK_SECRET=your-webhook-secret
 
 # LiveKit Video
-LIVEKIT_API_KEY="your-livekit-key"
-LIVEKIT_API_SECRET="your-livekit-secret"
+LIVEKIT_API_KEY=your-api-key
+LIVEKIT_API_SECRET=your-api-secret
 LIVEKIT_WS_URL="wss://your-livekit-server.com"
 
-# Payments
-STRIPE_SECRET_KEY="sk_test_..."
-MERCADOPAGO_ACCESS_TOKEN="APP_USR-..."
+# Argentina AFIP
+AFIP_CUIT=your-cuit-number
+AFIP_CERT_PATH="./certs/afip-cert.pem"
+AFIP_KEY_PATH="./certs/afip-key.pem"
+AFIP_PRODUCTION=false
 
-# AFIP (Argentina Tax Authority)
-AFIP_CUIT="your-tax-id"
-AFIP_CERT_PATH="./certs/afip.crt"
-AFIP_KEY_PATH="./certs/afip.key"
-AFIP_ENVIRONMENT="testing" # or "production"
+# Payment Gateways
+MERCADOPAGO_ACCESS_TOKEN=your-mercadopago-token
+STRIPE_SECRET_KEY=sk_test_xxxxx
+
+# App
+JWT_SECRET=your-jwt-secret
+APP_URL="http://localhost:5173"
 ```
 
-### Database Setup
+### Database Migration
 
 ```bash
-# Run Prisma migrations
-pnpm prisma migrate dev
+# Generate Prisma client
+pnpm prisma generate
+
+# Run migrations
+pnpm prisma migrate deploy
 
 # Seed initial data
 pnpm prisma db seed
-
-# Generate Prisma client
-pnpm prisma generate
 ```
 
-## Core Modules
+### Start Development Servers
 
-### 1. Appointment Scheduling
+```bash
+# Start all services with Docker Compose
+docker-compose up -d
 
-**Prisma Schema** (`prisma/schema.prisma`):
+# Start backend (NestJS)
+cd backend
+pnpm dev
 
-```prisma
-model Appointment {
-  id            String   @id @default(cuid())
-  patientId     String
-  practitionerId String
-  startTime     DateTime
-  endTime       DateTime
-  type          SessionType
-  status        AppointmentStatus @default(SCHEDULED)
-  roomId        String?
-  notes         String?
-  
-  patient       Patient @relation(fields: [patientId], references: [id])
-  practitioner  Practitioner @relation(fields: [practitionerId], references: [id])
-  room          Room? @relation(fields: [roomId], references: [id])
-  invoice       Invoice?
-  
-  @@index([practitionerId, startTime])
-  @@index([patientId, startTime])
-}
-
-enum SessionType {
-  PRESENCIAL
-  VIRTUAL
-  EVALUACION
-  PAREJA
-  FAMILIAR
-}
-
-enum AppointmentStatus {
-  SCHEDULED
-  CONFIRMED
-  IN_PROGRESS
-  COMPLETED
-  CANCELLED
-  NO_SHOW
-}
+# Start frontend (SvelteKit)
+cd frontend
+pnpm dev
 ```
 
-**Appointment Service** (`src/appointments/appointments.service.ts`):
+## Core Module Usage
+
+### 1. Patient Management (Prisma)
 
 ```typescript
+// backend/src/patients/patients.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Appointment, SessionType } from '@prisma/client';
-import { DateTime } from 'luxon';
+
+@Injectable()
+export class PatientsService {
+  constructor(private prisma: PrismaService) {}
+
+  async createPatient(data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    dni: string;
+  }) {
+    return this.prisma.patient.create({
+      data: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        dni: data.dni,
+        status: 'ACTIVE',
+        journeyStage: 'PRIMER_CONTACTO',
+      },
+    });
+  }
+
+  async getPatientWithHistory(patientId: string) {
+    return this.prisma.patient.findUnique({
+      where: { id: patientId },
+      include: {
+        appointments: {
+          orderBy: { scheduledAt: 'desc' },
+          take: 10,
+        },
+        invoices: {
+          orderBy: { issuedAt: 'desc' },
+        },
+        clinicalNotes: {
+          orderBy: { createdAt: 'desc' },
+        },
+      },
+    });
+  }
+}
+```
+
+### 2. Appointment Scheduling
+
+```typescript
+// backend/src/appointments/appointments.service.ts
+import { Injectable, BadRequestException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { WhatsAppService } from '../whatsapp/whatsapp.service';
 
 @Injectable()
 export class AppointmentsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private whatsapp: WhatsAppService,
+  ) {}
 
-  async createAppointment(data: {
+  async scheduleAppointment(data: {
     patientId: string;
     practitionerId: string;
-    startTime: Date;
-    type: SessionType;
-  }): Promise<Appointment> {
-    // Calculate end time based on session type
-    const duration = this.getSessionDuration(data.type);
-    const endTime = DateTime.fromJSDate(data.startTime)
-      .plus({ minutes: duration })
-      .toJSDate();
-
+    scheduledAt: Date;
+    duration: number;
+    type: 'PRESENCIAL' | 'VIRTUAL' | 'EVALUACION';
+  }) {
     // Check for conflicts
-    const conflicts = await this.findConflicts(
-      data.practitionerId,
-      data.startTime,
-      endTime
-    );
+    const conflicts = await this.prisma.appointment.findMany({
+      where: {
+        practitionerId: data.practitionerId,
+        scheduledAt: {
+          gte: data.scheduledAt,
+          lt: new Date(data.scheduledAt.getTime() + data.duration * 60000),
+        },
+        status: { notIn: ['CANCELLED'] },
+      },
+    });
 
     if (conflicts.length > 0) {
-      throw new Error('Schedule conflict detected');
+      throw new BadRequestException('Time slot already booked');
     }
 
-    return this.prisma.appointment.create({
+    const appointment = await this.prisma.appointment.create({
       data: {
-        ...data,
-        endTime,
+        patientId: data.patientId,
+        practitionerId: data.practitionerId,
+        scheduledAt: data.scheduledAt,
+        duration: data.duration,
+        type: data.type,
         status: 'SCHEDULED',
       },
-      include: {
-        patient: true,
-        practitioner: true,
-      },
+      include: { patient: true, practitioner: true },
     });
+
+    // Send WhatsApp confirmation
+    await this.whatsapp.sendAppointmentConfirmation(appointment);
+
+    return appointment;
   }
 
-  private getSessionDuration(type: SessionType): number {
-    const durations = {
-      PRESENCIAL: 45,
-      VIRTUAL: 45,
-      EVALUACION: 60,
-      PAREJA: 90,
-      FAMILIAR: 90,
-    };
-    return durations[type];
-  }
+  async sendReminders() {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
-  async findConflicts(
-    practitionerId: string,
-    startTime: Date,
-    endTime: Date
-  ): Promise<Appointment[]> {
-    return this.prisma.appointment.findMany({
+    const appointments = await this.prisma.appointment.findMany({
       where: {
-        practitionerId,
-        status: { notIn: ['CANCELLED', 'NO_SHOW'] },
-        OR: [
-          {
-            startTime: { lte: startTime },
-            endTime: { gt: startTime },
-          },
-          {
-            startTime: { lt: endTime },
-            endTime: { gte: endTime },
-          },
-        ],
+        scheduledAt: {
+          gte: new Date(tomorrow.setHours(0, 0, 0, 0)),
+          lt: new Date(tomorrow.setHours(23, 59, 59, 999)),
+        },
+        status: 'SCHEDULED',
       },
-    });
-  }
-
-  async suggestAlternativeSlots(
-    practitionerId: string,
-    preferredDate: Date,
-    type: SessionType
-  ) {
-    const duration = this.getSessionDuration(type);
-    const availability = await this.prisma.practitionerAvailability.findMany({
-      where: { practitionerId },
+      include: { patient: true, practitioner: true },
     });
 
-    // Logic to suggest 3-5 alternative time slots
-    const suggestions = [];
-    const dayOfWeek = DateTime.fromJSDate(preferredDate).weekday;
-    
-    for (const slot of availability) {
-      if (slot.dayOfWeek === dayOfWeek) {
-        const potentialStart = DateTime.fromJSDate(preferredDate)
-          .set({ hour: slot.startHour, minute: slot.startMinute });
-        const potentialEnd = potentialStart.plus({ minutes: duration });
-
-        const conflicts = await this.findConflicts(
-          practitionerId,
-          potentialStart.toJSDate(),
-          potentialEnd.toJSDate()
-        );
-
-        if (conflicts.length === 0) {
-          suggestions.push({
-            startTime: potentialStart.toJSDate(),
-            endTime: potentialEnd.toJSDate(),
-          });
-        }
-      }
+    for (const appointment of appointments) {
+      await this.whatsapp.sendReminder(appointment);
     }
-
-    return suggestions.slice(0, 5);
   }
 }
 ```
 
-### 2. WhatsApp Automation
-
-**WhatsApp Service** (`src/whatsapp/whatsapp.service.ts`):
+### 3. WhatsApp Automation (Baileys)
 
 ```typescript
-import { Injectable } from '@nestjs/common';
+// backend/src/whatsapp/whatsapp.service.ts
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import makeWASocket, {
-  DisconnectReason,
   useMultiFileAuthState,
-  WAMessage,
+  DisconnectReason,
 } from '@whiskeysockets/baileys';
 import { Boom } from '@hapi/boom';
 
 @Injectable()
-export class WhatsAppService {
+export class WhatsAppService implements OnModuleInit {
   private sock: any;
 
-  async initialize() {
+  async onModuleInit() {
+    await this.connectWhatsApp();
+  }
+
+  private async connectWhatsApp() {
     const { state, saveCreds } = await useMultiFileAuthState(
-      process.env.WHATSAPP_SESSION_PATH
+      process.env.WHATSAPP_SESSION_PATH,
     );
 
     this.sock = makeWASocket({
@@ -296,685 +282,657 @@ export class WhatsAppService {
     });
 
     this.sock.ev.on('creds.update', saveCreds);
-    this.sock.ev.on('connection.update', this.handleConnectionUpdate);
-    this.sock.ev.on('messages.upsert', this.handleIncomingMessage);
-  }
 
-  private handleConnectionUpdate = async (update: any) => {
-    const { connection, lastDisconnect } = update;
-    if (connection === 'close') {
-      const shouldReconnect =
-        (lastDisconnect?.error as Boom)?.output?.statusCode !==
-        DisconnectReason.loggedOut;
-      if (shouldReconnect) {
-        await this.initialize();
+    this.sock.ev.on('connection.update', (update) => {
+      const { connection, lastDisconnect } = update;
+      if (connection === 'close') {
+        const shouldReconnect =
+          (lastDisconnect?.error as Boom)?.output?.statusCode !==
+          DisconnectReason.loggedOut;
+        if (shouldReconnect) {
+          this.connectWhatsApp();
+        }
       }
-    }
-  };
-
-  private handleIncomingMessage = async ({ messages }: { messages: WAMessage[] }) => {
-    const msg = messages[0];
-    if (!msg.message) return;
-
-    const text = msg.message.conversation || 
-                 msg.message.extendedTextMessage?.text || '';
-    
-    // Crisis detection
-    const crisisKeywords = ['suicidio', 'morir', 'crisis', 'emergencia'];
-    if (crisisKeywords.some(keyword => text.toLowerCase().includes(keyword))) {
-      await this.escalateCrisis(msg.key.remoteJid!, text);
-    }
-
-    // Parse confirmation responses
-    if (text.toLowerCase() === 'confirmar' || text.toLowerCase() === 'si') {
-      await this.processConfirmation(msg.key.remoteJid!);
-    }
-  };
-
-  async sendAppointmentReminder(
-    phoneNumber: string,
-    appointmentData: {
-      patientName: string;
-      practitionerName: string;
-      dateTime: Date;
-      type: string;
-    }
-  ) {
-    const formattedDate = DateTime.fromJSDate(appointmentData.dateTime)
-      .setLocale('es-AR')
-      .toFormat("dd/MM/yyyy 'a las' HH:mm");
-
-    const message = `Hola ${appointmentData.patientName},
-
-Te recordamos tu sesión de ${appointmentData.type.toLowerCase()} con ${appointmentData.practitionerName} 
-programada para el ${formattedDate}.
-
-Respondé *CONFIRMAR* para confirmar tu asistencia o *CANCELAR* si necesitás reprogramar.
-
-Equipo Sesión`;
-
-    await this.sock.sendMessage(phoneNumber, { text: message });
-  }
-
-  async sendInvoice(phoneNumber: string, invoiceUrl: string, amount: number) {
-    const message = `Tu factura electrónica está disponible.
-
-Monto: $${amount.toLocaleString('es-AR')}
-Link: ${invoiceUrl}
-
-Podés pagar por transferencia, Mercado Pago o efectivo en tu próxima sesión.`;
-
-    await this.sock.sendMessage(phoneNumber, { text: message });
-  }
-
-  private async escalateCrisis(phoneNumber: string, message: string) {
-    // Alert practitioner immediately
-    await this.prisma.alert.create({
-      data: {
-        type: 'CRISIS',
-        severity: 'HIGH',
-        source: phoneNumber,
-        content: message,
-        timestamp: new Date(),
-      },
     });
-
-    // Send automated crisis support message
-    const crisisResponse = `Detectamos que podés estar pasando por un momento difícil. 
-Tu bienestar es importante.
-
-Líneas de ayuda inmediata (24hs):
-🆘 Centro de Asistencia al Suicida: 135
-📞 Línea de salud mental: 0800-999-0091
-
-Tu terapeuta será notificado de forma urgente.`;
-
-    await this.sock.sendMessage(phoneNumber, { text: crisisResponse });
   }
 
-  private async processConfirmation(phoneNumber: string) {
-    // Update appointment status
-    const patient = await this.prisma.patient.findUnique({
-      where: { phone: phoneNumber },
-    });
+  async sendAppointmentConfirmation(appointment: any) {
+    const message = `Hola ${appointment.patient.firstName}! 👋
 
-    if (patient) {
-      await this.prisma.appointment.updateMany({
-        where: {
-          patientId: patient.id,
-          status: 'SCHEDULED',
-          startTime: { gte: new Date() },
-        },
-        data: { status: 'CONFIRMED' },
-      });
+Tu sesión con ${appointment.practitioner.firstName} ${appointment.practitioner.lastName} está confirmada:
+
+📅 Fecha: ${appointment.scheduledAt.toLocaleDateString('es-AR')}
+⏰ Hora: ${appointment.scheduledAt.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}
+${appointment.type === 'VIRTUAL' ? '💻 Modalidad: Virtual' : '🏥 Modalidad: Presencial'}
+
+Responde SÍ para confirmar o NO para reagendar.`;
+
+    await this.sock.sendMessage(
+      `${appointment.patient.phone}@s.whatsapp.net`,
+      { text: message },
+    );
+  }
+
+  async sendReminder(appointment: any) {
+    const message = `Recordatorio: Tu sesión es mañana a las ${appointment.scheduledAt.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}. ⏰`;
+
+    await this.sock.sendMessage(
+      `${appointment.patient.phone}@s.whatsapp.net`,
+      { text: message },
+    );
+  }
+
+  async handleIncomingMessage(from: string, text: string) {
+    // Crisis detection keywords
+    const crisisKeywords = ['suicidio', 'quiero morir', 'no puedo más', 'ayuda urgente'];
+    if (crisisKeywords.some((kw) => text.toLowerCase().includes(kw))) {
+      // Alert practitioner immediately
+      await this.alertPractitionerCrisis(from, text);
     }
   }
 }
 ```
 
-**Automated Reminder Job** (`src/jobs/reminder.job.ts`):
+### 4. AFIP Electronic Invoicing
 
 ```typescript
+// backend/src/billing/afip.service.ts
 import { Injectable } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
-import { WhatsAppService } from '../whatsapp/whatsapp.service';
-import { PrismaService } from '../prisma/prisma.service';
-import { DateTime } from 'luxon';
+import * as Afip from '@afipsdk/afip.js';
 
 @Injectable()
-export class ReminderJob {
-  constructor(
-    private whatsapp: WhatsAppService,
-    private prisma: PrismaService
-  ) {}
-
-  @Cron(CronExpression.EVERY_HOUR)
-  async send24HourReminders() {
-    const tomorrow = DateTime.now().plus({ days: 1 });
-    const tomorrowStart = tomorrow.startOf('day').toJSDate();
-    const tomorrowEnd = tomorrow.endOf('day').toJSDate();
-
-    const appointments = await this.prisma.appointment.findMany({
-      where: {
-        startTime: { gte: tomorrowStart, lte: tomorrowEnd },
-        status: 'SCHEDULED',
-      },
-      include: {
-        patient: true,
-        practitioner: true,
-      },
-    });
-
-    for (const apt of appointments) {
-      await this.whatsapp.sendAppointmentReminder(apt.patient.phone, {
-        patientName: apt.patient.firstName,
-        practitionerName: apt.practitioner.fullName,
-        dateTime: apt.startTime,
-        type: apt.type,
-      });
-    }
-  }
-
-  @Cron('*/30 * * * *') // Every 30 minutes
-  async send2HourReminders() {
-    const twoHoursFromNow = DateTime.now().plus({ hours: 2 });
-    const startWindow = twoHoursFromNow.minus({ minutes: 30 }).toJSDate();
-    const endWindow = twoHoursFromNow.toJSDate();
-
-    const appointments = await this.prisma.appointment.findMany({
-      where: {
-        startTime: { gte: startWindow, lte: endWindow },
-        status: { in: ['SCHEDULED', 'CONFIRMED'] },
-      },
-      include: {
-        patient: true,
-        practitioner: true,
-      },
-    });
-
-    for (const apt of appointments) {
-      await this.whatsapp.sendAppointmentReminder(apt.patient.phone, {
-        patientName: apt.patient.firstName,
-        practitionerName: apt.practitioner.fullName,
-        dateTime: apt.startTime,
-        type: apt.type,
-      });
-    }
-  }
-}
-```
-
-### 3. AFIP Electronic Invoicing
-
-**Invoice Service** (`src/billing/invoice.service.ts`):
-
-```typescript
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import * as AfipSDK from '@afipsdk/afip.js';
-
-@Injectable()
-export class InvoiceService {
+export class AfipService {
   private afip: any;
 
-  constructor(private prisma: PrismaService) {
-    this.afip = new AfipSDK({
+  constructor() {
+    this.afip = new Afip({
       CUIT: process.env.AFIP_CUIT,
       cert: process.env.AFIP_CERT_PATH,
       key: process.env.AFIP_KEY_PATH,
-      production: process.env.AFIP_ENVIRONMENT === 'production',
+      production: process.env.AFIP_PRODUCTION === 'true',
     });
   }
 
-  async generateInvoice(appointmentId: string) {
-    const appointment = await this.prisma.appointment.findUnique({
-      where: { id: appointmentId },
-      include: {
-        patient: true,
-        practitioner: true,
-      },
-    });
-
-    if (!appointment) throw new Error('Appointment not found');
-
-    // Determine invoice type based on patient's fiscal condition
-    const invoiceType = this.determineInvoiceType(
-      appointment.patient.fiscalCondition
-    );
-
-    // Calculate amount
-    const sessionRates = await this.prisma.sessionRate.findFirst({
-      where: {
-        practitionerId: appointment.practitionerId,
-        sessionType: appointment.type,
-      },
-    });
-
-    const baseAmount = sessionRates?.amount || 0;
-    const taxAmount = this.calculateTax(baseAmount, invoiceType);
-
-    // Generate AFIP invoice
-    const afipInvoice = await this.afip.ElectronicBilling.createVoucher({
+  async createInvoice(data: {
+    patientName: string;
+    patientDni: string;
+    amount: number;
+    sessionDate: Date;
+    concept: string;
+  }) {
+    const invoiceData = {
       CantReg: 1,
-      PtoVta: appointment.practitioner.salesPoint,
-      CbteTipo: invoiceType,
-      Concepto: 2, // Services
-      DocTipo: 80, // CUIT
-      DocNro: appointment.patient.cuit || 0,
+      PtoVta: 1, // Punto de venta
+      CbteTipo: 6, // Factura B
+      Concepto: 2, // Servicios
+      DocTipo: 96, // DNI
+      DocNro: data.patientDni,
       CbteDesde: 1,
       CbteHasta: 1,
-      CbteFch: DateTime.now().toFormat('yyyyMMdd'),
-      ImpTotal: baseAmount + taxAmount,
+      CbteFch: parseInt(data.sessionDate.toISOString().slice(0, 10).replace(/-/g, '')),
+      ImpTotal: data.amount,
       ImpTotConc: 0,
-      ImpNeto: baseAmount,
+      ImpNeto: data.amount,
       ImpOpEx: 0,
-      ImpIVA: taxAmount,
+      ImpIVA: 0,
       ImpTrib: 0,
       MonId: 'PES',
       MonCotiz: 1,
-      Tributos: null,
-      Iva: [
+    };
+
+    const response = await this.afip.ElectronicBilling.createVoucher(invoiceData);
+
+    return {
+      cae: response.CAE,
+      caeExpiration: response.CAEFchVto,
+      invoiceNumber: response.CbteDesde,
+      afipResponse: response,
+    };
+  }
+
+  async getLastInvoiceNumber() {
+    return this.afip.ElectronicBilling.getLastVoucher(1, 6); // Punto vta 1, Tipo 6 (Factura B)
+  }
+}
+```
+
+### 5. AI Clinical Notes (Claude)
+
+```typescript
+// backend/src/ai/claude.service.ts
+import { Injectable } from '@nestjs/common';
+import Anthropic from '@anthropic-ai/sdk';
+
+@Injectable()
+export class ClaudeService {
+  private anthropic: Anthropic;
+
+  constructor() {
+    this.anthropic = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY,
+    });
+  }
+
+  async summarizeClinicalNote(rawNotes: string, patientHistory: string) {
+    const response = await this.anthropic.messages.create({
+      model: process.env.CLAUDE_OPUS_MODEL,
+      max_tokens: 2048,
+      system: `Eres un asistente especializado en psicología clínica argentina. 
+Tu tarea es resumir notas de sesión de forma profesional, confidencial y estructurada.
+Nunca incluyas información identificable del paciente en el resumen.`,
+      messages: [
         {
-          Id: 5, // 21%
-          BaseImp: baseAmount,
-          Importe: taxAmount,
+          role: 'user',
+          content: `Historial del paciente (últimas 5 sesiones):
+${patientHistory}
+
+Notas de la sesión actual:
+${rawNotes}
+
+Por favor, genera un resumen estructurado con:
+1. Presentación del paciente
+2. Temas principales tratados
+3. Intervenciones realizadas
+4. Evolución observada
+5. Plan terapéutico siguiente`,
         },
       ],
     });
 
-    // Store invoice in database
-    const invoice = await this.prisma.invoice.create({
-      data: {
-        appointmentId,
-        invoiceNumber: afipInvoice.CAE,
-        invoiceType,
-        baseAmount,
-        taxAmount,
-        totalAmount: baseAmount + taxAmount,
-        cae: afipInvoice.CAE,
-        caeExpiration: DateTime.fromFormat(
-          afipInvoice.CAEFchVto,
-          'yyyyMMdd'
-        ).toJSDate(),
-        afipResponse: afipInvoice,
-      },
-    });
-
-    return invoice;
+    return response.content[0].type === 'text' 
+      ? response.content[0].text 
+      : '';
   }
 
-  private determineInvoiceType(fiscalCondition: string): number {
-    const types = {
-      RESPONSABLE_INSCRIPTO: 1, // Factura A
-      MONOTRIBUTO: 6, // Factura B
-      CONSUMIDOR_FINAL: 6, // Factura B
-      EXENTO: 11, // Factura C
-    };
-    return types[fiscalCondition] || 6;
-  }
-
-  private calculateTax(baseAmount: number, invoiceType: number): number {
-    // Factura A and B include 21% IVA
-    if (invoiceType === 1 || invoiceType === 6) {
-      return baseAmount * 0.21;
-    }
-    return 0;
-  }
-
-  async generateMonthlyReport(practitionerId: string, month: number, year: number) {
-    const startDate = DateTime.fromObject({ year, month, day: 1 }).toJSDate();
-    const endDate = DateTime.fromObject({ year, month, day: 1 })
-      .plus({ months: 1 })
-      .toJSDate();
-
-    const invoices = await this.prisma.invoice.findMany({
-      where: {
-        appointment: { practitionerId },
-        createdAt: { gte: startDate, lt: endDate },
-      },
-      include: {
-        appointment: {
-          include: { patient: true },
+  async generateSessionReport(appointmentId: string) {
+    // Use Sonnet for faster interactive responses
+    const response = await this.anthropic.messages.create({
+      model: process.env.CLAUDE_SONNET_MODEL,
+      max_tokens: 1024,
+      messages: [
+        {
+          role: 'user',
+          content: `Genera un informe de sesión para obra social/prepaga basado en el appointment ID: ${appointmentId}`,
         },
-      },
+      ],
     });
 
-    const summary = {
-      totalInvoices: invoices.length,
-      totalRevenue: invoices.reduce((sum, inv) => sum + inv.totalAmount, 0),
-      totalTax: invoices.reduce((sum, inv) => sum + inv.taxAmount, 0),
-      byType: this.groupByInvoiceType(invoices),
-    };
-
-    return summary;
+    return response.content[0].type === 'text'
+      ? response.content[0].text
+      : '';
   }
 
-  private groupByInvoiceType(invoices: any[]) {
-    return invoices.reduce((acc, inv) => {
-      const type = inv.invoiceType;
-      if (!acc[type]) {
-        acc[type] = { count: 0, total: 0 };
-      }
-      acc[type].count++;
-      acc[type].total += inv.totalAmount;
-      return acc;
-    }, {});
+  async detectRiskFactors(patientMessages: string[]) {
+    const response = await this.anthropic.messages.create({
+      model: process.env.CLAUDE_OPUS_MODEL,
+      max_tokens: 512,
+      system: `Analiza mensajes de pacientes para detectar factores de riesgo psicológico.
+Categorías: suicidio, autolesión, violencia, abuso de sustancias, crisis aguda.`,
+      messages: [
+        {
+          role: 'user',
+          content: `Mensajes del paciente: ${patientMessages.join('\n\n')}`,
+        },
+      ],
+    });
+
+    return response.content[0].type === 'text'
+      ? response.content[0].text
+      : '';
   }
 }
 ```
 
-### 4. Video Consultations with LiveKit
-
-**Video Service** (`src/video/video.service.ts`):
+### 6. Video Consultations (LiveKit)
 
 ```typescript
+// backend/src/video/livekit.service.ts
 import { Injectable } from '@nestjs/common';
 import { AccessToken } from 'livekit-server-sdk';
-import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
-export class VideoService {
-  constructor(private prisma: PrismaService) {}
-
-  async createVideoSession(appointmentId: string) {
-    const appointment = await this.prisma.appointment.findUnique({
-      where: { id: appointmentId },
-      include: {
-        patient: true,
-        practitioner: true,
-      },
-    });
-
-    if (!appointment) throw new Error('Appointment not found');
-    if (appointment.type !== 'VIRTUAL') {
-      throw new Error('Appointment is not virtual');
-    }
-
-    const roomName = `session-${appointmentId}`;
-
-    // Create session record
-    const session = await this.prisma.videoSession.create({
-      data: {
-        appointmentId,
-        roomName,
-        status: 'WAITING',
-      },
-    });
-
-    return session;
-  }
-
-  generateToken(
-    roomName: string,
-    identity: string,
-    metadata: { role: 'practitioner' | 'patient'; name: string }
-  ): string {
+export class LiveKitService {
+  async createRoomToken(roomName: string, participantName: string) {
     const at = new AccessToken(
       process.env.LIVEKIT_API_KEY,
       process.env.LIVEKIT_API_SECRET,
       {
-        identity,
-        metadata: JSON.stringify(metadata),
-      }
+        identity: participantName,
+        name: participantName,
+      },
     );
 
-    at.addGrant({
-      roomJoin: true,
+    at.addGrant({ 
+      roomJoin: true, 
       room: roomName,
       canPublish: true,
       canSubscribe: true,
-      canPublishData: true,
     });
 
     return at.toJwt();
   }
 
-  async getPractitionerToken(appointmentId: string, practitionerId: string) {
-    const session = await this.prisma.videoSession.findFirst({
-      where: { appointmentId },
-      include: {
-        appointment: { include: { practitioner: true } },
-      },
-    });
-
-    if (!session) throw new Error('Video session not found');
-    if (session.appointment.practitionerId !== practitionerId) {
-      throw new Error('Unauthorized');
-    }
-
-    return this.generateToken(
-      session.roomName,
+  async createTherapySession(appointmentId: string, practitionerId: string, patientId: string) {
+    const roomName = `session-${appointmentId}`;
+    
+    const practitionerToken = await this.createRoomToken(
+      roomName,
       `practitioner-${practitionerId}`,
-      {
-        role: 'practitioner',
-        name: session.appointment.practitioner.fullName,
-      }
     );
-  }
-
-  async getPatientToken(appointmentId: string, patientId: string) {
-    const session = await this.prisma.videoSession.findFirst({
-      where: { appointmentId },
-      include: {
-        appointment: { include: { patient: true } },
-      },
-    });
-
-    if (!session) throw new Error('Video session not found');
-    if (session.appointment.patientId !== patientId) {
-      throw new Error('Unauthorized');
-    }
-
-    // Check if session is in waiting room
-    if (session.status === 'WAITING') {
-      throw new Error('Practitioner has not started the session yet');
-    }
-
-    return this.generateToken(
-      session.roomName,
+    
+    const patientToken = await this.createRoomToken(
+      roomName,
       `patient-${patientId}`,
-      {
-        role: 'patient',
-        name: session.appointment.patient.firstName,
-      }
     );
-  }
 
-  async admitPatient(appointmentId: string, practitionerId: string) {
-    const session = await this.prisma.videoSession.findFirst({
-      where: { appointmentId },
-      include: { appointment: true },
-    });
-
-    if (!session) throw new Error('Video session not found');
-    if (session.appointment.practitionerId !== practitionerId) {
-      throw new Error('Unauthorized');
-    }
-
-    return this.prisma.videoSession.update({
-      where: { id: session.id },
-      data: { status: 'ACTIVE' },
-    });
-  }
-
-  async endSession(appointmentId: string) {
-    const session = await this.prisma.videoSession.findFirst({
-      where: { appointmentId },
-    });
-
-    if (!session) throw new Error('Video session not found');
-
-    await this.prisma.videoSession.update({
-      where: { id: session.id },
-      data: {
-        status: 'ENDED',
-        endedAt: new Date(),
-      },
-    });
-
-    await this.prisma.appointment.update({
-      where: { id: appointmentId },
-      data: { status: 'COMPLETED' },
-    });
+    return {
+      roomName,
+      practitionerToken,
+      patientToken,
+      wsUrl: process.env.LIVEKIT_WS_URL,
+    };
   }
 }
 ```
 
-**SvelteKit Video Component** (`src/lib/components/VideoConsultation.svelte`):
+## Frontend Components (SvelteKit 5)
+
+### Appointment Calendar Component
 
 ```svelte
+<!-- frontend/src/lib/components/AppointmentCalendar.svelte -->
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { Room, RoomEvent, Track } from 'livekit-client';
+  import { writable } from 'svelte/store';
   
-  export let token: string;
-  export let serverUrl: string;
-  export let role: 'practitioner' | 'patient';
-  
-  let room: Room;
-  let videoElement: HTMLVideoElement;
-  let remoteVideoElement: HTMLVideoElement;
-  let isConnected = false;
-  let isMuted = false;
-  let isVideoOff = false;
-  
-  onMount(async () => {
-    room = new Room({
-      adaptiveStream: true,
-      dynacast: true,
-      videoCaptureDefaults: {
-        resolution: {
-          width: 1280,
-          height: 720,
-          frameRate: 30,
-        },
+  let appointments = writable<any[]>([]);
+  let selectedDate = writable(new Date());
+
+  async function loadAppointments() {
+    const response = await fetch('/api/appointments', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    const data = await response.json();
+    appointments.set(data);
+  }
+
+  async function createAppointment(patientId: string, scheduledAt: Date) {
+    const response = await fetch('/api/appointments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
+      body: JSON.stringify({
+        patientId,
+        scheduledAt,
+        duration: 45,
+        type: 'PRESENCIAL'
+      })
     });
     
-    room.on(RoomEvent.TrackSubscribed, handleTrackSubscribed);
-    room.on(RoomEvent.Disconnected, handleDisconnect);
-    
-    await room.connect(serverUrl, token);
-    
-    // Publish local tracks
-    await room.localParticipant.enableCameraAndMicrophone();
-    isConnected = true;
-    
-    // Attach local video
-    const videoTrack = room.localParticipant.videoTrackPublications.values().next().value?.track;
-    if (videoTrack && videoElement) {
-      videoTrack.attach(videoElement);
+    if (response.ok) {
+      await loadAppointments();
     }
-    
-    return () => {
-      room.disconnect();
-    };
+  }
+
+  onMount(() => {
+    loadAppointments();
   });
-  
-  function handleTrackSubscribed(track: any, publication: any, participant: any) {
-    if (track.kind === Track.Kind.Video && remoteVideoElement) {
-      track.attach(remoteVideoElement);
-    }
-  }
-  
-  function handleDisconnect() {
-    isConnected = false;
-  }
-  
-  async function toggleMute() {
-    if (room.localParticipant) {
-      isMuted = !isMuted;
-      await room.localParticipant.setMicrophoneEnabled(!isMuted);
-    }
-  }
-  
-  async function toggleVideo() {
-    if (room.localParticipant) {
-      isVideoOff = !isVideoOff;
-      await room.localParticipant.setCameraEnabled(!isVideoOff);
-    }
-  }
-  
-  async function endCall() {
-    await room.disconnect();
-    // Navigate back or show end screen
-  }
 </script>
 
-<div class="video-container">
-  <div class="remote-video">
-    <video bind:this={remoteVideoElement} autoplay playsinline />
+<div class="calendar-container">
+  <div class="calendar-header">
+    <h2>Agenda del Día</h2>
+    <button on:click={() => loadAppointments()}>Actualizar</button>
   </div>
   
-  <div class="local-video">
-    <video bind:this={videoElement} autoplay playsinline muted />
+  <div class="appointments-list">
+    {#each $appointments as appointment}
+      <div class="appointment-card">
+        <div class="time">{new Date(appointment.scheduledAt).toLocaleTimeString('es-AR')}</div>
+        <div class="patient">{appointment.patient.firstName} {appointment.patient.lastName}</div>
+        <div class="type">{appointment.type}</div>
+        {#if appointment.type === 'VIRTUAL'}
+          <button on:click={() => window.location.href = `/video/${appointment.id}`}>
+            Iniciar Videollamada
+          </button>
+        {/if}
+      </div>
+    {/each}
   </div>
-  
-  <div class="controls">
-    <button on:click={toggleMute} class:active={isMuted}>
-      {isMuted ? '🔇' : '🎤'}
-    </button>
-    <button on:click={toggleVideo} class:active={isVideoOff}>
-      {isVideoOff ? '📹' : '📷'}
-    </button>
-    <button on:click={endCall} class="end-call">
-      📞 Finalizar
-    </button>
-  </div>
-  
-  {#if !isConnected}
-    <div class="connecting">Conectando...</div>
-  {/if}
 </div>
 
 <style>
-  .video-container {
-    position: relative;
-    width: 100%;
+  .calendar-container {
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+  }
+  
+  .appointment-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border-left: 4px solid #3b82f6;
+    margin-bottom: 0.5rem;
+    background: #f9fafb;
+  }
+</style>
+```
+
+### Video Room Component
+
+```svelte
+<!-- frontend/src/routes/video/[appointmentId]/+page.svelte -->
+<script lang="ts">
+  import { onMount, onDestroy } from 'svelte';
+  import { Room, RoomEvent } from 'livekit-client';
+  import { page } from '$app/stores';
+
+  let videoContainer: HTMLDivElement;
+  let room: Room;
+  let audioEnabled = $state(true);
+  let videoEnabled = $state(true);
+
+  async function joinRoom() {
+    const response = await fetch(`/api/video/${$page.params.appointmentId}/token`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    
+    const { wsUrl, token } = await response.json();
+    
+    room = new Room();
+    
+    room.on(RoomEvent.TrackSubscribed, (track, publication, participant) => {
+      if (track.kind === 'video') {
+        const element = track.attach();
+        videoContainer.appendChild(element);
+      }
+    });
+
+    await room.connect(wsUrl, token);
+    
+    // Publish local tracks
+    await room.localParticipant.enableCameraAndMicrophone();
+  }
+
+  function toggleAudio() {
+    audioEnabled = !audioEnabled;
+    room.localParticipant.setMicrophoneEnabled(audioEnabled);
+  }
+
+  function toggleVideo() {
+    videoEnabled = !videoEnabled;
+    room.localParticipant.setCameraEnabled(videoEnabled);
+  }
+
+  onMount(() => {
+    joinRoom();
+  });
+
+  onDestroy(() => {
+    room?.disconnect();
+  });
+</script>
+
+<div class="video-room">
+  <div bind:this={videoContainer} class="video-container"></div>
+  
+  <div class="controls">
+    <button on:click={toggleAudio}>
+      {audioEnabled ? 'Silenciar' : 'Activar Audio'}
+    </button>
+    <button on:click={toggleVideo}>
+      {videoEnabled ? 'Desactivar Video' : 'Activar Video'}
+    </button>
+    <button on:click={() => room?.disconnect()}>Terminar Sesión</button>
+  </div>
+</div>
+
+<style>
+  .video-room {
     height: 100vh;
-    background: #000;
+    background: #1f2937;
   }
   
-  .remote-video video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .local-video {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 200px;
-    height: 150px;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    border: 2px solid #fff;
-  }
-  
-  .local-video video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .video-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
   }
   
   .controls {
-    position: absolute;
+    position: fixed;
     bottom: 2rem;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     gap: 1rem;
   }
-  
-  .controls button {
-    padding: 1rem 2rem;
-    border-radius: 50%;
-    border: none;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  
-  .controls button:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-  
-  .controls button.active {
-    background: rgba(239, 68, 68, 0.8);
-  }
-  
-  .end-call {
-    background: rgba(239, 68, 68, 0.8) !important;
-  }
 </style>
 ```
 
-### 5. Claude AI Integration
+## Common Patterns
 
-**AI Service** (`src/ai/ai.service.ts`):
+### Patient Journey Tracking
 
 ```typescript
-import { Injectable } from '@nestjs/common';
-import Anthrop
+// Update patient journey stage automatically
+async function updateJourneyStage(patientId: string) {
+  const patient = await prisma.patient.findUnique({
+    where: { id: patientId },
+    include: {
+      appointments: {
+        where: { status: 'COMPLETED' },
+        orderBy: { scheduledAt: 'desc' },
+      },
+    },
+  });
+
+  let newStage = patient.journeyStage;
+
+  if (patient.appointments.length === 0) {
+    newStage = 'PRIMER_CONTACTO';
+  } else if (patient.appointments.length >= 1 && patient.appointments.length < 4) {
+    newStage = 'ADMISION';
+  } else if (patient.appointments.length >= 4) {
+    newStage = 'SESION_ACTIVA';
+  }
+
+  const lastAppointment = patient.appointments[0];
+  const daysSinceLastSession = lastAppointment
+    ? Math.floor((Date.now() - lastAppointment.scheduledAt.getTime()) / (1000 * 60 * 60 * 24))
+    : 999;
+
+  if (daysSinceLastSession > 60) {
+    newStage = 'SEGUIMIENTO';
+  }
+
+  if (newStage !== patient.journeyStage) {
+    await prisma.patient.update({
+      where: { id: patientId },
+      data: { journeyStage: newStage },
+    });
+  }
+}
+```
+
+### Multi-Model AI Routing
+
+```typescript
+// Route complex queries to Opus, simple ones to Sonnet
+async function routeAIQuery(query: string, complexity: 'simple' | 'complex') {
+  const model = complexity === 'complex'
+    ? process.env.CLAUDE_OPUS_MODEL
+    : process.env.CLAUDE_SONNET_MODEL;
+
+  const response = await anthropic.messages.create({
+    model,
+    max_tokens: complexity === 'complex' ? 4096 : 1024,
+    messages: [{ role: 'user', content: query }],
+  });
+
+  return response.content[0].type === 'text' ? response.content[0].text : '';
+}
+```
+
+## CLI Commands
+
+```bash
+# Database management
+pnpm prisma studio                 # Open Prisma Studio GUI
+pnpm prisma migrate dev            # Create and apply migration
+pnpm prisma db push                # Push schema without migration
+
+# Development
+pnpm dev                           # Start dev servers
+pnpm build                         # Build production bundles
+pnpm start                         # Start production server
+
+# Testing
+pnpm test                          # Run unit tests
+pnpm test:e2e                      # Run E2E tests
+pnpm test:cov                      # Generate coverage report
+
+# WhatsApp
+pnpm whatsapp:connect              # Generate QR code for WhatsApp
+pnpm whatsapp:logout               # Disconnect WhatsApp session
+
+# AFIP
+pnpm afip:test-connection          # Test AFIP credentials
+pnpm afip:generate-cert            # Generate AFIP certificate
+```
+
+## Troubleshooting
+
+### WhatsApp Connection Issues
+
+```typescript
+// Clear session and reconnect
+import { rm } from 'fs/promises';
+
+async function resetWhatsAppSession() {
+  await rm(process.env.WHATSAPP_SESSION_PATH, { recursive: true, force: true });
+  // Restart the WhatsApp service to generate new QR code
+}
+```
+
+### AFIP Certificate Errors
+
+```bash
+# Verify certificate format
+openssl x509 -in ./certs/afip-cert.pem -text -noout
+
+# Check certificate expiration
+openssl x509 -in ./certs/afip-cert.pem -enddate -noout
+
+# Regenerate certificate from AFIP admin portal if expired
+```
+
+### LiveKit Video Quality Issues
+
+```typescript
+// Adjust video quality dynamically based on bandwidth
+const videoOptions = {
+  resolution: {
+    width: 1280,
+    height: 720,
+    frameRate: 30,
+  },
+  // Reduce for low bandwidth
+  adaptiveStream: true,
+  dynacast: true,
+};
+
+await room.localParticipant.setCameraEnabled(true, videoOptions);
+```
+
+### Claude API Rate Limits
+
+```typescript
+// Implement exponential backoff
+async function callClaudeWithRetry(prompt: string, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await anthropic.messages.create({
+        model: process.env.CLAUDE_SONNET_MODEL,
+        max_tokens: 1024,
+        messages: [{ role: 'user', content: prompt }],
+      });
+    } catch (error) {
+      if (error.status === 429 && i < maxRetries - 1) {
+        await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+      } else {
+        throw error;
+      }
+    }
+  }
+}
+```
+
+### Database Migration Conflicts
+
+```bash
+# Reset database (DANGER: deletes all data)
+pnpm prisma migrate reset
+
+# Create migration from schema changes
+pnpm prisma migrate dev --name add-new-field
+
+# Resolve migration conflicts manually
+pnpm prisma migrate resolve --applied "migration_name"
+```
+
+### Mercado Pago Webhook Verification
+
+```typescript
+import crypto from 'crypto';
+
+function verifyMercadoPagoWebhook(payload: string, signature: string) {
+  const secret = process.env.MERCADOPAGO_WEBHOOK_SECRET;
+  const hmac = crypto.createHmac('sha256', secret);
+  hmac.update(payload);
+  const digest = hmac.digest('hex');
+  
+  return crypto.timingSafeEqual(
+    Buffer.from(signature),
+    Buffer.from(digest)
+  );
+}
+```
+
+## Production Deployment
+
+```bash
+# Build optimized bundles
+pnpm build
+
+# Run database migrations
+pnpm prisma migrate deploy
+
+# Start with PM2
+pm2 start ecosystem.config.js
+
+# Monitor logs
+pm2 logs sesion-backend
+pm2 logs sesion-frontend
+```
+
+### Docker Deployment
+
+```bash
+# Build images
+docker-compose -f docker-compose.prod.yml build
+
+# Start services
+docker-compose -f docker-compose.prod.yml up -d
+
+# View logs
+docker-compose logs -f backend
+```
