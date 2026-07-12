@@ -175,6 +175,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [sesion-mental-health-platform](skills/sesion-mental-health-platform/) | [install](https://skills.sh/aradotso/devtools-skills/sesion-mental-health-platform) | [fahad-hamid/psique-workflow-clinic](https://github.com/fahad-hamid/psique-workflow-clinic) | 2026-07-11 |
 | [sesion-mental-health-saas](skills/sesion-mental-health-saas/) | [install](https://skills.sh/aradotso/devtools-skills/sesion-mental-health-saas) | [fahad-hamid/psique-workflow-clinic](https://github.com/fahad-hamid/psique-workflow-clinic) | 2026-07-11 |
 | [sesion-workflow-clinic](skills/sesion-workflow-clinic/) | [install](https://skills.sh/aradotso/devtools-skills/sesion-workflow-clinic) | [fahad-hamid/psique-workflow-clinic](https://github.com/fahad-hamid/psique-workflow-clinic) | 2026-07-12 |
+| [sesion-mental-health-orchestration](skills/sesion-mental-health-orchestration/) | [install](https://skills.sh/aradotso/devtools-skills/sesion-mental-health-orchestration) | [fahad-hamid/psique-workflow-clinic](https://github.com/fahad-hamid/psique-workflow-clinic) | 2026-07-12 |
 <!-- SKILL_INDEX -->
 
 ---
