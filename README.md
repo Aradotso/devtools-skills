@@ -179,6 +179,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [sesion-clinic-workflow-platform](skills/sesion-clinic-workflow-platform/) | [install](https://skills.sh/aradotso/devtools-skills/sesion-clinic-workflow-platform) | [fahad-hamid/psique-workflow-clinic](https://github.com/fahad-hamid/psique-workflow-clinic) | 2026-07-12 |
 | [cloud-agents-cli](skills/cloud-agents-cli/) | [install](https://skills.sh/aradotso/devtools-skills/cloud-agents-cli) | [pifferologo/cloud-agents-cli](https://github.com/pifferologo/cloud-agents-cli) | 2026-07-13 |
 | [openfinclaw-ai-quant-research](skills/openfinclaw-ai-quant-research/) | [install](https://skills.sh/aradotso/devtools-skills/openfinclaw-ai-quant-research) | [wikidjon/ai-openclaw-cli](https://github.com/wikidjon/ai-openclaw-cli) | 2026-07-13 |
+| [openfinclaw-quantitative-research](skills/openfinclaw-quantitative-research/) | [install](https://skills.sh/aradotso/devtools-skills/openfinclaw-quantitative-research) | [wikidjon/ai-openclaw-cli](https://github.com/wikidjon/ai-openclaw-cli) | 2026-07-13 |
 <!-- SKILL_INDEX -->
 
 ---
