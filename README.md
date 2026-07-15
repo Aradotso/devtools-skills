@@ -180,6 +180,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [cloud-agents-cli](skills/cloud-agents-cli/) | [install](https://skills.sh/aradotso/devtools-skills/cloud-agents-cli) | [pifferologo/cloud-agents-cli](https://github.com/pifferologo/cloud-agents-cli) | 2026-07-13 |
 | [openfinclaw-ai-quant-research](skills/openfinclaw-ai-quant-research/) | [install](https://skills.sh/aradotso/devtools-skills/openfinclaw-ai-quant-research) | [wikidjon/ai-openclaw-cli](https://github.com/wikidjon/ai-openclaw-cli) | 2026-07-13 |
 | [openfinclaw-quantitative-research](skills/openfinclaw-quantitative-research/) | [install](https://skills.sh/aradotso/devtools-skills/openfinclaw-quantitative-research) | [wikidjon/ai-openclaw-cli](https://github.com/wikidjon/ai-openclaw-cli) | 2026-07-13 |
+| [mangasnap-oneclick-userscript](skills/mangasnap-oneclick-userscript/) | [install](https://skills.sh/aradotso/devtools-skills/mangasnap-oneclick-userscript) | [morethanpaper/MangaSnap-OneClick](https://github.com/morethanpaper/MangaSnap-OneClick) | 2026-07-15 |
 <!-- SKILL_INDEX -->
 
 ---
