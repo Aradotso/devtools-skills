@@ -181,6 +181,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [openfinclaw-ai-quant-research](skills/openfinclaw-ai-quant-research/) | [install](https://skills.sh/aradotso/devtools-skills/openfinclaw-ai-quant-research) | [wikidjon/ai-openclaw-cli](https://github.com/wikidjon/ai-openclaw-cli) | 2026-07-13 |
 | [openfinclaw-quantitative-research](skills/openfinclaw-quantitative-research/) | [install](https://skills.sh/aradotso/devtools-skills/openfinclaw-quantitative-research) | [wikidjon/ai-openclaw-cli](https://github.com/wikidjon/ai-openclaw-cli) | 2026-07-13 |
 | [mangasnap-oneclick-userscript](skills/mangasnap-oneclick-userscript/) | [install](https://skills.sh/aradotso/devtools-skills/mangasnap-oneclick-userscript) | [morethanpaper/MangaSnap-OneClick](https://github.com/morethanpaper/MangaSnap-OneClick) | 2026-07-15 |
+| [soku-cli-integration](skills/soku-cli-integration/) | [install](https://skills.sh/aradotso/devtools-skills/soku-cli-integration) | [About-Intelligence/soku-cli](https://github.com/About-Intelligence/soku-cli) | 2026-07-30 |
 <!-- SKILL_INDEX -->
 
 ---
