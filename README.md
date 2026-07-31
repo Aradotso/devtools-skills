@@ -185,6 +185,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [flatkey-cli-media-generation](skills/flatkey-cli-media-generation/) | [install](https://skills.sh/aradotso/devtools-skills/flatkey-cli-media-generation) | [flatkey-ai/flatkey-cli](https://github.com/flatkey-ai/flatkey-cli) | 2026-07-30 |
 | [bleswiftcli-macos-bluetooth](skills/bleswiftcli-macos-bluetooth/) | [install](https://skills.sh/aradotso/devtools-skills/bleswiftcli-macos-bluetooth) | [kylebrowning/BLESwiftCLI](https://github.com/kylebrowning/BLESwiftCLI) | 2026-07-30 |
 | [cliproxyapi-cloudflare-stack](skills/cliproxyapi-cloudflare-stack/) | [install](https://skills.sh/aradotso/devtools-skills/cliproxyapi-cloudflare-stack) | [xsser/cliproxyapi-cloudflare-stack](https://github.com/xsser/cliproxyapi-cloudflare-stack) | 2026-07-30 |
+| [nova-client-proxy](skills/nova-client-proxy/) | [install](https://skills.sh/aradotso/devtools-skills/nova-client-proxy) | [IRNova/Nova-Client](https://github.com/IRNova/Nova-Client) | 2026-07-31 |
 <!-- SKILL_INDEX -->
 
 ---
