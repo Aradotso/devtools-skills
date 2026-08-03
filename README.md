@@ -188,6 +188,7 @@ npx skills add Aradotso/devtools-skills --skill <skill-name>
 | [nova-client-proxy](skills/nova-client-proxy/) | [install](https://skills.sh/aradotso/devtools-skills/nova-client-proxy) | [IRNova/Nova-Client](https://github.com/IRNova/Nova-Client) | 2026-07-31 |
 | [humanizer-cli-detector](skills/humanizer-cli-detector/) | [install](https://skills.sh/aradotso/devtools-skills/humanizer-cli-detector) | [0xwilliamortiz/humanizer-cli](https://github.com/0xwilliamortiz/humanizer-cli) | 2026-08-02 |
 | [oh-my-cli-autonomous-code-agent](skills/oh-my-cli-autonomous-code-agent/) | [install](https://skills.sh/aradotso/devtools-skills/oh-my-cli-autonomous-code-agent) | [qwen-code-dev-bot/oh-my-cli](https://github.com/qwen-code-dev-bot/oh-my-cli) | 2026-08-03 |
+| [da-cli-deviantart-sync](skills/da-cli-deviantart-sync/) | [install](https://skills.sh/aradotso/devtools-skills/da-cli-deviantart-sync) | [FZ2000/da-cli](https://github.com/FZ2000/da-cli) | 2026-08-03 |
 <!-- SKILL_INDEX -->
 
 ---
